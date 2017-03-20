@@ -26,18 +26,27 @@ namespace VisualPinballBackupToolConsole
                 //INFO: parse the actual arguments
                 if (args.Contains("-backup"))
                 {
+                    string backupValue = @"C:\temp";
                     int backupValueIndex = lArgs.IndexOf("-backup") + 1;
-                    string backupValue = lArgs[backupValueIndex];
-                    if (!Directory.Exists(backupValue))
+                    a.Action = ActionTypes.BackupPinballX;
+
+                    try
                     {
-                        //INFO: directory doesnt exit. Try again.
-                        Console.WriteLine("The directory '" + backupValue + "' does not exist.");
+                        backupValue = lArgs[backupValueIndex];
+                        if (!Directory.Exists(backupValue))
+                        {
+                            //INFO: directory doesnt exit. Try again.
+                            Console.WriteLine("The directory '" + backupValue + "' does not exist.");
+                            Environment.Exit(0);
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        a.Action = ActionTypes.BackupPinballX;
-                        a.Directory = backupValue;
+                        //TODO: there is no directory astated, need to default it to something
+                        backupValue = @"C:\temp";
                     }
+
+                    a.Directory = backupValue;
                 }
             }
 

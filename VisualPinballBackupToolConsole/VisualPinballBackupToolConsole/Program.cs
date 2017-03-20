@@ -10,11 +10,16 @@ namespace VisualPinballBackupToolConsole
     {
         public static void Main(string[] args)
         {
-            Arguments backup = ArgumentParser.Parse(args);
+            //DEBUG- START
+            args = new string[] { "-backup" };
+            //DEBUG -STOP
 
-            switch(backup.Action)
+            Arguments a = ArgumentParser.Parse(args);
+
+            switch(a.Action)
             {
                 case ActionTypes.BackupPinballX:
+                    BackupPinballX pbx = new  BackupPinballX();
                     break;
                 default:
                     break;
