@@ -53,7 +53,7 @@ namespace VisualPinballUtilities
             if (textBox_backupDIrectory.Text.Trim() != string.Empty && Directory.Exists(textBox_backupDIrectory.Text))
             {
                 string[] consoleArgs = new string[] { "-backup", textBox_backupDIrectory.Text };
-                Arguments a = ArgumentParser.Parse(consoleArgs);
+                ConsoleArguments ca = ArgumentParser.Parse(consoleArgs);
 
 
             }

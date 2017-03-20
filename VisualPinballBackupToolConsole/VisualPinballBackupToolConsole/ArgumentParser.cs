@@ -9,11 +9,9 @@ namespace VisualPinballBackupToolConsole
 {
     public class ArgumentParser
     {
-        public static Arguments Parse(string[] args)
+        public static ConsoleArguments Parse(string[] args)
         {
-            Arguments a = new Arguments();
-
-            List<string> lArgs = args.ToList<string>();
+            ConsoleArguments ca = new ConsoleArguments();
 
             if (args.Length == 0 || args.Contains("-h") || args.Contains("?"))
             {
@@ -27,12 +25,12 @@ namespace VisualPinballBackupToolConsole
                 if (args.Contains("-backup"))
                 {
                     string backupValue = @"C:\temp";
-                    int backupValueIndex = lArgs.IndexOf("-backup") + 1;
-                    a.Action = ActionTypes.BackupPinballX;
+                    int backupValueIndex = Array.IndexOf(args, "-backup") + 1;
+                    ca.Action = ActionType.BackupPinballX;
 
                     try
                     {
-                        backupValue = lArgs[backupValueIndex];
+                        backupValue = args[backupValueIndex];
                         if (!Directory.Exists(backupValue))
                         {
                             //INFO: directory doesnt exit. Try again.
@@ -46,21 +44,21 @@ namespace VisualPinballBackupToolConsole
                         backupValue = @"C:\temp";
                     }
 
-                    a.Directory = backupValue;
+                    ca.Directory = backupValue;
                 }
             }
 
-            return a;
+            return ca;
         }
     }
 
-    public class Arguments
+    public class ConsoleArguments
     {
-        public ActionTypes Action { get; set; }
+        public ActionType Action { get; set; }
         public string Directory { get; set; }
     }
 
-    public enum ActionTypes
+    public enum ActionType
     {
         BackupPinballX = 1
     }
