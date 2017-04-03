@@ -18,7 +18,7 @@ namespace VisualPinballUtilities
         public Form_visualPinballUtilities()
         {
             InitializeComponent();
-            textBox_backupDIrectory.Text = string.Empty;
+            textBox_backupDirectory.Text = string.Empty;
         }
 
         private void button_packageTable_Click(object sender, EventArgs e)
@@ -44,20 +44,20 @@ namespace VisualPinballUtilities
             DialogResult result = folderBrowserDialog_backupDirectory.ShowDialog();
             if (result == DialogResult.OK)
             {
-                textBox_backupDIrectory.Text = folderBrowserDialog_backupDirectory.SelectedPath;
+                textBox_backupDirectory.Text = folderBrowserDialog_backupDirectory.SelectedPath;
             }
         }
 
         private void button_backupVisualPinballData_Click(object sender, EventArgs e)
         {
-            if (textBox_backupDIrectory.Text.Trim() != string.Empty && Directory.Exists(textBox_backupDIrectory.Text))
+            if (textBox_backupDirectory.Text.Trim() != string.Empty && Directory.Exists(textBox_backupDirectory.Text))
             {
-                string[] consoleArgs = new string[] { "-backup", textBox_backupDIrectory.Text };
+                string[] consoleArgs = new string[] { "-backup", textBox_backupDirectory.Text };
                 ConsoleArguments ca = ArgumentParser.Parse(consoleArgs);
-
+                
 
             }
-            else MessageBox.Show("The directory '" + textBox_backupDIrectory.Text + "' is not valid.  Please try another.", "Invalid Backup Directory Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            else MessageBox.Show("The directory '" + textBox_backupDirectory.Text + "' is not valid.  Please try another.", "Invalid Backup Directory Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void button_registryUpdate_Click(object sender, EventArgs e)
@@ -65,13 +65,12 @@ namespace VisualPinballUtilities
             //process all the updates for the registry
 
             //INFO: 'dmd_compact' update
-            string subkey = @"SOFTWARE\Freeware\Visual PinMame";
             string field = "dmd_compact";
             int newValue = 1;
             if (checkBox_compactDMD.Checked) newValue = 1;
             else newValue = 0;
 
-            bool b = RegistryUtilities.Update.Key(subkey, field, newValue);
+            bool b = RegistryUtilities.VisualPinMame.Update.Roms.All.For(field, newValue);
         }
     }
 }

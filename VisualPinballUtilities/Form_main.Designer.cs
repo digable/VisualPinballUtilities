@@ -34,7 +34,7 @@
             this.button_removeTable = new System.Windows.Forms.Button();
             this.button_backupVisualPinballData = new System.Windows.Forms.Button();
             this.label_backupDirectory = new System.Windows.Forms.Label();
-            this.textBox_backupDIrectory = new System.Windows.Forms.TextBox();
+            this.textBox_backupDirectory = new System.Windows.Forms.TextBox();
             this.button_browseBackupDIrectory = new System.Windows.Forms.Button();
             this.folderBrowserDialog_backupDirectory = new System.Windows.Forms.FolderBrowserDialog();
             this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
@@ -105,10 +105,10 @@
             // 
             // textBox_backupDIrectory
             // 
-            this.textBox_backupDIrectory.Location = new System.Drawing.Point(111, 135);
-            this.textBox_backupDIrectory.Name = "textBox_backupDIrectory";
-            this.textBox_backupDIrectory.Size = new System.Drawing.Size(335, 20);
-            this.textBox_backupDIrectory.TabIndex = 6;
+            this.textBox_backupDirectory.Location = new System.Drawing.Point(111, 135);
+            this.textBox_backupDirectory.Name = "textBox_backupDIrectory";
+            this.textBox_backupDirectory.Size = new System.Drawing.Size(335, 20);
+            this.textBox_backupDirectory.TabIndex = 6;
             // 
             // button_browseBackupDIrectory
             // 
@@ -160,7 +160,7 @@
             this.ClientSize = new System.Drawing.Size(539, 228);
             this.Controls.Add(this.groupBox_registryUpdates);
             this.Controls.Add(this.button_browseBackupDIrectory);
-            this.Controls.Add(this.textBox_backupDIrectory);
+            this.Controls.Add(this.textBox_backupDirectory);
             this.Controls.Add(this.label_backupDirectory);
             this.Controls.Add(this.button_backupVisualPinballData);
             this.Controls.Add(this.button_removeTable);
@@ -184,7 +184,7 @@
         private System.Windows.Forms.Button button_removeTable;
         private System.Windows.Forms.Button button_backupVisualPinballData;
         private System.Windows.Forms.Label label_backupDirectory;
-        private System.Windows.Forms.TextBox textBox_backupDIrectory;
+        private System.Windows.Forms.TextBox textBox_backupDirectory;
         private System.Windows.Forms.Button button_browseBackupDIrectory;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_backupDirectory;
         private System.Windows.Forms.CheckBox checkBox_compactDMD;

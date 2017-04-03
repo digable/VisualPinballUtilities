@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Microsoft.Win32;
+
 namespace VisualPinballBackupToolConsole
 {
     public class BackupPinballX
@@ -14,8 +16,10 @@ namespace VisualPinballBackupToolConsole
         {
             List<string> processedItems = new List<string>();
 
+            string dateTimeNow = DateTime.Now.ToString("yyyy-MM-dd");
+
             string backupDirectory = @"C:\temp1";
-            string backupFilename = "vpin-backup_" + DateTime.Now.ToString("yyyy-MM-dd") + ".zip";
+            string backupFilename = "vpin-backup_" + dateTimeNow + ".zip";
 
             string emulatorsDirectory = @"C:\temp";//@"C:\Emulators";
             string emulatorsCompressedFile = "Emulators.zip";
@@ -28,9 +32,14 @@ namespace VisualPinballBackupToolConsole
             string pinscapeDirectory = Environment.SpecialFolder.MyDocuments.ToString().TrimEnd('\\') + @"\" +  @"Pinscape";
             string pinscapeCompressedFile = "Pinscape.zip";
 
-            string[] registryEntries = new string[] { };
-            string registryCompressedFile = "registry-exports.zip";
+            if (!Directory.Exists(backupDirectory + @"\" + @"registry-exports"))
+            {
+                Directory.CreateDirectory(backupDirectory + @"\" + @"registry-exports");
+            }
+            //INFO: visual pinmame
+            RegistryUtilities.VisualPinMame.Backup.All(backupDirectory + @"\" + @"registry-exports" + @"\" + "visual-pinmame_" + dateTimeNow + ".reg");
 
+            string registryCompressedFile = "registry-exports.zip";
         }
 
         public bool ProcessDirectory(string sourceDirectory, string backupFilename, string backupDirectory, string masterBackupFilename)

@@ -10,48 +10,112 @@ namespace VisualPinballBackupToolConsole
 {
     public class RegistryUtilities
     {
-        public class Update
+        public class PinballX
         {
-            //TODO: this is only good for a specific subkey, need to verify this and refactor, onlt for roms
-            public static bool Key(string subKey, string field, object newValue)
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+        }
+
+        public class B2S
+        {
+            //need to to both sets
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+        }
+
+        public class VisualPinball
+        {
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+        }
+
+        public class UltraDMD
+        {
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+        }
+
+        public class SetDMD
+        {
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+        }
+        public class VisualPinMame
+        {
+            //INFO: these are the roms
+            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            public class Backup
             {
-                bool b = true;
-
-                RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(subKey);
-
-                string[] roms = vpinmameKey.GetSubKeyNames();
-
-                foreach (string rom in roms)
+                public static bool All(string savePath)
                 {
-                    RegistryKey romKey = Registry.CurrentUser.OpenSubKey(subKey + @"\" + rom, true);
-                    object value = 0;
-                    try
-                    {
-                        value = (int)romKey.GetValue(field);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("'" + rom + "' doesn't have a '" + field + "' field.  Skipping...");
-                    }
+                    bool b = true;
 
-                    if (value != newValue)
-                    {
-                        romKey.SetValue(field, newValue);
-                        Console.WriteLine("Successfully updated '" + field + "' value to 1 for rom '" + rom + "'.");
-                    }
-                    else
-                    {
-                        Console.WriteLine("'" + field + "' value is already set to 1 for rom '" + rom + "'.");
-                    }
+                    RegistryUtilities.ExportKey(SubKey, savePath);
 
-                    romKey = null;
+                    return b;
                 }
-
-                roms = null;
-                Console.WriteLine("Finished updating roms.");
-
-                return b;
             }
+            public class Update
+            {
+                public class Roms
+                {
+                    public class All
+                    {
+                        public static bool For(string field, object newValue)
+                        {
+                            bool b = true;
+
+                            RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKey);
+
+                            string[] roms = vpinmameKey.GetSubKeyNames();
+
+                            foreach (string rom in roms)
+                            {
+                                RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKey + @"\" + rom, true);
+                                object value = 0;
+                                try
+                                {
+                                    value = (int)romKey.GetValue(field);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("'" + rom + "' doesn't have a '" + field + "' field.  Skipping...");
+                                }
+
+                                if (value != newValue)
+                                {
+                                    romKey.SetValue(field, newValue);
+                                    Console.WriteLine("Successfully updated '" + field + "' value to 1 for rom '" + rom + "'.");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("'" + field + "' value is already set to 1 for rom '" + rom + "'.");
+                                }
+
+                                romKey = null;
+                            }
+
+                            roms = null;
+                            Console.WriteLine("Finished updating roms.");
+
+                            return b;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void ExportKey(string registryKey, string exportPath)
+        {
+            var proc = new System.Diagnostics.Process();
+            try
+            {
+                proc.StartInfo.FileName = "regedit.exe";
+                proc.StartInfo.UseShellExecute = false;
+                proc = System.Diagnostics.Process.Start("regedit.exe", "/e " + exportPath + " " + registryKey + "");
+
+                if (proc != null) proc.WaitForExit();
+            }
+            finally
+            {
+                if (proc != null) proc.Dispose();
+            }
+
         }
     }
 }
