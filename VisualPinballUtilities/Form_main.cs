@@ -60,6 +60,18 @@ namespace VisualPinballUtilities
             else MessageBox.Show("The directory '" + textBox_backupDIrectory.Text + "' is not valid.  Please try another.", "Invalid Backup Directory Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
+        private void button_registryUpdate_Click(object sender, EventArgs e)
+        {
+            //process all the updates for the registry
 
+            //INFO: 'dmd_compact' update
+            string subkey = @"SOFTWARE\Freeware\Visual PinMame";
+            string field = "dmd_compact";
+            int newValue = 1;
+            if (checkBox_compactDMD.Checked) newValue = 1;
+            else newValue = 0;
+
+            bool b = RegistryUtilities.Update.Key(subkey, field, newValue);
+        }
     }
 }

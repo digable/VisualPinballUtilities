@@ -37,6 +37,10 @@
             this.textBox_backupDIrectory = new System.Windows.Forms.TextBox();
             this.button_browseBackupDIrectory = new System.Windows.Forms.Button();
             this.folderBrowserDialog_backupDirectory = new System.Windows.Forms.FolderBrowserDialog();
+            this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
+            this.groupBox_registryUpdates = new System.Windows.Forms.GroupBox();
+            this.button_registryUpdate = new System.Windows.Forms.Button();
+            this.groupBox_registryUpdates.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_packageTable
@@ -116,11 +120,45 @@
             this.button_browseBackupDIrectory.UseVisualStyleBackColor = true;
             this.button_browseBackupDIrectory.Click += new System.EventHandler(this.button_browseBackupDIrectory_Click);
             // 
+            // checkBox_compactDMD
+            // 
+            this.checkBox_compactDMD.AutoSize = true;
+            this.checkBox_compactDMD.Checked = true;
+            this.checkBox_compactDMD.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_compactDMD.Location = new System.Drawing.Point(6, 19);
+            this.checkBox_compactDMD.Name = "checkBox_compactDMD";
+            this.checkBox_compactDMD.Size = new System.Drawing.Size(102, 17);
+            this.checkBox_compactDMD.TabIndex = 8;
+            this.checkBox_compactDMD.Text = "Compact DMD?";
+            this.checkBox_compactDMD.UseVisualStyleBackColor = true;
+            // 
+            // groupBox_registryUpdates
+            // 
+            this.groupBox_registryUpdates.Controls.Add(this.button_registryUpdate);
+            this.groupBox_registryUpdates.Controls.Add(this.checkBox_compactDMD);
+            this.groupBox_registryUpdates.Location = new System.Drawing.Point(112, 12);
+            this.groupBox_registryUpdates.Name = "groupBox_registryUpdates";
+            this.groupBox_registryUpdates.Size = new System.Drawing.Size(415, 110);
+            this.groupBox_registryUpdates.TabIndex = 9;
+            this.groupBox_registryUpdates.TabStop = false;
+            this.groupBox_registryUpdates.Text = "Registry Updates";
+            // 
+            // button_registryUpdate
+            // 
+            this.button_registryUpdate.Location = new System.Drawing.Point(334, 81);
+            this.button_registryUpdate.Name = "button_registryUpdate";
+            this.button_registryUpdate.Size = new System.Drawing.Size(75, 23);
+            this.button_registryUpdate.TabIndex = 9;
+            this.button_registryUpdate.Text = "Update!!!";
+            this.button_registryUpdate.UseVisualStyleBackColor = true;
+            this.button_registryUpdate.Click += new System.EventHandler(this.button_registryUpdate_Click);
+            // 
             // Form_visualPinballUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(539, 228);
+            this.Controls.Add(this.groupBox_registryUpdates);
             this.Controls.Add(this.button_browseBackupDIrectory);
             this.Controls.Add(this.textBox_backupDIrectory);
             this.Controls.Add(this.label_backupDirectory);
@@ -131,6 +169,8 @@
             this.Controls.Add(this.button_packageTable);
             this.Name = "Form_visualPinballUtilities";
             this.Text = "Visual Pinball Utilities";
+            this.groupBox_registryUpdates.ResumeLayout(false);
+            this.groupBox_registryUpdates.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,6 +187,9 @@
         private System.Windows.Forms.TextBox textBox_backupDIrectory;
         private System.Windows.Forms.Button button_browseBackupDIrectory;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_backupDirectory;
+        private System.Windows.Forms.CheckBox checkBox_compactDMD;
+        private System.Windows.Forms.GroupBox groupBox_registryUpdates;
+        private System.Windows.Forms.Button button_registryUpdate;
     }
 }
 
