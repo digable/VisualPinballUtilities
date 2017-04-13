@@ -72,5 +72,14 @@ namespace VisualPinballUtilities
 
             bool b = RegistryUtilities.VisualPinMame.Update.Roms.All.For(field, newValue);
         }
+
+        private void button_eloRating_Click(object sender, EventArgs e)
+        {
+            Rating.EloRating.Matchup m = new Rating.EloRating.Matchup();
+            m.User1Score = 1000;
+            m.User2Score = 1000;
+
+            Rating.EloRating.UpdateScores(m, true);
+        }
     }
 }
