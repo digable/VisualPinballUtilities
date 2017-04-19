@@ -40,6 +40,8 @@ namespace VisualPinballBackupToolConsole
             RegistryUtilities.VisualPinMame.Backup.All(backupDirectory + @"\" + @"registry-exports" + @"\" + "visual-pinmame_" + dateTimeNow + ".reg");
 
             string registryCompressedFile = "registry-exports.zip";
+
+            //TODO: need to put the pindmd.dll and .ini file in the systemWOW64 folder
         }
 
         public bool ProcessDirectory(string sourceDirectory, string backupFilename, string backupDirectory, string masterBackupFilename)
