@@ -19,7 +19,7 @@ namespace VisualPinballBackupToolConsole
             switch(ca.Action)
             {
                 case ActionType.BackupPinballX:
-                    BackupPinballX pbx = new  BackupPinballX();
+                    Backup pbx = new  Backup();
                     break;
                 default:
                     break;

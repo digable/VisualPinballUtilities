@@ -99,14 +99,14 @@
             this.label_backupDirectory.AutoSize = true;
             this.label_backupDirectory.Location = new System.Drawing.Point(12, 138);
             this.label_backupDirectory.Name = "label_backupDirectory";
-            this.label_backupDirectory.Size = new System.Drawing.Size(93, 13);
+            this.label_backupDirectory.Size = new System.Drawing.Size(92, 13);
             this.label_backupDirectory.TabIndex = 5;
-            this.label_backupDirectory.Text = "Backup DIrectory:";
+            this.label_backupDirectory.Text = "Backup Directory:";
             // 
-            // textBox_backupDIrectory
+            // textBox_backupDirectory
             // 
             this.textBox_backupDirectory.Location = new System.Drawing.Point(111, 135);
-            this.textBox_backupDirectory.Name = "textBox_backupDIrectory";
+            this.textBox_backupDirectory.Name = "textBox_backupDirectory";
             this.textBox_backupDirectory.Size = new System.Drawing.Size(335, 20);
             this.textBox_backupDirectory.TabIndex = 6;
             // 
