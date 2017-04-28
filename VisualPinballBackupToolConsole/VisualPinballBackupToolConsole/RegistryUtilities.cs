@@ -12,28 +12,29 @@ namespace VisualPinballBackupToolConsole
     {
         public class PinballX
         {
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKey = @"SOFTWARE\PinballX";
         }
 
         public class B2S
         {
             //need to to both sets
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKey = @"B2S";
+            const string SubKey2 = @"SOFTWARE\B2S";
         }
 
         public class VisualPinball
         {
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKey = @"SOFTWARE\Visual Pinball";
         }
 
         public class UltraDMD
         {
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKey = @"SOFTWARE\UltraDMD";
         }
 
         public class SetDMD
         {
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKey = @"SOFTWARE\SetDMD";
         }
         public class VisualPinMame
         {

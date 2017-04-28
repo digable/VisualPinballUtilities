@@ -48,6 +48,7 @@ namespace VisualPinballBackupToolConsole
                 string registryCompressedFile = "registry-exports_" + dateTimeNow + ".zip";
 
                 //TODO: need to pull in all of the files from processed items and toss them into the backupfilename
+                //TODO: need to put the pindmd.dll and .ini file in the systemWOW64 folder
             }
         }
         private static bool ProcessDirectory(string sourceDirectory, string backupFilename, string backupDirectory)

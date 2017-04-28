@@ -40,6 +40,7 @@
             this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
             this.groupBox_registryUpdates = new System.Windows.Forms.GroupBox();
             this.button_registryUpdate = new System.Windows.Forms.Button();
+            this.button_eloRating = new System.Windows.Forms.Button();
             this.groupBox_registryUpdates.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -153,11 +154,22 @@
             this.button_registryUpdate.UseVisualStyleBackColor = true;
             this.button_registryUpdate.Click += new System.EventHandler(this.button_registryUpdate_Click);
             // 
+            // button_eloRating
+            // 
+            this.button_eloRating.Location = new System.Drawing.Point(12, 161);
+            this.button_eloRating.Name = "button_eloRating";
+            this.button_eloRating.Size = new System.Drawing.Size(75, 23);
+            this.button_eloRating.TabIndex = 10;
+            this.button_eloRating.Text = "Elo Rating";
+            this.button_eloRating.UseVisualStyleBackColor = true;
+            this.button_eloRating.Click += new System.EventHandler(this.button_eloRating_Click);
+            // 
             // Form_visualPinballUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(539, 228);
+            this.Controls.Add(this.button_eloRating);
             this.Controls.Add(this.groupBox_registryUpdates);
             this.Controls.Add(this.button_browseBackupDIrectory);
             this.Controls.Add(this.textBox_backupDirectory);
@@ -190,6 +202,7 @@
         private System.Windows.Forms.CheckBox checkBox_compactDMD;
         private System.Windows.Forms.GroupBox groupBox_registryUpdates;
         private System.Windows.Forms.Button button_registryUpdate;
+        private System.Windows.Forms.Button button_eloRating;
     }
 }
 
