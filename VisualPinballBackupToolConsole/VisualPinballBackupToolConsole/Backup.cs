@@ -18,89 +18,121 @@ namespace VisualPinballBackupToolConsole
             {
                 List<string> processedItems = new List<string>();
 
+                //INFO: primary backup information
                 string dateTimeNow = DateTime.Now.ToString("yyyy-MM-dd");
-
                 string backupDirectory = @"C:\temp";
                 string backupFilename = "vpin-backup_" + dateTimeNow + ".zip";
 
-                string emulatorsDirectory = @"C:\Emulators";//@"C:\Emulators";
+                //INFO: main emulators folder
+                string emulatorsDirectory = @"C:\Emulators";
                 string emulatorsCompressedFile = "Emulators_" + dateTimeNow + ".zip";
-                bool emulatorProcessing = ProcessDirectory(emulatorsDirectory, emulatorsCompressedFile, backupDirectory);
+                bool emulatorProcessing = Process.Folder(emulatorsDirectory, emulatorsCompressedFile, backupDirectory);
                 if (emulatorProcessing) processedItems.Add(emulatorsCompressedFile);
 
+                //INFO: p-roc folder
                 string procDirectory = @"C:\P-ROC";
                 string procCompressedFile = "P-ROC_" + dateTimeNow + ".zip";
-                bool procProcessing = ProcessDirectory(procDirectory, procCompressedFile, backupDirectory);
+                bool procProcessing = Process.Folder(procDirectory, procCompressedFile, backupDirectory);
                 if (procProcessing) processedItems.Add(procCompressedFile);
 
+                //INFO: pinscape folder
                 string pinscapeDirectory = Environment.SpecialFolder.MyDocuments.ToString().TrimEnd('\\') + @"\" + @"Pinscape";
                 string pinscapeCompressedFile = "Pinscape_" + dateTimeNow + ".zip";
-                bool pinscapeProcessing = ProcessDirectory(pinscapeDirectory, pinscapeCompressedFile, backupDirectory);
+                bool pinscapeProcessing = Process.Folder(pinscapeDirectory, pinscapeCompressedFile, backupDirectory);
                 if (pinscapeProcessing) processedItems.Add(pinscapeCompressedFile);
 
-                if (!Directory.Exists(backupDirectory + @"\" + @"registry-exports"))
+                //INFO: registry items
+                string registryDirectory = backupDirectory + @"\" + @"registry-exports";
+                if (!Directory.Exists(registryDirectory))
                 {
-                    Directory.CreateDirectory(backupDirectory + @"\" + @"registry-exports");
+                    Directory.CreateDirectory(registryDirectory);
                 }
-                //INFO: visual pinmame
-                RegistryUtilities.VisualPinMame.Backup.All(backupDirectory + @"\" + @"registry-exports" + @"\" + "visual-pinmame_" + dateTimeNow + ".reg");
-
+                RegistryUtilities.B2S.Backup.All(registryDirectory + @"\" + "b2s_" + dateTimeNow + ".reg");
+                RegistryUtilities.B2S_Software.Backup.All(registryDirectory + @"\" + "software-b2s_" + dateTimeNow + ".reg");
+                RegistryUtilities.PinballX.Backup.All(registryDirectory + @"\" + "pinballx_" + dateTimeNow + ".reg");
+                RegistryUtilities.SetDMD.Backup.All(registryDirectory + @"\" + "setdmd_" + dateTimeNow + ".reg");
+                RegistryUtilities.UltraDMD.Backup.All(registryDirectory + @"\" + "ultradmd_" + dateTimeNow + ".reg");
+                RegistryUtilities.VisualPinball.Backup.All(registryDirectory + @"\" + "visual-pinball_" + dateTimeNow + ".reg");
+                RegistryUtilities.VisualPinMame.Backup.All(registryDirectory + @"\" + "visual-pinmame_" + dateTimeNow + ".reg");
                 string registryCompressedFile = "registry-exports_" + dateTimeNow + ".zip";
+                bool registryProcessing = Process.Folder(registryDirectory, registryCompressedFile, backupDirectory);
+                if (registryProcessing) processedItems.Add(registryCompressedFile);
 
                 //TODO: need to pull in all of the files from processed items and toss them into the backupfilename
-                //TODO: need to put the pindmd.dll and .ini file in the systemWOW64 folder
+
+                //TODO: need to copy the emulators\ultradmd\pindmd.dll and .ini file in the systemWOW64 folder
             }
         }
-        private static bool ProcessDirectory(string sourceDirectory, string backupFilename, string backupDirectory)
+
+        class Process
         {
-            bool b = true;
-
-            if (!Directory.Exists(backupDirectory))
+            public static Dictionary<string, bool> RegisteryEntries(string[] paths, string backupFilename, string backupDirectory)
             {
+                Dictionary<string, bool> d = new Dictionary<string, bool>();
+                foreach (string path in paths)
+                {
+                    bool b = RegistryEntry(path, backupFilename, backupDirectory);
+                    d.Add(path, b);
+                }
+                return d;
+            }
+            public static bool RegistryEntry(string path, string backupFilename, string backupDirectory)
+            {
+                bool b = true;
+
+                return b;
+            }
+            public static bool Folder(string sourceDirectory, string backupFilename, string backupDirectory)
+            {
+                bool b = true;
+
+                if (!Directory.Exists(backupDirectory))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(backupDirectory);
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: couldnt create the backup directory
+                        return false;
+                    }
+                }
+
+
+                string zipPath = backupDirectory.TrimEnd('\\') + @"\" + backupFilename;
+                //check for existing directory, if not, create it.
+                //check to see if there is an existing file, if so, delete it
+                //zip the directory and save
+                //toss that file into the master zip file backup
+                //need to check the zip and see if that file exists
+                //should think about incremental backups
+
+                if (File.Exists(zipPath))
+                {
+                    try
+                    {
+                        File.Delete(zipPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: couldn't remove current zip file
+                        return false;
+                    }
+                }
+
                 try
                 {
-                    Directory.CreateDirectory(backupDirectory);
+                    ZipFile.CreateFromDirectory(sourceDirectory, zipPath);
                 }
                 catch (Exception ex)
                 {
-                    //TODO: couldnt create the backup directory
+                    //couldnt zip directory
                     return false;
                 }
+
+                return b;
             }
-
-
-            string zipPath = backupDirectory.TrimEnd('\\') + @"\" + backupFilename;
-            //check for existing directory, if not, create it.
-            //check to see if there is an existing file, if so, delete it
-            //zip the directory and save
-            //toss that file into the master zip file backup
-            //need to check the zip and see if that file exists
-            //should think about incremental backups
-
-            if (File.Exists(zipPath))
-            {
-                try
-                {
-                    File.Delete(zipPath);
-                }
-                catch (Exception ex)
-                {
-                    //TODO: couldn't remove current zip file
-                    return false;
-                }
-            }
-
-            try
-            {
-                ZipFile.CreateFromDirectory(sourceDirectory, zipPath);
-            }
-            catch (Exception ex)
-            {
-                //couldnt zip directory
-                return false;
-            }
-
-            return b;
         }
     }
 }

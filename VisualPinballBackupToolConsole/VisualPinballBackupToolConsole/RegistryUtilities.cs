@@ -13,28 +13,103 @@ namespace VisualPinballBackupToolConsole
         public class PinballX
         {
             const string SubKey = @"SOFTWARE\PinballX";
+
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
         }
 
         public class B2S
         {
             //need to to both sets
             const string SubKey = @"B2S";
-            const string SubKey2 = @"SOFTWARE\B2S";
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
+        }
+
+        public class B2S_Software
+        {
+            //need to to both sets
+            const string SubKey = @"SOFTWARE\B2S";
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
         }
 
         public class VisualPinball
         {
             const string SubKey = @"SOFTWARE\Visual Pinball";
+
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
         }
 
         public class UltraDMD
         {
             const string SubKey = @"SOFTWARE\UltraDMD";
+
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
         }
 
         public class SetDMD
         {
             const string SubKey = @"SOFTWARE\SetDMD";
+
+            public class Backup
+            {
+                public static bool All(string savePath)
+                {
+                    bool b = true;
+
+                    RegistryUtilities.ExportKey(SubKey, savePath);
+
+                    return b;
+                }
+            }
         }
         public class VisualPinMame
         {
