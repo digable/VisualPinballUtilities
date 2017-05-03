@@ -66,22 +66,6 @@ namespace VisualPinballBackupToolConsole
 
         class Process
         {
-            public static Dictionary<string, bool> RegisteryEntries(string[] paths, string backupFilename, string backupDirectory)
-            {
-                Dictionary<string, bool> d = new Dictionary<string, bool>();
-                foreach (string path in paths)
-                {
-                    bool b = RegistryEntry(path, backupFilename, backupDirectory);
-                    d.Add(path, b);
-                }
-                return d;
-            }
-            public static bool RegistryEntry(string path, string backupFilename, string backupDirectory)
-            {
-                bool b = true;
-
-                return b;
-            }
             public static bool Folder(string sourceDirectory, string backupFilename, string backupDirectory)
             {
                 bool b = true;

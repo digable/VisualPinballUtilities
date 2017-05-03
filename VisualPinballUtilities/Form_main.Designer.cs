@@ -156,6 +156,7 @@
             // 
             // button_eloRating
             // 
+            this.button_eloRating.Enabled = false;
             this.button_eloRating.Location = new System.Drawing.Point(12, 161);
             this.button_eloRating.Name = "button_eloRating";
             this.button_eloRating.Size = new System.Drawing.Size(75, 23);
