@@ -19,6 +19,14 @@ namespace VisualPinballUtilities
         {
             InitializeComponent();
             textBox_backupDirectory.Text = string.Empty;
+            string[] reports = new string[] {
+                "PinballX --> list of media files w/o associations", //INFO: AC/DC will be ACDC
+                "PinballX --> ",
+                "adadadadad" };
+            for (int i = 0; i < reports.Length; i++)
+            {
+                checkedListBox_reports.Items.Add(reports[i]);
+            }
         }
 
         private void button_packageTable_Click(object sender, EventArgs e)
@@ -39,7 +47,7 @@ namespace VisualPinballUtilities
             //package up all the files into a compressed file structure.
         }
 
-        private void button_browseBackupDIrectory_Click(object sender, EventArgs e)
+        private void Button_browseBackupDirectory_Click(object sender, EventArgs e)
         {
             DialogResult result = folderBrowserDialog_backupDirectory.ShowDialog();
             if (result == DialogResult.OK)
@@ -80,6 +88,17 @@ namespace VisualPinballUtilities
             m.User2Score = 1000;
 
             Rating.EloRating.UpdateScores(m, true);
+        }
+
+        private void button_runReports_Click(object sender, EventArgs e)
+        {
+            List<string> reportNames = new List<string>();
+            foreach (var reportName in checkedListBox_reports.CheckedItems)
+            {
+                reportNames.Add(reportName.ToString());
+            }
+            Report.Process(reportNames);
+            reportNames = null;
         }
     }
 }

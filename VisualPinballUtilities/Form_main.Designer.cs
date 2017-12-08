@@ -35,13 +35,17 @@
             this.button_backupVisualPinballData = new System.Windows.Forms.Button();
             this.label_backupDirectory = new System.Windows.Forms.Label();
             this.textBox_backupDirectory = new System.Windows.Forms.TextBox();
-            this.button_browseBackupDIrectory = new System.Windows.Forms.Button();
+            this.button_browseBackupDirectory = new System.Windows.Forms.Button();
             this.folderBrowserDialog_backupDirectory = new System.Windows.Forms.FolderBrowserDialog();
             this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
             this.groupBox_registryUpdates = new System.Windows.Forms.GroupBox();
             this.button_registryUpdate = new System.Windows.Forms.Button();
             this.button_eloRating = new System.Windows.Forms.Button();
+            this.button_runReports = new System.Windows.Forms.Button();
+            this.checkedListBox_reports = new System.Windows.Forms.CheckedListBox();
+            this.groupBox_reports = new System.Windows.Forms.GroupBox();
             this.groupBox_registryUpdates.SuspendLayout();
+            this.groupBox_reports.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_packageTable
@@ -111,15 +115,15 @@
             this.textBox_backupDirectory.Size = new System.Drawing.Size(335, 20);
             this.textBox_backupDirectory.TabIndex = 6;
             // 
-            // button_browseBackupDIrectory
+            // button_browseBackupDirectory
             // 
-            this.button_browseBackupDIrectory.Location = new System.Drawing.Point(452, 133);
-            this.button_browseBackupDIrectory.Name = "button_browseBackupDIrectory";
-            this.button_browseBackupDIrectory.Size = new System.Drawing.Size(75, 23);
-            this.button_browseBackupDIrectory.TabIndex = 7;
-            this.button_browseBackupDIrectory.Text = "Browse...";
-            this.button_browseBackupDIrectory.UseVisualStyleBackColor = true;
-            this.button_browseBackupDIrectory.Click += new System.EventHandler(this.button_browseBackupDIrectory_Click);
+            this.button_browseBackupDirectory.Location = new System.Drawing.Point(452, 133);
+            this.button_browseBackupDirectory.Name = "button_browseBackupDirectory";
+            this.button_browseBackupDirectory.Size = new System.Drawing.Size(75, 23);
+            this.button_browseBackupDirectory.TabIndex = 7;
+            this.button_browseBackupDirectory.Text = "Browse...";
+            this.button_browseBackupDirectory.UseVisualStyleBackColor = true;
+            this.button_browseBackupDirectory.Click += new System.EventHandler(this.Button_browseBackupDirectory_Click);
             // 
             // checkBox_compactDMD
             // 
@@ -165,14 +169,44 @@
             this.button_eloRating.UseVisualStyleBackColor = true;
             this.button_eloRating.Click += new System.EventHandler(this.button_eloRating_Click);
             // 
+            // button_runReports
+            // 
+            this.button_runReports.Location = new System.Drawing.Point(256, 119);
+            this.button_runReports.Name = "button_runReports";
+            this.button_runReports.Size = new System.Drawing.Size(84, 23);
+            this.button_runReports.TabIndex = 0;
+            this.button_runReports.Text = "Run Reports!";
+            this.button_runReports.UseVisualStyleBackColor = true;
+            this.button_runReports.Click += new System.EventHandler(this.button_runReports_Click);
+            // 
+            // checkedListBox_reports
+            // 
+            this.checkedListBox_reports.FormattingEnabled = true;
+            this.checkedListBox_reports.Location = new System.Drawing.Point(6, 19);
+            this.checkedListBox_reports.Name = "checkedListBox_reports";
+            this.checkedListBox_reports.Size = new System.Drawing.Size(334, 94);
+            this.checkedListBox_reports.TabIndex = 1;
+            // 
+            // groupBox_reports
+            // 
+            this.groupBox_reports.Controls.Add(this.button_runReports);
+            this.groupBox_reports.Controls.Add(this.checkedListBox_reports);
+            this.groupBox_reports.Location = new System.Drawing.Point(12, 190);
+            this.groupBox_reports.Name = "groupBox_reports";
+            this.groupBox_reports.Size = new System.Drawing.Size(346, 148);
+            this.groupBox_reports.TabIndex = 12;
+            this.groupBox_reports.TabStop = false;
+            this.groupBox_reports.Text = "Reports";
+            // 
             // Form_visualPinballUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(539, 228);
+            this.ClientSize = new System.Drawing.Size(539, 369);
+            this.Controls.Add(this.groupBox_reports);
             this.Controls.Add(this.button_eloRating);
             this.Controls.Add(this.groupBox_registryUpdates);
-            this.Controls.Add(this.button_browseBackupDIrectory);
+            this.Controls.Add(this.button_browseBackupDirectory);
             this.Controls.Add(this.textBox_backupDirectory);
             this.Controls.Add(this.label_backupDirectory);
             this.Controls.Add(this.button_backupVisualPinballData);
@@ -184,9 +218,15 @@
             this.Text = "Visual Pinball Utilities";
             this.groupBox_registryUpdates.ResumeLayout(false);
             this.groupBox_registryUpdates.PerformLayout();
+            this.groupBox_reports.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void Button_browseBackupDirectory_Click1(object sender, System.EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
 
         #endregion
@@ -198,12 +238,15 @@
         private System.Windows.Forms.Button button_backupVisualPinballData;
         private System.Windows.Forms.Label label_backupDirectory;
         private System.Windows.Forms.TextBox textBox_backupDirectory;
-        private System.Windows.Forms.Button button_browseBackupDIrectory;
+        private System.Windows.Forms.Button button_browseBackupDirectory;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_backupDirectory;
         private System.Windows.Forms.CheckBox checkBox_compactDMD;
         private System.Windows.Forms.GroupBox groupBox_registryUpdates;
         private System.Windows.Forms.Button button_registryUpdate;
         private System.Windows.Forms.Button button_eloRating;
+        private System.Windows.Forms.Button button_runReports;
+        private System.Windows.Forms.CheckedListBox checkedListBox_reports;
+        private System.Windows.Forms.GroupBox groupBox_reports;
     }
 }
 
