@@ -37,221 +37,25 @@ namespace VisualPinballUtilities.PinballX_Utilities
             vp10 = 3
         }
 
-        //public class VisualPinballTables
-        //{
-        //    public 
-        //    //[Serializable]
-        //    //[XmlRoot("menu")]
-        //    //public class menu
-        //    //{
-        //    //    [XmlArray("game")]
-        //    //    public string game { get; set; }
-        //    //}
-        //    //public class VisualPinballItem
-        //    //{
-        //    //    [XmlArray("game")]
-        //    //    public string name { get; set; }
-        //    //    public string rom { get; set; }
-        //    //    public string manufacturer { get; set; }
-        //    //    public int year { get; set; }
-        //    //    public string type { get; set; }
-        //    //    public bool hidedmd { get; set; }
-        //    //    public bool hidebackglass { get; set; }
-        //    //    public bool enabled { get; set; }
-        //    //    public decimal rating { get; set; }
-
-        //    //}
-        //}
-        //    }
-        //}
-        /// <remarks/>
-        //public class VisualPinballTables
-        //{
-        //    //[System.SerializableAttribute()]
-        //    [Serializable]
-        //    [XmlRoot("menu")]
-        //    //[System.ComponentModel.DesignerCategoryAttribute("code")]
-        //    //[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-        //    //[System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
-        //    public partial class menu
-        //    {
-
-        //        private menuGame[] gameField;
-
-        //        /// <remarks/>
-        //        [System.Xml.Serialization.XmlElementAttribute("game")]
-        //        public menuGame[] game
-        //        {
-        //            get
-        //            {
-        //                return this.gameField;
-        //            }
-        //            set
-        //            {
-        //                this.gameField = value;
-        //            }
-        //        }
-        //    }
-
-        //    /// <remarks/>
-        //    [System.SerializableAttribute()]
-        //    [System.ComponentModel.DesignerCategoryAttribute("code")]
-        //    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-        //    public partial class menuGame
-        //    {
-
-        //        private string descriptionField;
-
-        //        private object romField;
-
-        //        private string manufacturerField;
-
-        //        private int yearField;
-
-        //        private string typeField;
-
-        //        private bool hidedmdField;
-
-        //        private bool hidebackglassField;
-
-        //        private bool enabledField;
-
-        //        private decimal ratingField;
-
-        //        private string nameField;
-
-        //        /// <remarks/>
-        //        public string description
-        //        {
-        //            get
-        //            {
-        //                return this.descriptionField;
-        //            }
-        //            set
-        //            {
-        //                this.descriptionField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public object rom
-        //        {
-        //            get
-        //            {
-        //                return this.romField;
-        //            }
-        //            set
-        //            {
-        //                this.romField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public string manufacturer
-        //        {
-        //            get
-        //            {
-        //                return this.manufacturerField;
-        //            }
-        //            set
-        //            {
-        //                this.manufacturerField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public int year
-        //        {
-        //            get
-        //            {
-        //                return this.yearField;
-        //            }
-        //            set
-        //            {
-        //                this.yearField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public string type
-        //        {
-        //            get
-        //            {
-        //                return this.typeField;
-        //            }
-        //            set
-        //            {
-        //                this.typeField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public bool hidedmd
-        //        {
-        //            get
-        //            {
-        //                return this.hidedmdField;
-        //            }
-        //            set
-        //            {
-        //                this.hidedmdField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public bool hidebackglass
-        //        {
-        //            get
-        //            {
-        //                return this.hidebackglassField;
-        //            }
-        //            set
-        //            {
-        //                this.hidebackglassField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public bool enabled
-        //        {
-        //            get
-        //            {
-        //                return this.enabledField;
-        //            }
-        //            set
-        //            {
-        //                this.enabledField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        public decimal rating
-        //        {
-        //            get
-        //            {
-        //                return this.ratingField;
-        //            }
-        //            set
-        //            {
-        //                this.ratingField = value;
-        //            }
-        //        }
-
-        //        /// <remarks/>
-        //        [System.Xml.Serialization.XmlAttributeAttribute()]
-        //        public string name
-        //        {
-        //            get
-        //            {
-        //                return this.nameField;
-        //            }
-        //            set
-        //            {
-        //                this.nameField = value;
-        //            }
-        //        }
-        //    }
-        //}
+        public class PinballXConfig
+        {
+            public string Name { get; set; }
+            public bool Enabled { get; set; }
+            public string WorkingPath { get; set; }
+            public string TablePath { get; set; }
+            public string Executable { get; set; }
+            public string Parameters { get; set; }
+            public bool LaunchBeforeEnabled { get; set; }
+            public string LaunchBeforeWorkingPath { get; set; }
+            public string LaunchBeforeExecutable { get; set; }
+            public bool LaunchBeforeHideWindow { get; set; }
+            public bool LaunchBeforeWaitForExit { get; set; }
+            public bool LaunchAfterEnabled { get; set; }
+            public string LaunchAfterWorkingPath { get; set; }
+            public string LaunchAfterExecutable { get; set; }
+            public bool LaunchAfterHideWindow { get; set; }
+            public bool LaunchAfterWaitForExit { get; set; }
+        }
     }
 }
 
