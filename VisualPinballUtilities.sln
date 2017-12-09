@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballUtilities", "V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballBackupToolConsole", "VisualPinballBackupToolConsole\VisualPinballBackupToolConsole\VisualPinballBackupToolConsole.csproj", "{AB0A0351-A442-4420-8CCE-3C3257BA359D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateScreen", "..\..\..\Documents\Visual Studio 2017\Projects\RotateScreen\RotateScreen\RotateScreen.csproj", "{4F1D6B3D-AB80-4185-B116-FD5FDB368005}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateScreen", "RotateScreen\RotateScreen\RotateScreen.csproj", "{4F1D6B3D-AB80-4185-B116-FD5FDB368005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
