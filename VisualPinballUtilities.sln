@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballUtilities", "VisualPinballUtilities\VisualPinballUtilities.csproj", "{E9520455-A2C3-4900-A5A7-EDA8C8F4222D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballBackupToolConsole", "VisualPinballBackupToolConsole\VisualPinballBackupToolConsole\VisualPinballBackupToolConsole.csproj", "{AB0A0351-A442-4420-8CCE-3C3257BA359D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateScreen", "..\..\..\Documents\Visual Studio 2017\Projects\RotateScreen\RotateScreen\RotateScreen.csproj", "{4F1D6B3D-AB80-4185-B116-FD5FDB368005}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AB0A0351-A442-4420-8CCE-3C3257BA359D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB0A0351-A442-4420-8CCE-3C3257BA359D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB0A0351-A442-4420-8CCE-3C3257BA359D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
