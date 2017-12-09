@@ -32,9 +32,10 @@ namespace VisualPinballUtilities.PinballX_Utilities
 
         public enum VisualPinballVersion
         {
-            vp9 = 1,
-            vp9pm = 2,
-            vp10 = 3
+            UNKNOWN = 0,
+            VP9 = 1,
+            VP9PM5 = 2,
+            VP10 = 3
         }
 
         public class PinballXConfig
