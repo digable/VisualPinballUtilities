@@ -1,40 +1,19 @@
 ﻿using System;
 using System.Configuration;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
+
 
 namespace RotateScreen
 {
     class Program
     {
-        private static string appName = ConfigurationManager.AppSettings["appName"].ToLower();
-        private static int monitor = 2;
         private static int sleepTime = 1;
 
-        private static bool CheckForRunningProcess(string processName) =>
-            Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
+        private static string rotateScreen_appName = ConfigurationManager.AppSettings["rotate-screen_appName"].ToLower();
+        private static int rotateScreen_monitor = 2;
 
-        private static string CheckMonitorOrientation(int deviceIndex = 1)
-        {
-            string str = string.Empty;
-            foreach (Screen screen in Screen.AllScreens)
-            {
-                if (screen.DeviceName.EndsWith(deviceIndex.ToString()))
-                {
-                    if (screen.Bounds.Height > screen.Bounds.Width)
-                    {
-                        return "portrait";
-                    }
-                    return "landscape";
-                }
-            }
-            return str;
-        }
+        private static string appKill_appName = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
+        private static string appKill_watchApp = ConfigurationManager.AppSettings["app-kill_watchApp"].ToLower();
 
         static void Main(string[] args)
         {
@@ -42,56 +21,34 @@ namespace RotateScreen
             {
                 sleepTime = Convert.ToInt32(ConfigurationManager.AppSettings["sleepTime"]) * 1000;
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
+
             try
             {
-                monitor = Convert.ToInt32(ConfigurationManager.AppSettings["monitor"]);
+                rotateScreen_monitor = Convert.ToInt32(ConfigurationManager.AppSettings["rotate-screen_monitor"]);
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
+
             while (true)
             {
-                string str = CheckMonitorOrientation(monitor);
-                if (CheckForRunningProcess(appName))
+                Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
+                if (Functions.CheckForRunningProcess(rotateScreen_appName))
                 {
-                    if (str == "portrait")
+                    if (orientation == Functions.MonitorOrientation.Portrait)
                     {
-                        RotateMonitor(monitor, "landscape");
+                        Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
                     }
                     Thread.Sleep(sleepTime);
                 }
                 else
                 {
-                    if (str == "landscape")
+                    if (orientation == Functions.MonitorOrientation.Landscape)
                     {
-                        RotateMonitor(monitor, "portrait");
+                        Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Portrait);
                     }
                     Thread.Sleep(sleepTime);
                 }
             }
-        }
-
-        private static void RotateMonitor(int deviceIndex = 1, string orientation = "landscape")
-        {
-            int num = 0;
-            if (orientation.ToLower() == "portrait")
-            {
-                num = 90;
-            }
-            string[] commandArray = new string[] { "/C display.exe /rotate:", num.ToString(), " /device:", deviceIndex.ToString(), " /toggle" };
-            string str = string.Concat(commandArray);
-            Process process = new Process
-            {
-                StartInfo = { FileName = "cmd.exe" }
-            };
-            char[] trimChars = new char[] { '\\' };
-            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\";
-            process.StartInfo.Arguments = str;
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.Start();
         }
     }
 }
