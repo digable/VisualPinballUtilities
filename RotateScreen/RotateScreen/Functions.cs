@@ -13,7 +13,18 @@ namespace RotateScreen
 {
     class Functions
     {
-        public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
+        public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));//.Contains(processName.ToLower()));
+
+        public static bool KillRunningProcess(string processName)
+        {
+            Process[] processes = Process.GetProcessesByName(processName);
+            foreach (Process p in processes)
+            {
+                p.Kill();
+            }
+
+            return true;
+        }
 
         public static MonitorOrientation CheckMonitorOrientation(int deviceIndex = 1)
         {
