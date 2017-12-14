@@ -58,6 +58,8 @@ namespace VisualPinballUtilities
                                         mediaFiles = null;
                                         directoryName = null;
                                     }
+
+                                    //need to check the media files, mark which sections are missing files, and which files are not a match to anything in the db.
                                 }
                                 else
                                 {

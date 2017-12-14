@@ -18,6 +18,8 @@ namespace RotateScreen
         private static string appKill_watchApp = ConfigurationManager.AppSettings["app-kill_watchApp"].ToLower();
         //need to close out the longest running one if there are multiples.
 
+        //have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
+
         static void Main(string[] args)
         {
             bool bRotateScreen_enable = true;
