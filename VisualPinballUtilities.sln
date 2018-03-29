@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballBackupToolCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateScreen", "RotateScreen\RotateScreen\RotateScreen.csproj", "{4F1D6B3D-AB80-4185-B116-FD5FDB368005}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBLib", "..\..\..\..\..\temp\USBView\USBLib\USBLib.csproj", "{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F1D6B3D-AB80-4185-B116-FD5FDB368005}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

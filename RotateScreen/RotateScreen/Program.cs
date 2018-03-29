@@ -3,6 +3,9 @@ using System.Configuration;
 using System.Threading;
 
 
+using System.Collections.Generic;
+using System.Linq;
+
 namespace RotateScreen
 {
     class Program
@@ -16,14 +19,19 @@ namespace RotateScreen
         private static string appKill_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
         private static string appKill_appName = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
         private static string appKill_watchApp = ConfigurationManager.AppSettings["app-kill_watchApp"].ToLower();
+
+        private static string usbKill_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
+        private static string usbKill_deviceName = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower();
+        private static string usbKill_watchApp = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
         //need to close out the longest running one if there are multiples.
 
         //have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 
         static void Main(string[] args)
         {
-            bool bRotateScreen_enable = true;
-            bool bAppKill_enable = true;
+            bool bRotateScreen_enable = false;
+            bool bAppKill_enable = false;
+            bool bUsbKill_enable = false;
 
             try
             {
@@ -39,13 +47,19 @@ namespace RotateScreen
 
             try
             {
-                bRotateScreen_enable = Convert.ToBoolean(rotateScreen_enable);
+                //bRotateScreen_enable = Convert.ToBoolean(rotateScreen_enable);
             }
             catch (Exception ex) { }
 
             try
             {
-                bAppKill_enable = Convert.ToBoolean(appKill_enable);
+                //bAppKill_enable = Convert.ToBoolean(appKill_enable);
+            }
+            catch (Exception ex) { }
+
+            try
+            {
+                bUsbKill_enable = Convert.ToBoolean(usbKill_enable);
             }
             catch (Exception ex) { }
 
@@ -94,6 +108,37 @@ namespace RotateScreen
                             bool b = Functions.KillRunningProcess(appKill_appName);
                         }
 
+                    }
+                }
+
+                if (bUsbKill_enable)
+                {
+                    IEnumerable<USBLib.USB.USBDevice> yeah = USBLib.USB.GetConnectedDevices();//.Any<USBLib.USB.USBDevice>(d => d.Name.ToLower().Equals(deviceName.ToLower()));
+                    var adad = yeah.Where(d => d.Product.ToLower() == usbKill_deviceName);
+                    //var yeah1 = ()
+
+                    if (Functions.CheckForRunningProcess(usbKill_watchApp))
+                    {
+                        //need to enable the device
+                        if (Functions.CheckForConnectedDevice(usbKill_deviceName))
+                        {
+                            //its already enabled
+                        }
+                        else
+                        {
+                            //need to enable it
+                        }
+                    }
+                    else
+                    {
+                        if (Functions.CheckForConnectedDevice(usbKill_deviceName))
+                        {
+                            //need to disable it
+                        }
+                        else
+                        {
+                            //its already disabled
+                        }
                     }
                 }
 
