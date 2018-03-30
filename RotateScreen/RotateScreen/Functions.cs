@@ -14,6 +14,7 @@ namespace RotateScreen
     class Functions
     {
         public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));//.Contains(processName.ToLower()));
+        public static bool CheckForRunningProcessContains(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));//.Contains(processName.ToLower()));
         public static bool CheckForConnectedDevice(string deviceName) => USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
 
         public static bool KillRunningProcess(string processName)
@@ -82,14 +83,14 @@ namespace RotateScreen
             return s;
         }
 
-        public static bool ChangeStatusOfUSBDevice(string usbDeviceId, bool enable)
+        public static bool ChangeStatusOfUSBDevice(string usbDeviceId, int osVersion, bool enable)
         {
             bool b = true;
 
             string enDisable = "enable";
             if (!enable) enDisable = "disable";
 
-            string[] commandArray = new string[] { "/C devcon64.exe " + enDisable + " \"@" + usbDeviceId + "\"" };
+            string[] commandArray = new string[] { "/C devcon" + osVersion + ".exe " + enDisable + " \"@" + usbDeviceId + "\"" };
             string str = string.Concat(commandArray);
             Process process = new Process
             {
