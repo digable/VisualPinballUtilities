@@ -33,6 +33,8 @@ namespace RotateScreen
             bool bAppKill_enable = false;
             bool bUsbKill_enable = false;
 
+            string usbKill_deviceId = string.Empty;
+
             try
             {
                 sleepTime = Convert.ToInt32(ConfigurationManager.AppSettings["sleepTime"]) * 1000;
@@ -47,13 +49,13 @@ namespace RotateScreen
 
             try
             {
-                //bRotateScreen_enable = Convert.ToBoolean(rotateScreen_enable);
+                bRotateScreen_enable = Convert.ToBoolean(rotateScreen_enable);
             }
             catch (Exception ex) { }
 
             try
             {
-                //bAppKill_enable = Convert.ToBoolean(appKill_enable);
+                bAppKill_enable = Convert.ToBoolean(appKill_enable);
             }
             catch (Exception ex) { }
 
@@ -113,20 +115,23 @@ namespace RotateScreen
 
                 if (bUsbKill_enable)
                 {
-                    IEnumerable<USBLib.USB.USBDevice> yeah = USBLib.USB.GetConnectedDevices();//.Any<USBLib.USB.USBDevice>(d => d.Name.ToLower().Equals(deviceName.ToLower()));
-                    var adad = yeah.Where(d => d.Product.ToLower() == usbKill_deviceName);
+                    //get the device id before it's disabled...keep is safe.
+                    if (usbKill_deviceId == string.Empty)
+                    {
+                        usbKill_deviceId = Functions.GetUsbDeviceId(usbKill_deviceName);
+                    }
+
+                    //IEnumerable<USBLib.USB.USBDevice> yeah = USBLib.USB.GetConnectedDevices();//.Any<USBLib.USB.USBDevice>(d => d.Name.ToLower().Equals(deviceName.ToLower()));
+                    //var adad = yeah.Where(d => d.Product.ToLower() == usbKill_deviceName);
                     //var yeah1 = ()
 
                     if (Functions.CheckForRunningProcess(usbKill_watchApp))
                     {
                         //need to enable the device
-                        if (Functions.CheckForConnectedDevice(usbKill_deviceName))
-                        {
-                            //its already enabled
-                        }
-                        else
+                        if (!Functions.CheckForConnectedDevice(usbKill_deviceName))
                         {
                             //need to enable it
+                            bool b = Functions.ChangeStatusOfUSBDevice(usbKill_deviceId, true);
                         }
                     }
                     else
@@ -134,10 +139,7 @@ namespace RotateScreen
                         if (Functions.CheckForConnectedDevice(usbKill_deviceName))
                         {
                             //need to disable it
-                        }
-                        else
-                        {
-                            //its already disabled
+                            bool b = Functions.ChangeStatusOfUSBDevice(usbKill_deviceId, false);
                         }
                     }
                 }

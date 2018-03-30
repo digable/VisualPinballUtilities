@@ -14,7 +14,7 @@ namespace RotateScreen
     class Functions
     {
         public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));//.Contains(processName.ToLower()));
-        public static bool CheckForConnectedDevice(string deviceName) => USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Name.ToLower().Equals(deviceName.ToLower()));
+        public static bool CheckForConnectedDevice(string deviceName) => USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
 
         public static bool KillRunningProcess(string processName)
         {
@@ -68,6 +68,40 @@ namespace RotateScreen
         {
             Landscape = 1,
             Portrait = 2
+        }
+
+        public static string GetUsbDeviceId(string deviceName)
+        {
+            string s = string.Empty;
+
+            s = USBLib.USB.GetConnectedDevices().Where(d => d.Product.ToLower().Equals(deviceName.ToLower())).Select(d => d.InstanceID).FirstOrDefault();
+
+            //HACK
+            if (s == null) s = string.Empty;
+
+            return s;
+        }
+
+        public static bool ChangeStatusOfUSBDevice(string usbDeviceId, bool enable)
+        {
+            bool b = true;
+
+            string enDisable = "enable";
+            if (!enable) enDisable = "disable";
+
+            string[] commandArray = new string[] { "/C devcon64.exe " + enDisable + " \"@" + usbDeviceId + "\"" };
+            string str = string.Concat(commandArray);
+            Process process = new Process
+            {
+                StartInfo = { FileName = "cmd.exe" }
+            };
+            char[] trimChars = new char[] { '\\' };
+            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\";
+            process.StartInfo.Arguments = str;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.Start();
+
+            return b;
         }
     }
 }
