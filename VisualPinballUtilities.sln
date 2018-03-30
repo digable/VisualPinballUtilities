@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualPinballBackupToolCons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotateScreen", "RotateScreen\RotateScreen\RotateScreen.csproj", "{4F1D6B3D-AB80-4185-B116-FD5FDB368005}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBLib", "..\..\..\..\..\temp\USBView\USBLib\USBLib.csproj", "{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBLib", "USBLib\USBLib.csproj", "{D5E4C645-FF2E-4F83-A287-3EA3E50D5833}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

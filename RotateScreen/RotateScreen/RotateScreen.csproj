@@ -99,7 +99,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\..\temp\USBView\USBLib\USBLib.csproj">
+    <ProjectReference Include="..\..\USBLib\USBLib.csproj">
       <Project>{d5e4c645-ff2e-4f83-a287-3ea3e50d5833}</Project>
       <Name>USBLib</Name>
     </ProjectReference>
