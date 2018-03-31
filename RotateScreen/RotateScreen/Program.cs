@@ -30,28 +30,6 @@ namespace RotateScreen
             bool bAppKill_enable = false;
             bool bUsbKill_enable = false;
 
-            //isContains
-            bool isContains_rotateScreen = false;
-            if (rotateScreen_watchApp.EndsWith("*"))
-            {
-                isContains_rotateScreen = true;
-                rotateScreen_watchApp = rotateScreen_watchApp.TrimEnd('*');
-            }
-
-            bool isContains_appKill = false;
-            if (appKill_appName.EndsWith("*"))
-            {
-                isContains_appKill = true;
-                appKill_appName = appKill_appName.TrimEnd('*');
-            }
-
-            bool isContains_usbKill = false;
-            if (usbKill_watchApp.EndsWith("*"))
-            {
-                isContains_usbKill = true;
-                usbKill_watchApp = usbKill_watchApp.TrimEnd('*');
-            }
-
             string usbKill_deviceId = string.Empty;
 
             try
@@ -93,6 +71,13 @@ namespace RotateScreen
             {
                 if (bRotateScreen_enable)
                 {
+                    bool isContains_rotateScreen = false;
+                    if (rotateScreen_watchApp.EndsWith("*"))
+                    {
+                        isContains_rotateScreen = true;
+                        rotateScreen_watchApp = rotateScreen_watchApp.TrimEnd('*');
+                    }
+
                     Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
 
                     bool isRunning = false;
@@ -117,6 +102,13 @@ namespace RotateScreen
 
                 if (bAppKill_enable)
                 {
+                    bool isContains_appKill = false;
+                    if (appKill_appName.EndsWith("*"))
+                    {
+                        isContains_appKill = true;
+                        appKill_appName = appKill_appName.TrimEnd('*');
+                    }
+
                     //bool isRunning = false;
                     //if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName);
                     //else isRunning = Functions.CheckForRunningProcess(appKill_appName);
@@ -146,6 +138,13 @@ namespace RotateScreen
 
                 if (bUsbKill_enable)
                 {
+                    bool isContains_usbKill = false;
+                    if (usbKill_watchApp.EndsWith("*"))
+                    {
+                        isContains_usbKill = true;
+                        usbKill_watchApp = usbKill_watchApp.TrimEnd('*');
+                    }
+
                     bool isRunning = false;
                     if (isContains_usbKill) isRunning = Functions.CheckForRunningProcessContains(usbKill_watchApp);
                     else isRunning = Functions.CheckForRunningProcess(usbKill_watchApp);
