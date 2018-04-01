@@ -104,5 +104,61 @@ namespace RotateScreen
 
             return b;
         }
+
+        public static bool WriteDeviceIdToConfig(string deviceName, string deviceId, string configFile)
+        {
+            bool b = true;
+
+            StreamWriter sw = new StreamWriter(configFile);
+            sw.WriteLine(deviceName + "|" + deviceId);
+            sw.Close();
+            sw.Dispose();
+
+            return b;
+        }
+
+        public static string GetUsbDeviceIdFromFile(string deviceName, string configFile)
+        {
+            string s = string.Empty;
+
+            string line;
+            StreamReader sr = new StreamReader(configFile);
+            
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.StartsWith("#")) continue; //these are comments
+
+                if (line.ToLower().Contains('|'))
+                {
+                    string[] lineSplit = line.Split('|');
+                    if (lineSplit[0].Trim().ToLower() == deviceName.Trim().ToLower())
+                    {
+                        s = lineSplit[1].Trim();
+                        break;
+                    }
+                }
+            }
+
+            return s;
+        }
+
+        public static bool WriteToLogFile(LoggingType loggingType, string details, string logFile)
+        {
+            bool b = true;
+
+            StreamWriter sw = new StreamWriter(logFile, true);
+            sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + details);
+            sw.Close();
+            sw.Dispose();
+
+            return b;
+        }
+
+        public enum LoggingType
+        {
+            Information = 1,
+            Warning = 2,
+            Error = 3
+        }
     }
 }

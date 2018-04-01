@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using System.Threading;
 
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
@@ -11,6 +12,8 @@ namespace RotateScreen
     {
         private static int sleepTime = 1;
         private static int osVersion = 32;
+        private static string config_File = ConfigurationManager.AppSettings["config-file"];
+        private static string log_file = ConfigurationManager.AppSettings["log-file"];
 
         private static string rotateScreen_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower();
         private static string rotateScreen_watchApp = ConfigurationManager.AppSettings["rotate-screen_watchApp"].ToLower();
@@ -26,6 +29,16 @@ namespace RotateScreen
 
         static void Main(string[] args)
         {
+            //setup the full path for config and log files
+            char[] trimChars = new char[] { '\\' };
+            string configFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + config_File;
+            //remove URI format from file path
+            configFile = configFile.Substring(6);
+            
+            string logFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + log_file;
+            //remove URI format from file path
+            logFile = logFile.Substring(6);
+
             bool bRotateScreen_enable = false;
             bool bAppKill_enable = false;
             bool bUsbKill_enable = false;
@@ -153,6 +166,36 @@ namespace RotateScreen
                     if (usbKill_deviceId == string.Empty)
                     {
                         usbKill_deviceId = Functions.GetUsbDeviceId(usbKill_deviceName);
+
+                        //query to find the led wiz device, then find its device id
+                        if (usbKill_deviceId != string.Empty)
+                        {
+                            //then detect it if its there, before you write to it again.
+                            //write this to a file, save it somewhere for the first boot up.
+
+                            if (!System.IO.File.Exists(configFile))
+                            {
+                                //write to the config file
+                                bool b = Functions.WriteDeviceIdToConfig(usbKill_deviceName, usbKill_deviceId, configFile);
+                            }
+                        }
+                        else
+                        {
+                            if (System.IO.File.Exists(configFile))
+                            {
+                                //read from this file, get the id
+                                usbKill_deviceId = Functions.GetUsbDeviceIdFromFile(usbKill_deviceName, configFile);
+                            }
+                            else
+                            {
+                                //INFO: there is no file and you need to reset your led wiz in Devices and Printers
+                                string details = "No device id found for '" + usbKill_deviceName + "'";
+                                bool b = Functions.WriteToLogFile(Functions.LoggingType.Warning, details, log_file);
+                                details = null;
+                            }
+                        }
+
+                        //if (usbKill_deviceId == string.Empty) usbKill_deviceId = @"USB\VID_FAFA&PID_00F0\6&12A4013&0&2";
                     }
 
                     if (isRunning)
