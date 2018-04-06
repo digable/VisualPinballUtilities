@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Threading;
 
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 //TODO: need to close out the longest running one if there are multiples.
+//TODO: need to use the config file for other things, remove app config once that is completed.
+//TODO: check to see if the app is already running, if so, kill it, post a message, set the monitor to landscape
 
 namespace RotateScreen
 {
@@ -27,8 +28,38 @@ namespace RotateScreen
         private static string usbKill_deviceName = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower();
         private static string usbKill_watchApp = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
 
+        private static string moveFile_enable = ConfigurationManager.AppSettings["move-file_enable"];
+        private static string moveFile_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
+        private static string moveFile_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
+        private static string moveFile_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
+
         static void Main(string[] args)
         {
+            //check to see if there is another one running
+            var processes = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
+            if (processes.Length > 1)
+            {
+                //the application is already running
+                //post a message saying you are killing the app
+                System.Windows.Forms.MessageBox.Show("RotateScreen is turning off.  To enable again, relaunch the application.", "Killing RotateScreen", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+
+                //rotate screen to landscape
+                Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
+                if (orientation == Functions.MonitorOrientation.Portrait)
+                {
+                    Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
+                }
+
+                //kill rotate screen
+                foreach ( var p in processes)
+                {
+                    p.Kill();
+                }
+                //this kills this instance, it shouldn't make it this far
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            }
+            processes = null;
+
             //setup the full path for config and log files
             char[] trimChars = new char[] { '\\' };
             string configFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + config_File;
@@ -42,6 +73,7 @@ namespace RotateScreen
             bool bRotateScreen_enable = false;
             bool bAppKill_enable = false;
             bool bUsbKill_enable = false;
+            bool bMoveFile_enable = false;
 
             string usbKill_deviceId = string.Empty;
 
@@ -77,6 +109,12 @@ namespace RotateScreen
             try
             {
                 bUsbKill_enable = Convert.ToBoolean(usbKill_enable);
+            }
+            catch (Exception) { }
+
+            try
+            {
+                bMoveFile_enable = Convert.ToBoolean(moveFile_enable);
             }
             catch (Exception) { }
 
@@ -122,31 +160,31 @@ namespace RotateScreen
                         appKill_appName = appKill_appName.TrimEnd('*');
                     }
 
-                    //bool isRunning = false;
-                    //if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName);
-                    //else isRunning = Functions.CheckForRunningProcess(appKill_appName);
+                    bool isRunning = false;
+                    if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName);
+                    else isRunning = Functions.CheckForRunningProcess(appKill_appName);
 
-                    //if (isRunning)
-                    //{
-                    //    string appKill_watchApp_clean = appKill_watchApp;
-                    //    bool appKillWatchAppBool = true;
-                    //    if (appKill_watchApp.StartsWith("[-]"))
-                    //    {
-                    //        appKillWatchAppBool = false;
-                    //        appKill_watchApp_clean = appKill_watchApp.Replace("[-]", string.Empty).Trim();
-                    //    }
-                    //    else if (appKill_watchApp.StartsWith("[+]"))
-                    //    {
-                    //        appKillWatchAppBool = true;
-                    //        appKill_watchApp_clean = appKill_watchApp.Replace("[+]", string.Empty).Trim();
-                    //    }
+                    if (isRunning)
+                    {
+                        string appKill_watchApp_clean = appKill_watchApp;
+                        bool appKillWatchAppBool = true;
+                        if (appKill_watchApp.StartsWith("[-]"))
+                        {
+                            appKillWatchAppBool = false;
+                            appKill_watchApp_clean = appKill_watchApp.Replace("[-]", string.Empty).Trim();
+                        }
+                        else if (appKill_watchApp.StartsWith("[+]"))
+                        {
+                            appKillWatchAppBool = true;
+                            appKill_watchApp_clean = appKill_watchApp.Replace("[+]", string.Empty).Trim();
+                        }
 
-                    //    if (Functions.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
-                    //    {
-                    //        bool b = Functions.KillRunningProcess(appKill_appName);
-                    //    }
+                        if (Functions.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
+                        {
+                            bool b = Functions.KillRunningProcess(appKill_appName);
+                        }
 
-                    //}
+                    }
                 }
 
                 if (bUsbKill_enable)
@@ -214,6 +252,14 @@ namespace RotateScreen
                             bool b = Functions.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, false);
                         }
                     }
+                }
+
+                if (bMoveFile_enable)
+                {
+                    //get extensions list, or do all files
+                    //get from folders list, make sure they are all folders that exist
+                    //get to folders list, verify they all exist.
+                    //if they dont, need to log it
                 }
 
                 Thread.Sleep(sleepTime);
