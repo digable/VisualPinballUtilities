@@ -39,7 +39,7 @@
             this.folderBrowserDialog_backupDirectory = new System.Windows.Forms.FolderBrowserDialog();
             this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
             this.groupBox_registryUpdates = new System.Windows.Forms.GroupBox();
-            this.button_registryUpdate = new System.Windows.Forms.Button();
+            this.button_registryUpdateAll = new System.Windows.Forms.Button();
             this.button_eloRating = new System.Windows.Forms.Button();
             this.button_runReports = new System.Windows.Forms.Button();
             this.checkedListBox_reports = new System.Windows.Forms.CheckedListBox();
@@ -139,7 +139,7 @@
             // 
             // groupBox_registryUpdates
             // 
-            this.groupBox_registryUpdates.Controls.Add(this.button_registryUpdate);
+            this.groupBox_registryUpdates.Controls.Add(this.button_registryUpdateAll);
             this.groupBox_registryUpdates.Controls.Add(this.checkBox_compactDMD);
             this.groupBox_registryUpdates.Location = new System.Drawing.Point(112, 12);
             this.groupBox_registryUpdates.Name = "groupBox_registryUpdates";
@@ -148,15 +148,15 @@
             this.groupBox_registryUpdates.TabStop = false;
             this.groupBox_registryUpdates.Text = "Registry Updates";
             // 
-            // button_registryUpdate
+            // button_registryUpdateAll
             // 
-            this.button_registryUpdate.Location = new System.Drawing.Point(334, 81);
-            this.button_registryUpdate.Name = "button_registryUpdate";
-            this.button_registryUpdate.Size = new System.Drawing.Size(75, 23);
-            this.button_registryUpdate.TabIndex = 9;
-            this.button_registryUpdate.Text = "Update!!!";
-            this.button_registryUpdate.UseVisualStyleBackColor = true;
-            this.button_registryUpdate.Click += new System.EventHandler(this.button_registryUpdate_Click);
+            this.button_registryUpdateAll.Location = new System.Drawing.Point(334, 81);
+            this.button_registryUpdateAll.Name = "button_registryUpdateAll";
+            this.button_registryUpdateAll.Size = new System.Drawing.Size(75, 23);
+            this.button_registryUpdateAll.TabIndex = 9;
+            this.button_registryUpdateAll.Text = "Update All!!!";
+            this.button_registryUpdateAll.UseVisualStyleBackColor = true;
+            this.button_registryUpdateAll.Click += new System.EventHandler(this.button_registryUpdateAll_Click);
             // 
             // button_eloRating
             // 
@@ -242,7 +242,7 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog_backupDirectory;
         private System.Windows.Forms.CheckBox checkBox_compactDMD;
         private System.Windows.Forms.GroupBox groupBox_registryUpdates;
-        private System.Windows.Forms.Button button_registryUpdate;
+        private System.Windows.Forms.Button button_registryUpdateAll;
         private System.Windows.Forms.Button button_eloRating;
         private System.Windows.Forms.Button button_runReports;
         private System.Windows.Forms.CheckedListBox checkedListBox_reports;

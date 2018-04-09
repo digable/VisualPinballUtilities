@@ -68,9 +68,16 @@ namespace VisualPinballUtilities
             else MessageBox.Show("The directory '" + textBox_backupDirectory.Text + "' is not valid.  Please try another.", "Invalid Backup Directory Selected", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        private void button_registryUpdate_Click(object sender, EventArgs e)
+        private void button_registryUpdateAll_Click(object sender, EventArgs e)
         {
             //process all the updates for the registry
+            //freeware.visual pinmame.[rom name].showpindmd --> enable pindmd --> 1 or 0
+            //[rom name].showwindmd --> enable regular dmd --> 1 or 0
+            //walking dead, tron, spider man ve, acdc le, 
+
+            //should probably add the colors for dmds for pup or to make it look cool.
+            //need to get a list of these, so, it's automatic on restore
+            //dmd_blue, dmd_blue0, dmd_blue33, dmd_blue66, dmd_red, dmd_red0, dmd_red33, dmd_red66, dmd_green, dmd_green0, dmd_green33, dmd_green66
 
             //INFO: 'dmd_compact' update
             string field = "dmd_compact";

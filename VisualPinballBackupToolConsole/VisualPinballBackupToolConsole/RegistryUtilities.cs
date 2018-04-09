@@ -114,14 +114,14 @@ namespace VisualPinballBackupToolConsole
         public class VisualPinMame
         {
             //INFO: these are the roms
-            const string SubKey = @"SOFTWARE\Freeware\Visual PinMame";
+            const string SubKeyFreewareVisualPinMame = @"SOFTWARE\Freeware\Visual PinMame";
             public class Backup
             {
                 public static bool All(string savePath)
                 {
                     bool b = true;
 
-                    RegistryUtilities.ExportKey(SubKey, savePath);
+                    RegistryUtilities.ExportKey(SubKeyFreewareVisualPinMame, savePath);
 
                     return b;
                 }
@@ -136,13 +136,13 @@ namespace VisualPinballBackupToolConsole
                         {
                             bool b = true;
 
-                            RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKey);
+                            RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame);
 
                             string[] roms = vpinmameKey.GetSubKeyNames();
 
                             foreach (string rom in roms)
                             {
-                                RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKey + @"\" + rom, true);
+                                RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame + @"\" + rom, true);
                                 object value = 0;
                                 try
                                 {

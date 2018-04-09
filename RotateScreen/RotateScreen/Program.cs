@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Threading;
+
+using System.Linq;
 
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 //TODO: need to close out the longest running one if there are multiples.
@@ -36,10 +39,12 @@ namespace RotateScreen
         static void Main(string[] args)
         {
             //check to see if there is another one running
-            var processes = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
+            Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
+
             if (processes.Length > 1)
             {
                 //the application is already running
+
                 //post a message saying you are killing the app
                 System.Windows.Forms.MessageBox.Show("RotateScreen is turning off.  To enable again, relaunch the application.", "Killing RotateScreen", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
 
@@ -51,12 +56,14 @@ namespace RotateScreen
                 }
 
                 //kill rotate screen
-                foreach ( var p in processes)
+                var sorted = from p in processes orderby StartTimeNoException(p) ascending, p.Id select p;
+
+                foreach (var p in processes)
                 {
                     p.Kill();
                 }
                 //this kills this instance, it shouldn't make it this far
-                System.Diagnostics.Process.GetCurrentProcess().Kill();
+                Process.GetCurrentProcess().Kill();
             }
             processes = null;
 
@@ -123,17 +130,19 @@ namespace RotateScreen
                 if (bRotateScreen_enable)
                 {
                     bool isContains_rotateScreen = false;
+
+                    string rotateScreen_watchApp_clean = rotateScreen_watchApp;
                     if (rotateScreen_watchApp.EndsWith("*"))
                     {
                         isContains_rotateScreen = true;
-                        rotateScreen_watchApp = rotateScreen_watchApp.TrimEnd('*');
+                        rotateScreen_watchApp_clean = rotateScreen_watchApp.TrimEnd('*');
                     }
 
                     Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
 
                     bool isRunning = false;
-                    if (isContains_rotateScreen) isRunning = Functions.CheckForRunningProcessContains(rotateScreen_watchApp);
-                    else isRunning = Functions.CheckForRunningProcess(rotateScreen_watchApp);
+                    if (isContains_rotateScreen) isRunning = Functions.CheckForRunningProcessContains(rotateScreen_watchApp_clean);
+                    else isRunning = Functions.CheckForRunningProcess(rotateScreen_watchApp_clean);
 
                     if (isRunning)
                     {
@@ -154,15 +163,17 @@ namespace RotateScreen
                 if (bAppKill_enable)
                 {
                     bool isContains_appKill = false;
+
+                    string appKill_appName_clean = appKill_appName;
                     if (appKill_appName.EndsWith("*"))
                     {
                         isContains_appKill = true;
-                        appKill_appName = appKill_appName.TrimEnd('*');
+                        appKill_appName_clean = appKill_appName.TrimEnd('*');
                     }
 
                     bool isRunning = false;
-                    if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName);
-                    else isRunning = Functions.CheckForRunningProcess(appKill_appName);
+                    if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName_clean);
+                    else isRunning = Functions.CheckForRunningProcess(appKill_appName_clean);
 
                     if (isRunning)
                     {
@@ -181,7 +192,7 @@ namespace RotateScreen
 
                         if (Functions.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
                         {
-                            bool b = Functions.KillRunningProcess(appKill_appName);
+                            bool b = Functions.KillRunningProcess(appKill_appName_clean);
                         }
 
                     }
@@ -190,15 +201,17 @@ namespace RotateScreen
                 if (bUsbKill_enable)
                 {
                     bool isContains_usbKill = false;
+
+                    string usbKill_watchApp_clean = usbKill_watchApp;
                     if (usbKill_watchApp.EndsWith("*"))
                     {
                         isContains_usbKill = true;
-                        usbKill_watchApp = usbKill_watchApp.TrimEnd('*');
+                        usbKill_watchApp_clean = usbKill_watchApp.TrimEnd('*');
                     }
 
                     bool isRunning = false;
-                    if (isContains_usbKill) isRunning = Functions.CheckForRunningProcessContains(usbKill_watchApp);
-                    else isRunning = Functions.CheckForRunningProcess(usbKill_watchApp);
+                    if (isContains_usbKill) isRunning = Functions.CheckForRunningProcessContains(usbKill_watchApp_clean);
+                    else isRunning = Functions.CheckForRunningProcess(usbKill_watchApp_clean);
 
                     //get the device id before it's disabled...keep is safe.
                     if (usbKill_deviceId == string.Empty)
@@ -263,6 +276,18 @@ namespace RotateScreen
                 }
 
                 Thread.Sleep(sleepTime);
+            }
+        }
+
+        private static DateTime StartTimeNoException(System.Diagnostics.Process p)
+        {
+            try
+            {
+                return p.StartTime;
+            }
+            catch
+            {
+                return DateTime.MinValue;
             }
         }
     }
