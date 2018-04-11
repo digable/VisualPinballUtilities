@@ -21,7 +21,7 @@ namespace RotateScreen
 
         private static string rotateScreen_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower();
         private static string rotateScreen_watchApp = ConfigurationManager.AppSettings["rotate-screen_watchApp"].ToLower();
-        private static int rotateScreen_monitor = 2;
+        private static string rotateScreen_monitorString = ConfigurationManager.AppSettings["rotate-screen_monitor"].ToString();
 
         private static string appKill_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
         private static string appKill_appName = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
@@ -38,6 +38,18 @@ namespace RotateScreen
 
         static void Main(string[] args)
         {
+            int rotateScreen_monitor = 1;
+            try
+            {
+                rotateScreen_monitor = Convert.ToInt32(rotateScreen_monitorString);
+            }
+            catch (Exception ex)
+            {
+                string details = "Monitor number '" + rotateScreen_monitorString + "' isn't a valid integer.  Defaulting to 1.";
+                bool b = Functions.WriteToLogFile(Functions.LoggingType.Warning, details, log_file);
+                details = null;
+            }
+
             //check to see if there is another one running
             Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
 
@@ -53,12 +65,14 @@ namespace RotateScreen
                 if (orientation == Functions.MonitorOrientation.Portrait)
                 {
                     Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
+
+                    Thread.Sleep(1000);
                 }
 
                 //kill rotate screen
                 var sorted = from p in processes orderby StartTimeNoException(p) ascending, p.Id select p;
 
-                foreach (var p in processes)
+                foreach (var p in sorted)
                 {
                     p.Kill();
                 }

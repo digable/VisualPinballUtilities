@@ -74,6 +74,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <Content Include="config_files\backup.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="devcon32.exe">

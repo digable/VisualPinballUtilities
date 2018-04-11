@@ -1,0 +1,1 @@
+﻿led-wiz|USB\VID_FAFA&PID_00F0\6&1F555781&0&1
