@@ -14,6 +14,7 @@ namespace RotateScreen
 {
     class Program
     {
+        private static bool serviceIsRunning = true;
         private static int sleepTime = 1;
         private static int osVersion = 32;
         private static string config_File = ConfigurationManager.AppSettings["config-file"];
@@ -59,6 +60,8 @@ namespace RotateScreen
 
                 //post a message saying you are killing the app
                 System.Windows.Forms.MessageBox.Show("RotateScreen is turning off.  To enable again, relaunch the application.", "Killing RotateScreen", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+
+                serviceIsRunning = false;
 
                 //rotate screen to landscape
                 Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
@@ -139,7 +142,7 @@ namespace RotateScreen
             }
             catch (Exception) { }
 
-            while (true)
+            while (serviceIsRunning)
             {
                 if (bRotateScreen_enable)
                 {
