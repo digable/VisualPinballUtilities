@@ -63,21 +63,19 @@ namespace RotateScreen
 
                 serviceIsRunning = false;
 
-                //rotate screen to landscape
-                Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
-                if (orientation == Functions.MonitorOrientation.Portrait)
-                {
-                    Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
-
-                    Thread.Sleep(1000);
-                }
-
                 //kill rotate screen
                 var sorted = from p in processes orderby StartTimeNoException(p) ascending, p.Id select p;
 
                 foreach (var p in sorted)
                 {
+                    //need to kill the first one, then rotate the screen, then kill the second one
                     p.Kill();
+                    //rotate screen to landscape
+                    Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
+                    if (orientation == Functions.MonitorOrientation.Portrait)
+                    {
+                        Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
+                    }
                 }
                 //this kills this instance, it shouldn't make it this far
                 Process.GetCurrentProcess().Kill();
@@ -89,14 +87,38 @@ namespace RotateScreen
             string configFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + config_File;
             //remove URI format from file path
             configFile = configFile.Substring(6);
-            
+
             string logFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + log_file;
             //remove URI format from file path
             logFile = logFile.Substring(6);
 
             bool bRotateScreen_enable = false;
+            bool isContains_rotateScreen = false;
+            string rotateScreen_watchApp_clean = rotateScreen_watchApp;
+            if (rotateScreen_watchApp.EndsWith("*"))
+            {
+                isContains_rotateScreen = true;
+                rotateScreen_watchApp_clean = rotateScreen_watchApp.TrimEnd('*');
+            }
+
             bool bAppKill_enable = false;
+            bool isContains_appKill = false;
+            string appKill_appName_clean = appKill_appName;
+            if (appKill_appName.EndsWith("*"))
+            {
+                isContains_appKill = true;
+                appKill_appName_clean = appKill_appName.TrimEnd('*');
+            }
+
             bool bUsbKill_enable = false;
+            bool isContains_usbKill = false;
+            string usbKill_watchApp_clean = usbKill_watchApp;
+            if (usbKill_watchApp.EndsWith("*"))
+            {
+                isContains_usbKill = true;
+                usbKill_watchApp_clean = usbKill_watchApp.TrimEnd('*');
+            }
+
             bool bMoveFile_enable = false;
 
             string usbKill_deviceId = string.Empty;
@@ -146,15 +168,6 @@ namespace RotateScreen
             {
                 if (bRotateScreen_enable)
                 {
-                    bool isContains_rotateScreen = false;
-
-                    string rotateScreen_watchApp_clean = rotateScreen_watchApp;
-                    if (rotateScreen_watchApp.EndsWith("*"))
-                    {
-                        isContains_rotateScreen = true;
-                        rotateScreen_watchApp_clean = rotateScreen_watchApp.TrimEnd('*');
-                    }
-
                     Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
 
                     bool isRunning = false;
@@ -179,15 +192,6 @@ namespace RotateScreen
 
                 if (bAppKill_enable)
                 {
-                    bool isContains_appKill = false;
-
-                    string appKill_appName_clean = appKill_appName;
-                    if (appKill_appName.EndsWith("*"))
-                    {
-                        isContains_appKill = true;
-                        appKill_appName_clean = appKill_appName.TrimEnd('*');
-                    }
-
                     bool isRunning = false;
                     if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName_clean);
                     else isRunning = Functions.CheckForRunningProcess(appKill_appName_clean);
@@ -217,15 +221,6 @@ namespace RotateScreen
 
                 if (bUsbKill_enable)
                 {
-                    bool isContains_usbKill = false;
-
-                    string usbKill_watchApp_clean = usbKill_watchApp;
-                    if (usbKill_watchApp.EndsWith("*"))
-                    {
-                        isContains_usbKill = true;
-                        usbKill_watchApp_clean = usbKill_watchApp.TrimEnd('*');
-                    }
-
                     bool isRunning = false;
                     if (isContains_usbKill) isRunning = Functions.CheckForRunningProcessContains(usbKill_watchApp_clean);
                     else isRunning = Functions.CheckForRunningProcess(usbKill_watchApp_clean);
