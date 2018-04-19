@@ -9,9 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace RotateScreen
+namespace AutoFunctions
 {
-    class Functions
+    class Utilities
     {
         public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));
         public static bool CheckForRunningProcessContains(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
@@ -142,16 +142,24 @@ namespace RotateScreen
             return s;
         }
 
-        public static bool WriteToLogFile(LoggingType loggingType, string details, string logFile)
+        public static bool WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, string logFile)
         {
             bool b = true;
 
             StreamWriter sw = new StreamWriter(logFile, true);
-            sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + details);
+            sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + appFunction + "|" + details);
             sw.Close();
             sw.Dispose();
 
             return b;
+        }
+
+        public enum ApplicationFunction
+        {
+            RotateScreen = 1,
+            AppKill = 2,
+            USBKill = 3,
+            MoveFile = 4
         }
 
         public enum LoggingType

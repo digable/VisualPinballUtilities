@@ -42,9 +42,11 @@ namespace VisualPinballUtilities
             //get rom file, if required
             //Try to read the vb script for the rom name
             //get backglass, either file or direct b2s
+            //get table specific scripts (KISS has them)
+            //have option to package other files with the table, if needed (like the script/b2s.vbs file with the spaces fix)
             //get pinballx config xml created
             //get pinballx media files
-            //package up all the files into a compressed file structure.
+            //package up all the files into a compressed file structure. maybe have a manufest file to move all of these into the right spots
         }
 
         private void Button_browseBackupDirectory_Click(object sender, EventArgs e)

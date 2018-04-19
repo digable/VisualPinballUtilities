@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4F1D6B3D-AB80-4185-B116-FD5FDB368005}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>RotateScreen</RootNamespace>
-    <AssemblyName>RotateScreen</AssemblyName>
+    <RootNamespace>AutoFunctions</RootNamespace>
+    <AssemblyName>AutoFunctions</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -67,7 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Functions.cs" />
+    <Compile Include="Utilities.cs" />
+    <Compile Include="Functions\AppKill.cs" />
+    <Compile Include="Functions\MoveFile.cs" />
+    <Compile Include="Functions\RotateScreen.cs" />
+    <Compile Include="Functions\USBKill.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

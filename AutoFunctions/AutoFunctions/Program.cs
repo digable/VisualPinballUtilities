@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
@@ -10,7 +11,7 @@ using System.Linq;
 //TODO: need to use the config file for other things, remove app config once that is completed.
 //TODO: check to see if the app is already running, if so, kill it, post a message, set the monitor to landscape
 
-namespace RotateScreen
+namespace AutoFunctions
 {
     class Program
     {
@@ -33,6 +34,7 @@ namespace RotateScreen
         private static string usbKill_watchApp = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
 
         private static string moveFile_enable = ConfigurationManager.AppSettings["move-file_enable"];
+        private static string moveFile_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
         private static string moveFile_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
         private static string moveFile_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
         private static string moveFile_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
@@ -47,7 +49,7 @@ namespace RotateScreen
             catch (Exception ex)
             {
                 string details = "Monitor number '" + rotateScreen_monitorString + "' isn't a valid integer.  Defaulting to 1.";
-                bool b = Functions.WriteToLogFile(Functions.LoggingType.Warning, details, log_file);
+                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, log_file);
                 details = null;
             }
 
@@ -71,10 +73,10 @@ namespace RotateScreen
                     //need to kill the first one, then rotate the screen, then kill the second one
                     p.Kill();
                     //rotate screen to landscape
-                    Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
-                    if (orientation == Functions.MonitorOrientation.Portrait)
+                    Utilities.MonitorOrientation orientation = Utilities.CheckMonitorOrientation(rotateScreen_monitor);
+                    if (orientation == Utilities.MonitorOrientation.Portrait)
                     {
-                        Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
+                        Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Landscape);
                     }
                 }
                 //this kills this instance, it shouldn't make it this far
@@ -112,6 +114,7 @@ namespace RotateScreen
 
             bool bUsbKill_enable = false;
             bool isContains_usbKill = false;
+            string usbKill_deviceId = string.Empty;
             string usbKill_watchApp_clean = usbKill_watchApp;
             if (usbKill_watchApp.EndsWith("*"))
             {
@@ -119,9 +122,70 @@ namespace RotateScreen
                 usbKill_watchApp_clean = usbKill_watchApp.TrimEnd('*');
             }
 
-            bool bMoveFile_enable = false;
 
-            string usbKill_deviceId = string.Empty;
+            bool bMoveFile_enable = false;
+            bool bMoveFile_overwrite = false;
+
+            try
+            {
+                bMoveFile_enable = Convert.ToBoolean(moveFile_enable);
+            }
+            catch (Exception) { }
+
+            try
+            {
+                bMoveFile_overwrite = Convert.ToBoolean(moveFile_overwrite);
+            }
+            catch (Exception) { }
+
+            //get all from folders
+            string[] fromFolders = new string[] { };
+            if (moveFile_fromFolders.Contains(";"))
+            {
+                fromFolders = moveFile_fromFolders.Split(';');
+            }
+            //get all to folders
+            string[] toFolders = new string[] { };
+            if (moveFile_toFolders.Contains(";"))
+            {
+                toFolders = moveFile_toFolders.Split(';');
+            }
+            //check the counts on the 2 folder vars, they need to be the same or write to log and disable
+            if (fromFolders.Length != toFolders.Length)
+            {
+                //INFO: the folders do not match counts, log it
+                string details = "From folder count '" + fromFolders.Count().ToString() + "' and To folder count '" + toFolders.Count().ToString() + "' do not match.  Check and update the config file.";
+                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, log_file);
+                bMoveFile_enable = false;
+            }
+
+            //get from folders list, make sure they are all folders that exist
+            List<int> folderSkipIndices = new List<int>();
+            for (int i = 0; i < fromFolders.Length; i++)
+            {
+                string fromFolder = fromFolders[i];
+                if (!System.IO.Directory.Exists(fromFolder))
+                {
+                    //log it, but continue on
+                    string details = "From folder '" + fromFolder + "' does not exist.";
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, log_file);
+                    if (!folderSkipIndices.Contains(i)) folderSkipIndices.Add(i);
+                }
+                fromFolder = null;
+            }
+
+            for (int i = 0; i < toFolders.Length; i++)
+            {
+                string toFolder = toFolders[i];
+                if (!System.IO.Directory.Exists(toFolder))
+                {
+                    //log it, but continue on
+                    string details = "To folder '" + toFolder + "' does not exist.";
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, log_file);
+                    if (!folderSkipIndices.Contains(i)) folderSkipIndices.Add(i);
+                }
+                toFolder = null;
+            }
 
             try
             {
@@ -158,34 +222,28 @@ namespace RotateScreen
             }
             catch (Exception) { }
 
-            try
-            {
-                bMoveFile_enable = Convert.ToBoolean(moveFile_enable);
-            }
-            catch (Exception) { }
-
             while (serviceIsRunning)
             {
                 if (bRotateScreen_enable)
                 {
-                    Functions.MonitorOrientation orientation = Functions.CheckMonitorOrientation(rotateScreen_monitor);
+                    Utilities.MonitorOrientation orientation = Utilities.CheckMonitorOrientation(rotateScreen_monitor);
 
                     bool isRunning = false;
-                    if (isContains_rotateScreen) isRunning = Functions.CheckForRunningProcessContains(rotateScreen_watchApp_clean);
-                    else isRunning = Functions.CheckForRunningProcess(rotateScreen_watchApp_clean);
+                    if (isContains_rotateScreen) isRunning = Utilities.CheckForRunningProcessContains(rotateScreen_watchApp_clean);
+                    else isRunning = Utilities.CheckForRunningProcess(rotateScreen_watchApp_clean);
 
                     if (isRunning)
                     {
-                        if (orientation == Functions.MonitorOrientation.Portrait)
+                        if (orientation == Utilities.MonitorOrientation.Portrait)
                         {
-                            Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Landscape);
+                            Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Landscape);
                         }
                     }
                     else
                     {
-                        if (orientation == Functions.MonitorOrientation.Landscape)
+                        if (orientation == Utilities.MonitorOrientation.Landscape)
                         {
-                            Functions.RotateMonitor(rotateScreen_monitor, Functions.MonitorOrientation.Portrait);
+                            Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Portrait);
                         }
                     }
                 }
@@ -193,8 +251,8 @@ namespace RotateScreen
                 if (bAppKill_enable)
                 {
                     bool isRunning = false;
-                    if (isContains_appKill) isRunning = Functions.CheckForRunningProcessContains(appKill_appName_clean);
-                    else isRunning = Functions.CheckForRunningProcess(appKill_appName_clean);
+                    if (isContains_appKill) isRunning = Utilities.CheckForRunningProcessContains(appKill_appName_clean);
+                    else isRunning = Utilities.CheckForRunningProcess(appKill_appName_clean);
 
                     if (isRunning)
                     {
@@ -211,9 +269,9 @@ namespace RotateScreen
                             appKill_watchApp_clean = appKill_watchApp.Replace("[+]", string.Empty).Trim();
                         }
 
-                        if (Functions.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
+                        if (Utilities.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
                         {
-                            bool b = Functions.KillRunningProcess(appKill_appName_clean);
+                            bool b = Utilities.KillRunningProcess(appKill_appName_clean);
                         }
 
                     }
@@ -222,13 +280,13 @@ namespace RotateScreen
                 if (bUsbKill_enable)
                 {
                     bool isRunning = false;
-                    if (isContains_usbKill) isRunning = Functions.CheckForRunningProcessContains(usbKill_watchApp_clean);
-                    else isRunning = Functions.CheckForRunningProcess(usbKill_watchApp_clean);
+                    if (isContains_usbKill) isRunning = Utilities.CheckForRunningProcessContains(usbKill_watchApp_clean);
+                    else isRunning = Utilities.CheckForRunningProcess(usbKill_watchApp_clean);
 
                     //get the device id before it's disabled...keep is safe.
                     if (usbKill_deviceId == string.Empty)
                     {
-                        usbKill_deviceId = Functions.GetUsbDeviceId(usbKill_deviceName);
+                        usbKill_deviceId = Utilities.GetUsbDeviceId(usbKill_deviceName);
 
                         //query to find the led wiz device, then find its device id
                         if (usbKill_deviceId != string.Empty)
@@ -239,7 +297,7 @@ namespace RotateScreen
                             if (!System.IO.File.Exists(configFile))
                             {
                                 //write to the config file
-                                bool b = Functions.WriteDeviceIdToConfig(usbKill_deviceName, usbKill_deviceId, configFile);
+                                bool b = Utilities.WriteDeviceIdToConfig(usbKill_deviceName, usbKill_deviceId, configFile);
                             }
                         }
                         else
@@ -247,13 +305,13 @@ namespace RotateScreen
                             if (System.IO.File.Exists(configFile))
                             {
                                 //read from this file, get the id
-                                usbKill_deviceId = Functions.GetUsbDeviceIdFromFile(usbKill_deviceName, configFile);
+                                usbKill_deviceId = Utilities.GetUsbDeviceIdFromFile(usbKill_deviceName, configFile);
                             }
                             else
                             {
                                 //INFO: there is no file and you need to reset your led wiz in Devices and Printers
                                 string details = "No device id found for '" + usbKill_deviceName + "'";
-                                bool b = Functions.WriteToLogFile(Functions.LoggingType.Warning, details, log_file);
+                                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, log_file);
                                 details = null;
                             }
                         }
@@ -263,28 +321,27 @@ namespace RotateScreen
 
                     if (isRunning)
                     {
-                        if (!Functions.CheckForConnectedDevice(usbKill_deviceName))
+                        if (!Utilities.CheckForConnectedDevice(usbKill_deviceName))
                         {
                             //need to enable it
-                            bool b = Functions.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, true);
+                            bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, true);
                         }
                     }
                     else
                     {
-                        if (Functions.CheckForConnectedDevice(usbKill_deviceName))
+                        if (Utilities.CheckForConnectedDevice(usbKill_deviceName))
                         {
                             //need to disable it
-                            bool b = Functions.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, false);
+                            bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, false);
                         }
                     }
                 }
 
                 if (bMoveFile_enable)
                 {
+                    
+
                     //get extensions list, or do all files
-                    //get from folders list, make sure they are all folders that exist
-                    //get to folders list, verify they all exist.
-                    //if they dont, need to log it
                 }
 
                 Thread.Sleep(sleepTime);
