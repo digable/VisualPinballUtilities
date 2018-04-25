@@ -70,6 +70,7 @@
     <Compile Include="Functions\RunOnce.cs" />
     <Compile Include="Models\AppKill.cs" />
     <Compile Include="Models\Global.cs" />
+    <Compile Include="Models\MoveFile.cs" />
     <Compile Include="Models\RotateScreen.cs" />
     <Compile Include="Models\USBKill.cs" />
     <Compile Include="Utilities.cs" />

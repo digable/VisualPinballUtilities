@@ -8,5 +8,9 @@ namespace AutoFunctions.Functions
 {
     class MoveFile
     {
+        public static void IsEnabled()
+        {
+
+        }
     }
 }

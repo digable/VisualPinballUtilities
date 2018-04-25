@@ -43,12 +43,12 @@ namespace AutoFunctions.Models
             //KillDeviceId
             this.KillDeviceId = Utilities.GetUsbDeviceId(this.KillDeviceName);
 
-            //query to find the led wiz device, then find its device id
+            //Start --> Write device id to file
+            //INFO: query to find the led wiz device, then find its device id
             if (this.KillDeviceId != string.Empty)
             {
                 //then detect it if its there, before you write to it again.
                 //write this to a file, save it somewhere for the first boot up.
-
                 if (!System.IO.File.Exists(configFile))
                 {
                     //write to the config file
@@ -70,6 +70,7 @@ namespace AutoFunctions.Models
                     details = null;
                 }
             }
+            //Stop --> Write device id to file
         }
     }
 }
