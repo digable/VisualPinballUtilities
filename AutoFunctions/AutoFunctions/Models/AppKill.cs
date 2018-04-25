@@ -14,7 +14,7 @@ namespace AutoFunctions.Models
         public string KillApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
         public bool IsContains { get; set; } = false;
 
-        private static string pAppKill_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
+        private string pAppKill_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
 
         public AppKill(string logFile)
         {

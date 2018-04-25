@@ -15,9 +15,9 @@ namespace AutoFunctions
 {
     class Program
     {
-        private static string usbKill_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
-        private static string usbKill_deviceName = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower();
-        private static string usbKill_watchApp = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
+        //private static string usbKill_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
+        //private static string usbKill_deviceName = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower();
+        //private static string usbKill_watchApp = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
 
         private static string moveFile_enable = ConfigurationManager.AppSettings["move-file_enable"];
         private static string moveFile_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
@@ -39,19 +39,12 @@ namespace AutoFunctions
             if (rs.Enabled == false) rs = null;
 
             Models.AppKill ak = new Models.AppKill(g.LogFile);
-            //INFO: remove from memory rotate screen if its not enabled
+            //INFO: remove from memory app kill if its not enabled
             if (ak.Enabled == false) ak = null;
 
-            bool bUsbKill_enable = false;
-            bool isContains_usbKill = false;
-            string usbKill_deviceId = string.Empty;
-            string usbKill_watchApp_clean = usbKill_watchApp;
-            if (usbKill_watchApp.EndsWith("*"))
-            {
-                isContains_usbKill = true;
-                usbKill_watchApp_clean = usbKill_watchApp.TrimEnd('*');
-            }
-
+            Models.USBKill uk = new Models.USBKill(g.LogFile, g.ConfigFile);
+            //INFO: remove from memory usb kill if its not enabled
+            if (uk.Enabled == false) uk = null;
 
             bool bMoveFile_enable = false;
             bool bMoveFile_overwrite = false;
@@ -119,15 +112,9 @@ namespace AutoFunctions
 
             //try
             //{
-            //    bAppKill_enable = Convert.ToBoolean(appKill_enable);
+            //    bUsbKill_enable = Convert.ToBoolean(usbKill_enable);
             //}
             //catch (Exception) { }
-
-            try
-            {
-                bUsbKill_enable = Convert.ToBoolean(usbKill_enable);
-            }
-            catch (Exception) { }
 
             while (serviceIsRunning)
             {
@@ -135,66 +122,8 @@ namespace AutoFunctions
 
                 if (ak != null && ak.Enabled) Functions.AppKill.IsEnabled(ak.IsContains, ak.WatchApplication, ak.KillApplication);
 
-                if (bUsbKill_enable) Functions.USBKill.IsEnbaled(isContains_usbKill, usbKill_watchApp_clean, usbKill_deviceId, usbKill_deviceName, g.ConfigFile, g.LogFile, g.OSVersion);
-                //{
-                    //bool isRunning = false;
-                    //if (isContains_usbKill) isRunning = Utilities.CheckForRunningProcessContains(usbKill_watchApp_clean);
-                    //else isRunning = Utilities.CheckForRunningProcess(usbKill_watchApp_clean);
-
-                    ////get the device id before it's disabled...keep is safe.
-                    //if (usbKill_deviceId == string.Empty)
-                    //{
-                    //    usbKill_deviceId = Utilities.GetUsbDeviceId(usbKill_deviceName);
-
-                    //    //query to find the led wiz device, then find its device id
-                    //    if (usbKill_deviceId != string.Empty)
-                    //    {
-                    //        //then detect it if its there, before you write to it again.
-                    //        //write this to a file, save it somewhere for the first boot up.
-
-                    //        if (!System.IO.File.Exists(configFile))
-                    //        {
-                    //            //write to the config file
-                    //            bool b = Utilities.WriteDeviceIdToConfig(usbKill_deviceName, usbKill_deviceId, configFile);
-                    //        }
-                    //    }
-                    //    else
-                    //    {
-                    //        if (System.IO.File.Exists(configFile))
-                    //        {
-                    //            //read from this file, get the id
-                    //            usbKill_deviceId = Utilities.GetUsbDeviceIdFromFile(usbKill_deviceName, configFile);
-                    //        }
-                    //        else
-                    //        {
-                    //            //INFO: there is no file and you need to reset your led wiz in Devices and Printers
-                    //            string details = "No device id found for '" + usbKill_deviceName + "'";
-                    //            bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, log_file);
-                    //            details = null;
-                    //        }
-                    //    }
-
-                    //    //if (usbKill_deviceId == string.Empty) usbKill_deviceId = @"USB\VID_FAFA&PID_00F0\6&12A4013&0&2";
-                    //}
-
-                    //if (isRunning)
-                    //{
-                    //    if (!Utilities.CheckForConnectedDevice(usbKill_deviceName))
-                    //    {
-                    //        //need to enable it
-                    //        bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, true);
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    if (Utilities.CheckForConnectedDevice(usbKill_deviceName))
-                    //    {
-                    //        //need to disable it
-                    //        bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, false);
-                    //    }
-                    //}
-                //}
-
+                if (uk != null && uk.Enabled) Functions.USBKill.IsEnabled(uk.IsContains, uk.WatchApplication, uk.KillDeviceId, uk.KillDeviceName, g.OSVersion);
+  
                 if (bMoveFile_enable)
                 {
                     
@@ -205,17 +134,5 @@ namespace AutoFunctions
                 Thread.Sleep(g.SleepTime);
             }
         }
-
-        //private static DateTime StartTimeNoException(System.Diagnostics.Process p)
-        //{
-        //    try
-        //    {
-        //        return p.StartTime;
-        //    }
-        //    catch
-        //    {
-        //        return DateTime.MinValue;
-        //    }
-        //}
     }
 }

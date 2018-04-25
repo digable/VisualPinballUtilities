@@ -71,6 +71,7 @@
     <Compile Include="Models\AppKill.cs" />
     <Compile Include="Models\Global.cs" />
     <Compile Include="Models\RotateScreen.cs" />
+    <Compile Include="Models\USBKill.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Functions\AppKill.cs" />
     <Compile Include="Functions\MoveFile.cs" />
