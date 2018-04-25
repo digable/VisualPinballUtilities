@@ -11,66 +11,65 @@ namespace AutoFunctions.Models
     {
         public bool Enabled { get; set; } = false;
         public bool Overwrite { get; set; } = false;
-        private List<string> FileExtensions { get; set; } = new List<string>();
-        private List<string> FromFolders { get; set; } = new List<string>();
-        private List<string> ToFolders { get; set; } = new List<string>();
+        public List<string> FileExtensions { get; set; } = new List<string>();
+        public List<string> FromFolders { get; set; } = new List<string>();
+        public List<string> ToFolders { get; set; } = new List<string>();
+        public List<int> SkipFolderIndices { get; set; } = new List<int>();
 
-
-
-        private string pMoveFile_enable = ConfigurationManager.AppSettings["move-file_enable"];
-        private string pMoveFile_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
-        private string pMoveFile_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
-        private string pMoveFile_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
-        private string pMoveFile_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
+        private string p_enable = ConfigurationManager.AppSettings["move-file_enable"];
+        private string p_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
+        private string p_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
+        private string p_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
+        private string p_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
 
         public MoveFile(string logFile)
         {
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(pMoveFile_enable);
+                this.Enabled = Convert.ToBoolean(p_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + pMoveFile_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
+                string details = "Enabled value '" + p_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
-            pMoveFile_enable = null;
+            p_enable = null;
 
             //Overwrite
             try
             {
-                this.Enabled = Convert.ToBoolean(pMoveFile_overwrite);
+                this.Overwrite = Convert.ToBoolean(p_overwrite);
             }
             catch (Exception)
             {
-                string details = "Overwrite value '" + pMoveFile_overwrite + "' isn't a valid boolean.  Defaulting to '" + this.Overwrite.ToString() + "'.";
+                string details = "Overwrite value '" + p_overwrite + "' isn't a valid boolean.  Defaulting to '" + this.Overwrite.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
-            pMoveFile_overwrite = null;
+            p_overwrite = null;
 
             //FileExtensions
-            if (pMoveFile_extensions.Contains(";"))
+            if (p_extensions.Contains(";"))
             {
-                FileExtensions = pMoveFile_extensions.Split(';').ToList();
+                FileExtensions = p_extensions.Split(';').ToList();
             }
-            pMoveFile_extensions = null;
+            p_extensions = null;
 
             //FromFolders
-            if (pMoveFile_fromFolders.Contains(";"))
+            if (p_fromFolders.Contains(";"))
             {
-                FromFolders = pMoveFile_fromFolders.Split(';').ToList();
+                FromFolders = p_fromFolders.Split(';').ToList();
             }
-            pMoveFile_fromFolders = null;
+            p_fromFolders = null;
 
             //ToFolders
-            if (pMoveFile_toFolders.Contains(";"))
+            if (p_toFolders.Contains(";"))
             {
-                ToFolders = pMoveFile_toFolders.Split(';').ToList();
+                ToFolders = p_toFolders.Split(';').ToList();
             }
-            pMoveFile_toFolders = null;
+            p_toFolders = null;
 
             //Start --> Checks
             //INFO: check the counts on the 2 folder vars, they need to be the same or write to log and disable
@@ -83,7 +82,7 @@ namespace AutoFunctions.Models
                 Enabled = false;
             }
 
-            List<int> folderSkipIndices = new List<int>();
+            //INFO: check for missing folders, skip if not found
             for (int i = 0; i < FromFolders.Count(); i++)
             {
                 string fromFolder = FromFolders[i];
@@ -93,7 +92,7 @@ namespace AutoFunctions.Models
                     string details = "From folder '" + fromFolder + "' does not exist.";
                     bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
-                    if (!folderSkipIndices.Contains(i)) folderSkipIndices.Add(i);
+                    if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
                 fromFolder = null;
             }
@@ -107,7 +106,7 @@ namespace AutoFunctions.Models
                     string details = "To folder '" + toFolder + "' does not exist.";
                     bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
-                    if (!folderSkipIndices.Contains(i)) folderSkipIndices.Add(i);
+                    if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
                 toFolder = null;
             }

@@ -8,26 +8,26 @@ namespace AutoFunctions.Functions
 {
     class USBKill
     {
-        public static void IsEnabled(bool isContains_usbKill, string usbKill_watchApp_clean, string usbKill_deviceId, string usbKill_deviceName, int osVersion)
+        public static void IsEnabled(Models.USBKill uk, int osVersion)
         {
             bool isRunning = false;
-            if (isContains_usbKill) isRunning = Utilities.CheckForRunningProcessContains(usbKill_watchApp_clean);
-            else isRunning = Utilities.CheckForRunningProcess(usbKill_watchApp_clean);
+            if (uk.IsContains) isRunning = Utilities.CheckForRunningProcessContains(uk.WatchApplication);
+            else isRunning = Utilities.CheckForRunningProcess(uk.WatchApplication);
 
             if (isRunning)
             {
-                if (!Utilities.CheckForConnectedDevice(usbKill_deviceName))
+                if (!Utilities.CheckForConnectedDevice(uk.KillDeviceName))
                 {
                     //need to enable it
-                    bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, true);
+                    bool b = Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, true);
                 }
             }
             else
             {
-                if (Utilities.CheckForConnectedDevice(usbKill_deviceName))
+                if (Utilities.CheckForConnectedDevice(uk.KillDeviceName))
                 {
                     //need to disable it
-                    bool b = Utilities.ChangeStatusOfUSBDevice(usbKill_deviceId, osVersion, false);
+                    bool b = Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, false);
                 }
             }
         }

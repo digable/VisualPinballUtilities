@@ -14,22 +14,22 @@ namespace AutoFunctions.Models
         public string KillApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
         public bool IsContains { get; set; } = false;
 
-        private string pAppKill_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
+        private string p_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
 
         public AppKill(string logFile)
         {
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(pAppKill_enable);
+                this.Enabled = Convert.ToBoolean(p_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + pAppKill_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
+                string details = "Enabled value '" + p_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.AppKill, details, logFile);
                 details = null;
             }
-            pAppKill_enable = null;
+            p_enable = null;
 
             //WatchApplication
             if (this.WatchApplication.EndsWith("*"))

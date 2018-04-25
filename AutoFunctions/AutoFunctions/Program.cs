@@ -47,15 +47,24 @@ namespace AutoFunctions
             if (!mf.Enabled) mf = null;
 
             //INFO: this is the service
-            while (serviceIsRunning)
+            while (g.IsServiceRunning)
             {
-                if (rs != null && rs.Enabled) Functions.RotateScreen.IsEnabled(rs.Monitor, rs.IsContains, rs.WatchApplication);
+                if (rs != null && rs.Enabled) Functions.RotateScreen.IsEnabled(rs);
 
-                if (ak != null && ak.Enabled) Functions.AppKill.IsEnabled(ak.IsContains, ak.WatchApplication, ak.KillApplication);
+                if (ak != null && ak.Enabled) Functions.AppKill.IsEnabled(ak);
 
-                if (uk != null && uk.Enabled) Functions.USBKill.IsEnabled(uk.IsContains, uk.WatchApplication, uk.KillDeviceId, uk.KillDeviceName, g.OSVersion);
+                if (uk != null && uk.Enabled) Functions.USBKill.IsEnabled(uk, g.OSVersion);
 
-                if (mf != null && mf.Enabled) Functions.MoveFile.IsEnabled();
+                if (mf != null && mf.Enabled) Functions.MoveFile.IsEnabled(mf);
+
+                //INFO: log if there are no services running, close out the application
+                if (rs == null && ak == null && uk == null && mf == null)
+                {
+                    g.IsServiceRunning = false;
+                    string details = "None of the functions are enabled, please check your config.";
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, g.LogFile);
+                    details = null;
+                }
 
                 Thread.Sleep(g.SleepTime);
             }

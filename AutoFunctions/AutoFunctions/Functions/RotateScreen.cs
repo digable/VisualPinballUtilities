@@ -8,26 +8,26 @@ namespace AutoFunctions.Functions
 {
     class RotateScreen
     {
-        public static void IsEnabled(int rotateScreen_monitor, bool isContains_rotateScreen, string rotateScreen_watchApp_clean)
+        public static void IsEnabled(Models.RotateScreen rs)
         {
-            Utilities.MonitorOrientation orientation = Utilities.CheckMonitorOrientation(rotateScreen_monitor);
+            Utilities.MonitorOrientation orientation = Utilities.CheckMonitorOrientation(rs.Monitor);
 
             bool isRunning = false;
-            if (isContains_rotateScreen) isRunning = Utilities.CheckForRunningProcessContains(rotateScreen_watchApp_clean);
-            else isRunning = Utilities.CheckForRunningProcess(rotateScreen_watchApp_clean);
+            if (rs.IsContains) isRunning = Utilities.CheckForRunningProcessContains(rs.WatchApplication);
+            else isRunning = Utilities.CheckForRunningProcess(rs.WatchApplication);
 
             if (isRunning)
             {
                 if (orientation == Utilities.MonitorOrientation.Portrait)
                 {
-                    Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Landscape);
+                    Utilities.RotateMonitor(rs.Monitor, Utilities.MonitorOrientation.Landscape);
                 }
             }
             else
             {
                 if (orientation == Utilities.MonitorOrientation.Landscape)
                 {
-                    Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Portrait);
+                    Utilities.RotateMonitor(rs.Monitor, Utilities.MonitorOrientation.Portrait);
                 }
             }
         }

@@ -8,7 +8,7 @@ namespace AutoFunctions.Functions
 {
     class MoveFile
     {
-        public static void IsEnabled()
+        public static void IsEnabled(Models.MoveFile mf)
         {
 
         }
