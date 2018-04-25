@@ -156,6 +156,7 @@ namespace AutoFunctions
 
         public enum ApplicationFunction
         {
+            Global = 0,
             RotateScreen = 1,
             AppKill = 2,
             USBKill = 3,
