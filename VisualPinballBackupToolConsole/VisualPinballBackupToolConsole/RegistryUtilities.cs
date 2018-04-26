@@ -148,7 +148,7 @@ namespace VisualPinballBackupToolConsole
                                 {
                                     value = (int)romKey.GetValue(field);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
                                     Console.WriteLine("'" + rom + "' doesn't have a '" + field + "' field.  Skipping...");
                                 }

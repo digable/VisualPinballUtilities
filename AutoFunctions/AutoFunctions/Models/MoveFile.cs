@@ -16,66 +16,66 @@ namespace AutoFunctions.Models
         public List<string> ToFolders { get; set; } = new List<string>();
         public List<int> SkipFolderIndices { get; set; } = new List<int>();
 
-        private string p_enable = ConfigurationManager.AppSettings["move-file_enable"];
-        private string p_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
-        private string p_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
-        private string p_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
-        private string p_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
+        private string P_enable = ConfigurationManager.AppSettings["move-file_enable"];
+        private string P_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
+        private string P_extensions = ConfigurationManager.AppSettings["move-file_extensions"];
+        private string P_fromFolders = ConfigurationManager.AppSettings["move-file_fromFolders"];
+        private string P_toFolders = ConfigurationManager.AppSettings["move-file_toFolders"];
 
         public MoveFile(string logFile)
         {
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(p_enable);
+                this.Enabled = Convert.ToBoolean(P_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + p_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
-            p_enable = null;
+            P_enable = null;
 
             //Overwrite
             try
             {
-                this.Overwrite = Convert.ToBoolean(p_overwrite);
+                this.Overwrite = Convert.ToBoolean(P_overwrite);
             }
             catch (Exception)
             {
-                string details = "Overwrite value '" + p_overwrite + "' isn't a valid boolean.  Defaulting to '" + this.Overwrite.ToString() + "'.";
+                string details = "Overwrite value '" + P_overwrite + "' isn't a valid boolean.  Defaulting to '" + this.Overwrite.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
-            p_overwrite = null;
+            P_overwrite = null;
 
             //FileExtensions
-            if (p_extensions.Contains(";"))
+            if (P_extensions.Contains(";"))
             {
-                FileExtensions = p_extensions.Split(';').ToList();
+                FileExtensions = P_extensions.Split(';').ToList();
             }
-            FileExtensions.Add(p_extensions);
+            FileExtensions.Add(P_extensions);
             FileExtensions.Remove(string.Empty);
-            p_extensions = null;
+            P_extensions = null;
 
             //FromFolders
-            if (p_fromFolders.Contains(";"))
+            if (P_fromFolders.Contains(";"))
             {
-                FromFolders = p_fromFolders.Split(';').ToList();
+                FromFolders = P_fromFolders.Split(';').ToList();
             }
-            else FromFolders.Add(p_fromFolders);
+            else FromFolders.Add(P_fromFolders);
             FromFolders.Remove(string.Empty);
-            p_fromFolders = null;
+            P_fromFolders = null;
 
             //ToFolders
-            if (p_toFolders.Contains(";"))
+            if (P_toFolders.Contains(";"))
             {
-                ToFolders = p_toFolders.Split(';').ToList();
+                ToFolders = P_toFolders.Split(';').ToList();
             }
-            else ToFolders.Add(p_toFolders);
+            else ToFolders.Add(P_toFolders);
             ToFolders.Remove(string.Empty);
-            p_toFolders = null;
+            P_toFolders = null;
 
             //Start --> Checks
             //INFO: check the counts on the 2 folder vars, they need to be the same or write to log and disable

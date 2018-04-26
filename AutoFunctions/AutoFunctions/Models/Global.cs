@@ -16,8 +16,8 @@ namespace AutoFunctions.Models
         public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"];
         public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"];
 
-        private string p_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"];
-        private string p_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"];
+        private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"];
+        private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"];
 
         public Global()
         {
@@ -34,28 +34,28 @@ namespace AutoFunctions.Models
             //SleepTime
             try
             {
-                this.SleepTime = Convert.ToInt32(this.p_sleepTime) * 1000;
+                this.SleepTime = Convert.ToInt32(this.P_sleepTime) * 1000;
             }
             catch (Exception)
             {
-                string details = "SleepTime value '" + this.p_sleepTime + "' isn't a valid integer.  Defaulting to '" + (this.SleepTime / 1000).ToString() + "' seconds.";
+                string details = "SleepTime value '" + this.P_sleepTime + "' isn't a valid integer.  Defaulting to '" + (this.SleepTime / 1000).ToString() + "' seconds.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, this.LogFile);
                 details = null;
             }
-            p_sleepTime = null;
+            P_sleepTime = null;
 
             //OSVersion
             try
             {
-                this.OSVersion = Convert.ToInt32(this.p_osVersion);
+                this.OSVersion = Convert.ToInt32(this.P_osVersion);
             }
             catch (Exception)
             {
-                string details = "OSVersion value '" + this.p_osVersion + "' isn't a valid boolean.  Defaulting to '" + this.OSVersion.ToString() + "'.";
+                string details = "OSVersion value '" + this.P_osVersion + "' isn't a valid boolean.  Defaulting to '" + this.OSVersion.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, this.LogFile);
                 details = null;
             }
-            p_osVersion = null;
+            P_osVersion = null;
         }
     }
 }

@@ -51,13 +51,13 @@ namespace AutoFunctions.Functions
                     if (File.Exists(toFile))
                     {
                         string details = "File '" + Path.GetFileName(fromFile) + "' already exists in To Folder.";
-                        bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                        bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                         details = null;
 
                         if (mf.Overwrite)
                         {
                             details = "Deleting '" + Path.GetFileName(fromFile) + "' in To Folder.";
-                            b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                            b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                             details = null;
                             File.Delete(toFile);
                             File.Move(fromFile, toFile);
@@ -65,7 +65,7 @@ namespace AutoFunctions.Functions
                         else
                         {
                             details = "Overwrite is set to '" + mf.Overwrite + "'.  File will not be removed.";
-                            b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                            b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                             details = null;
                         }
                     }

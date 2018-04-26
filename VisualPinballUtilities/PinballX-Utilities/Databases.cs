@@ -35,8 +35,10 @@ namespace VisualPinballUtilities.PinballX_Utilities
         {
             public static Models.VisualPinballItem VisualPinball(string file, Models.VisualPinballVersion version)
             {
-                Models.VisualPinballItem vpItem = new Models.VisualPinballItem();
-                vpItem.version = version;
+                Models.VisualPinballItem vpItem = new Models.VisualPinballItem()
+                {
+                    version = version
+                };
 
                 //make sure the file exists
                 if (!File.Exists(file))
@@ -51,10 +53,11 @@ namespace VisualPinballUtilities.PinballX_Utilities
 
                     foreach (XmlNode game in rootNode.ChildNodes)
                     {
-                        XmlRootAttribute xRoot = new XmlRootAttribute();
-                        xRoot.ElementName = "game";
-                        xRoot.IsNullable = true;
-
+                        XmlRootAttribute xRoot = new XmlRootAttribute()
+                        {
+                            ElementName = "game",
+                            IsNullable = true
+                        };
                         Models.VisualPinballTable table = ConvertNode<Models.VisualPinballTable>(game, xRoot);
                         xRoot = null;
                         vpItem.tables.Add(table);

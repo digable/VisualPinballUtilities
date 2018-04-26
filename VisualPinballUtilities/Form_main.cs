@@ -92,10 +92,11 @@ namespace VisualPinballUtilities
 
         private void button_eloRating_Click(object sender, EventArgs e)
         {
-            Rating.EloRating.Matchup m = new Rating.EloRating.Matchup();
-            m.User1Score = 1000;
-            m.User2Score = 1000;
-
+            Rating.EloRating.Matchup m = new Rating.EloRating.Matchup()
+            {
+                User1Score = 1000,
+                User2Score = 1000
+            };
             Rating.EloRating.UpdateScores(m, true);
         }
 

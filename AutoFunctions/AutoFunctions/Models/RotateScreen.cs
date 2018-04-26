@@ -14,27 +14,27 @@ namespace AutoFunctions.Models
         public int Monitor { get; set; } = 1;
         public bool IsContains { get; set; } = false;
 
-        private string p_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower();
-        private string p_monitorString { get; set; } = ConfigurationManager.AppSettings["rotate-screen_monitor"];
+        private string P_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower();
+        private string P_monitorString { get; set; } = ConfigurationManager.AppSettings["rotate-screen_monitor"];
 
         public RotateScreen(string logFile)
         {
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(p_enable);
+                this.Enabled = Convert.ToBoolean(P_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + p_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
                 details = null;
             }
-            p_enable = null;
+            P_enable = null;
 
             //Monitor
-            this.Monitor = Functions.RunOnce.Get.RotateScreenMonitor(this.p_monitorString, logFile);
-            p_monitorString = null;
+            this.Monitor = Functions.RunOnce.Get.RotateScreenMonitor(this.P_monitorString, logFile);
+            P_monitorString = null;
 
             //WatchApplication
             if (this.WatchApplication.EndsWith("*"))

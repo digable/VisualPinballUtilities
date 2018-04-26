@@ -18,7 +18,7 @@ namespace AutoFunctions.Functions
                 {
                     rotateScreen_monitor = Convert.ToInt32(rotateScreen_monitorString);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     string details = "Monitor number '" + rotateScreen_monitorString + "' isn't a valid integer.  Defaulting to 1.";
                     bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);

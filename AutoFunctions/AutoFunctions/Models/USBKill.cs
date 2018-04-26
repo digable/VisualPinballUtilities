@@ -16,22 +16,22 @@ namespace AutoFunctions.Models
         //INFO: this is the default for LED-Wiz --> @"USB\VID_FAFA&PID_00F0\6&12A4013&0&2"
         public bool IsContains { get; set; } = false;
 
-        private string p_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
+        private string P_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
 
         public USBKill(string logFile, string configFile)
         {
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(p_enable);
+                this.Enabled = Convert.ToBoolean(P_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + p_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
                 bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, logFile);
                 details = null;
             }
-            p_enable = null;
+            P_enable = null;
 
             //WatchApplication
             if (this.WatchApplication.EndsWith("*"))
