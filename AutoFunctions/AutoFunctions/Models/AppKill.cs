@@ -10,8 +10,8 @@ namespace AutoFunctions.Models
     class AppKill
     {
         public bool Enabled { get; set; } = false;
-        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_watchApp"].ToLower();
-        public string KillApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_appName"].ToLower();
+        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_watchApp"].ToLower().Trim();
+        public string KillApplication { get; set; } = ConfigurationManager.AppSettings["app-kill_appName"].ToLower().Trim();
         public bool IsContains { get; set; } = false;
 
         private string P_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();

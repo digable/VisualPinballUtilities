@@ -13,11 +13,11 @@ namespace AutoFunctions.Models
         public int SleepTime { get; set; } = 1 * 1000;
         public int OSVersion { get; set; } = 32;
 
-        public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"];
-        public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"];
+        public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"].Trim();
+        public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"].Trim();
 
-        private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"];
-        private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"];
+        private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"].Trim();
+        private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"].Trim();
 
         public Global()
         {

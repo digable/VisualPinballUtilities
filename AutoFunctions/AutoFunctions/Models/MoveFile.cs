@@ -10,11 +10,13 @@ namespace AutoFunctions.Models
     class MoveFile
     {
         public bool Enabled { get; set; } = false;
+        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["move-file_watchApp"].ToLower().Trim();
         public bool Overwrite { get; set; } = false;
         public List<string> FileExtensions { get; set; } = new List<string>();
         public List<string> FromFolders { get; set; } = new List<string>();
         public List<string> ToFolders { get; set; } = new List<string>();
         public List<int> SkipFolderIndices { get; set; } = new List<int>();
+        public bool IsContains { get; set; } = false;
 
         private string P_enable = ConfigurationManager.AppSettings["move-file_enable"];
         private string P_overwrite = ConfigurationManager.AppSettings["move-file_overwrite"];
@@ -36,6 +38,13 @@ namespace AutoFunctions.Models
                 details = null;
             }
             P_enable = null;
+
+            //WatchApplication
+            if (this.WatchApplication.EndsWith("*"))
+            {
+                this.IsContains = true;
+                this.WatchApplication = this.WatchApplication.TrimEnd('*');
+            }
 
             //Overwrite
             try

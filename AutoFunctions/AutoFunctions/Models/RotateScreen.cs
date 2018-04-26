@@ -10,12 +10,12 @@ namespace AutoFunctions.Models
     public class RotateScreen
     {
         public bool Enabled { get; set; } = false;
-        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["rotate-screen_watchApp"].ToLower();
+        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["rotate-screen_watchApp"].ToLower().Trim();
         public int Monitor { get; set; } = 1;
         public bool IsContains { get; set; } = false;
 
-        private string P_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower();
-        private string P_monitorString { get; set; } = ConfigurationManager.AppSettings["rotate-screen_monitor"];
+        private string P_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower().Trim();
+        private string P_monitorString { get; set; } = ConfigurationManager.AppSettings["rotate-screen_monitor"].Trim();
 
         public RotateScreen(string logFile)
         {

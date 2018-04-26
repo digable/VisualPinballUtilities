@@ -10,8 +10,8 @@ namespace AutoFunctions.Models
     class USBKill
     {
         public bool Enabled { get; set; } = false;
-        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower();
-        public string KillDeviceName { get; set; } = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower();
+        public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower().Trim();
+        public string KillDeviceName { get; set; } = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower().Trim();
         public string KillDeviceId { get; set; }
         //INFO: this is the default for LED-Wiz --> @"USB\VID_FAFA&PID_00F0\6&12A4013&0&2"
         public bool IsContains { get; set; } = false;
