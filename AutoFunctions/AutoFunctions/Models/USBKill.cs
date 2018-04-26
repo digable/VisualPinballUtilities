@@ -65,8 +65,8 @@ namespace AutoFunctions.Models
                 else
                 {
                     //INFO: there is no file and you need to reset your led wiz in Devices and Printers
-                    string details = "No device id found for '" + this.KillDeviceName + "'";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, logFile);
+                    string details = "No device id found for '" + this.KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, logFile);
                     details = null;
                 }
             }

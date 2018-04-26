@@ -55,7 +55,7 @@ namespace AutoFunctions
 
                 if (uk != null && uk.Enabled) Functions.USBKill.IsEnabled(uk, g.OSVersion);
 
-                if (mf != null && mf.Enabled) Functions.MoveFile.IsEnabled(mf);
+                if (mf != null && mf.Enabled) Functions.MoveFile.IsEnabled(mf, g.LogFile);
 
                 //INFO: log if there are no services running, close out the application
                 if (rs == null && ak == null && uk == null && mf == null)

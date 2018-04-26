@@ -55,6 +55,8 @@ namespace AutoFunctions.Models
             {
                 FileExtensions = p_extensions.Split(';').ToList();
             }
+            FileExtensions.Add(p_extensions);
+            FileExtensions.Remove(string.Empty);
             p_extensions = null;
 
             //FromFolders
@@ -62,6 +64,8 @@ namespace AutoFunctions.Models
             {
                 FromFolders = p_fromFolders.Split(';').ToList();
             }
+            else FromFolders.Add(p_fromFolders);
+            FromFolders.Remove(string.Empty);
             p_fromFolders = null;
 
             //ToFolders
@@ -69,6 +73,8 @@ namespace AutoFunctions.Models
             {
                 ToFolders = p_toFolders.Split(';').ToList();
             }
+            else ToFolders.Add(p_toFolders);
+            ToFolders.Remove(string.Empty);
             p_toFolders = null;
 
             //Start --> Checks
@@ -90,7 +96,7 @@ namespace AutoFunctions.Models
                 {
                     //log it, but continue on
                     string details = "From folder '" + fromFolder + "' does not exist.";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
@@ -104,11 +110,20 @@ namespace AutoFunctions.Models
                 {
                     //log it, but continue on
                     string details = "To folder '" + toFolder + "' does not exist.";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
                 toFolder = null;
+            }
+
+            if (FromFolders.Count() == SkipFolderIndices.Count())
+            {
+                //INFO: if we are skipping all of the folders, disable the service
+                string details = "From folder count '" + FromFolders.Count().ToString() + "' and Skip Folder Indices count '" + SkipFolderIndices.Count().ToString() + "' match.  You shouldn't skip all folders you want to monitor.";
+                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                details = null;
+                Enabled = false;
             }
             //Stop --> Checks
         }
