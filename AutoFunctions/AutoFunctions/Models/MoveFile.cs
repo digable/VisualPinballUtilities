@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoFunctions.Models
 {
@@ -29,32 +27,32 @@ namespace AutoFunctions.Models
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(P_enable);
+                Enabled = Convert.ToBoolean(P_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
             P_enable = null;
 
             //WatchApplication
-            if (this.WatchApplication.EndsWith("*"))
+            if (WatchApplication.EndsWith("*"))
             {
-                this.IsContains = true;
-                this.WatchApplication = this.WatchApplication.TrimEnd('*');
+                IsContains = true;
+                WatchApplication = WatchApplication.TrimEnd('*');
             }
 
             //Overwrite
             try
             {
-                this.Overwrite = Convert.ToBoolean(P_overwrite);
+                Overwrite = Convert.ToBoolean(P_overwrite);
             }
             catch (Exception)
             {
-                string details = "Overwrite value '" + P_overwrite + "' isn't a valid boolean.  Defaulting to '" + this.Overwrite.ToString() + "'.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                string details = "Overwrite value '" + P_overwrite + "' isn't a valid boolean.  Defaulting to '" + Overwrite.ToString() + "'.";
+                 Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
             }
             P_overwrite = null;
@@ -92,7 +90,7 @@ namespace AutoFunctions.Models
             {
                 //INFO: the folders do not match counts, log it
                 string details = "From folder count '" + FromFolders.Count().ToString() + "' and To folder count '" + ToFolders.Count().ToString() + "' do not match.  Check and update the config file.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
                 Enabled = false;
             }
@@ -105,7 +103,7 @@ namespace AutoFunctions.Models
                 {
                     //log it, but continue on
                     string details = "From folder '" + fromFolder + "' does not exist.";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
@@ -119,7 +117,7 @@ namespace AutoFunctions.Models
                 {
                     //log it, but continue on
                     string details = "To folder '" + toFolder + "' does not exist.";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, logFile);
                     details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
@@ -130,11 +128,13 @@ namespace AutoFunctions.Models
             {
                 //INFO: if we are skipping all of the folders, disable the service
                 string details = "From folder count '" + FromFolders.Count().ToString() + "' and Skip Folder Indices count '" + SkipFolderIndices.Count().ToString() + "' match.  You shouldn't skip all folders you want to monitor.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, logFile);
                 details = null;
                 Enabled = false;
             }
             //Stop --> Checks
+
+            logFile = null;
         }
     }
 }

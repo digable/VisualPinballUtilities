@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoFunctions.Models
 {
@@ -15,31 +11,34 @@ namespace AutoFunctions.Models
 
         public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"].Trim();
         public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"].Trim();
+        public bool IsEnabledLogging { get; set; } = true;
 
         private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"].Trim();
         private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"].Trim();
+        private string P_isEnabledLogging { get; set; } = ConfigurationManager.AppSettings["enable-logging"].Trim();
 
         public Global()
         {
             //INFO: setup the full path for config and log files
             char[] trimChars = new char[] { '\\' };
-            this.ConfigFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + this.ConfigFile;
+            ConfigFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + ConfigFile;
             //INFO: remove URI format from file path
-            this.ConfigFile = this.ConfigFile.Substring(6);
+            ConfigFile = ConfigFile.Substring(6);
 
-            this.LogFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + this.LogFile;
+            LogFile = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\" + LogFile;
             //INFO: remove URI format from file path
-            this.LogFile = this.LogFile.Substring(6);
+            LogFile = LogFile.Substring(6);
+            trimChars = null;
 
             //SleepTime
             try
             {
-                this.SleepTime = Convert.ToInt32(this.P_sleepTime) * 1000;
+                SleepTime = Convert.ToInt32(P_sleepTime) * 1000;
             }
             catch (Exception)
             {
-                string details = "SleepTime value '" + this.P_sleepTime + "' isn't a valid integer.  Defaulting to '" + (this.SleepTime / 1000).ToString() + "' seconds.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, this.LogFile);
+                string details = "SleepTime value '" + P_sleepTime + "' isn't a valid integer.  Defaulting to '" + (SleepTime / 1000).ToString() + "' seconds.";
+               Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
                 details = null;
             }
             P_sleepTime = null;
@@ -47,15 +46,28 @@ namespace AutoFunctions.Models
             //OSVersion
             try
             {
-                this.OSVersion = Convert.ToInt32(this.P_osVersion);
+                OSVersion = Convert.ToInt32(P_osVersion);
             }
             catch (Exception)
             {
-                string details = "OSVersion value '" + this.P_osVersion + "' isn't a valid boolean.  Defaulting to '" + this.OSVersion.ToString() + "'.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, this.LogFile);
+                string details = "OSVersion value '" + P_osVersion + "' isn't a valid integer.  Defaulting to '" + OSVersion.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
                 details = null;
             }
             P_osVersion = null;
+
+            //IsEnabledLogging
+            try
+            {
+                IsEnabledLogging = Convert.ToBoolean(P_isEnabledLogging);
+            }
+            catch (Exception)
+            {
+                string details = "IsEnabledLogging value '" + P_isEnabledLogging + "' isn't a valid boolean.  Defaulting to '" + IsEnabledLogging.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
+                details = null;
+            }
+            P_isEnabledLogging = null;
         }
     }
 }

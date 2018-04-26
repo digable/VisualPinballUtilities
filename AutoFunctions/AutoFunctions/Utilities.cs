@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoFunctions
@@ -17,15 +13,23 @@ namespace AutoFunctions
         public static bool CheckForRunningProcessContains(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
         public static bool CheckForConnectedDevice(string deviceName) => USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
 
-        public static bool KillRunningProcess(string processName)
+        public static string[] RunningProcesses()
+        {
+            string[] s = new string[] { };
+
+            s = Process.GetProcesses().Select(p => p.ProcessName.ToLower()).ToArray();
+
+            return s;
+        }
+
+
+        public static void KillRunningProcess(string processName)
         {
             Process[] processes = Process.GetProcessesByName(processName);
             foreach (Process p in processes)
             {
                 p.Kill();
             }
-
-            return true;
         }
 
         public static MonitorOrientation CheckMonitorOrientation(int deviceIndex = 1)
@@ -83,10 +87,8 @@ namespace AutoFunctions
             return s;
         }
 
-        public static bool ChangeStatusOfUSBDevice(string usbDeviceId, int osVersion, bool enable)
+        public static void ChangeStatusOfUSBDevice(string usbDeviceId, int osVersion, bool enable)
         {
-            bool b = true;
-
             string enDisable = "enable";
             if (!enable) enDisable = "disable";
 
@@ -101,20 +103,14 @@ namespace AutoFunctions
             process.StartInfo.Arguments = str;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
-
-            return b;
         }
 
-        public static bool WriteDeviceIdToConfig(string deviceName, string deviceId, string configFile)
+        public static void WriteDeviceIdToConfig(string deviceName, string deviceId, string configFile)
         {
-            bool b = true;
-
             StreamWriter sw = new StreamWriter(configFile);
             sw.WriteLine(deviceName + "|" + deviceId);
             sw.Close();
             sw.Dispose();
-
-            return b;
         }
 
         public static string GetUsbDeviceIdFromFile(string deviceName, string configFile)
@@ -136,22 +132,25 @@ namespace AutoFunctions
                         s = lineSplit[1].Trim();
                         break;
                     }
+                    lineSplit = null;
                 }
             }
+
+            sr.Close();
+            sr.Dispose();
 
             return s;
         }
 
-        public static bool WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, string logFile)
+        public static void WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, string logFile)
         {
-            bool b = true;
-
             StreamWriter sw = new StreamWriter(logFile, true);
             sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + appFunction + "|" + details);
             sw.Close();
             sw.Dispose();
 
-            return b;
+            details = null;
+            logFile = null;
         }
 
         public enum ApplicationFunction

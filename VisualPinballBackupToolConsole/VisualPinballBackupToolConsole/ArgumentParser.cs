@@ -38,7 +38,7 @@ namespace VisualPinballBackupToolConsole
                             Environment.Exit(0);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //TODO: there is no directory astated, need to default it to something
                         backupValue = @"C:\temp";

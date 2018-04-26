@@ -76,7 +76,7 @@ namespace VisualPinballBackupToolConsole
                     {
                         Directory.CreateDirectory(backupDirectory);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //TODO: couldnt create the backup directory
                         return false;
@@ -98,7 +98,7 @@ namespace VisualPinballBackupToolConsole
                     {
                         File.Delete(zipPath);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //TODO: couldn't remove current zip file
                         return false;
@@ -109,7 +109,7 @@ namespace VisualPinballBackupToolConsole
                 {
                     ZipFile.CreateFromDirectory(sourceDirectory, zipPath);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //couldnt zip directory
                     return false;

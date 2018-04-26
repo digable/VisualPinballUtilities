@@ -9,15 +9,20 @@ namespace AutoFunctions.Functions
 {
     class MoveFile
     {
-        public static void IsEnabled(Models.MoveFile mf, string logFile)
+        public static void IsEnabled(Models.MoveFile mf, string[] runningProcesses, string logFile)
         {
-            bool isRunning = false;
+            bool isRunning = true;
             if (mf.WatchApplication != null && mf.WatchApplication != string.Empty)
             {
-                if (mf.IsContains) isRunning = Utilities.CheckForRunningProcessContains(mf.WatchApplication);
-                else isRunning = Utilities.CheckForRunningProcess(mf.WatchApplication);
+                if (mf.IsContains)
+                {
+                    var watchProcessName = runningProcesses.Where(p => p.Contains(mf.WatchApplication)).FirstOrDefault();
+                    if (watchProcessName != null) isRunning = true;
+                    watchProcessName = null;
+                }
+                else isRunning = runningProcesses.Contains(mf.WatchApplication);
             }
-            else isRunning = true;
+            runningProcesses = null;
 
             if (isRunning)
             {
@@ -60,14 +65,14 @@ namespace AutoFunctions.Functions
 
                         if (File.Exists(toFile))
                         {
-                            string details = "File '" + Path.GetFileName(fromFile) + "' already exists in To Folder.";
-                            bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                            string details = "File '" + Path.GetFileName(fromFile) + "' already exists in '" + toFolder + "'.";
+                            Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                             details = null;
 
                             if (mf.Overwrite)
                             {
-                                details = "Deleting '" + Path.GetFileName(fromFile) + "' in To Folder.";
-                                b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                details = "Deleting '" + Path.GetFileName(fromFile) + "' from '" + toFolder + "'.";
+                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                                 details = null;
                                 File.Delete(toFile);
                                 File.Move(fromFile, toFile);
@@ -75,13 +80,16 @@ namespace AutoFunctions.Functions
                             else
                             {
                                 details = "Overwrite is set to '" + mf.Overwrite + "'.  File will not be removed.";
-                                b = Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
                                 details = null;
                             }
                         }
                         else
                         {
                             File.Move(fromFile, toFile);
+                            string details = "Moved '" + Path.GetFileName(fromFile) + "' to '" + toFolder + "'.";
+                            Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                            details = null;
                         }
 
                         toFile = null;
@@ -89,6 +97,9 @@ namespace AutoFunctions.Functions
                 }
                 dMovingFiles = null;
             }
+
+            mf = null;
+            logFile = null;
         }
     }
 }

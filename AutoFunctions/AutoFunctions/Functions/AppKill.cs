@@ -31,9 +31,11 @@ namespace AutoFunctions.Functions
 
                 if (Utilities.CheckForRunningProcess(appKill_watchApp_clean) == appKillWatchAppBool)
                 {
-                    bool b = Utilities.KillRunningProcess(ak.KillApplication);
+                    Utilities.KillRunningProcess(ak.KillApplication);
                 }
             }
+
+            ak = null;
         }
     }
 }

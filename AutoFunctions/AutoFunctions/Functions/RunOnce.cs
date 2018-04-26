@@ -21,9 +21,12 @@ namespace AutoFunctions.Functions
                 catch (Exception)
                 {
                     string details = "Monitor number '" + rotateScreen_monitorString + "' isn't a valid integer.  Defaulting to 1.";
-                    bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
                     details = null;
                 }
+
+                rotateScreen_monitorString = null;
+                logFile = null;
 
                 return rotateScreen_monitor;
             }

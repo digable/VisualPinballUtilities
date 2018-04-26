@@ -8,18 +8,24 @@ namespace AutoFunctions.Functions
 {
     class USBKill
     {
-        public static void IsEnabled(Models.USBKill uk, int osVersion)
+        public static void IsEnabled(Models.USBKill uk, int osVersion, string[] runningProcesses)
         {
-            bool isRunning = false;
-            if (uk.IsContains) isRunning = Utilities.CheckForRunningProcessContains(uk.WatchApplication);
-            else isRunning = Utilities.CheckForRunningProcess(uk.WatchApplication);
+            bool isRunning = true;
+            if (uk.IsContains)
+            {
+                var watchProcessName = runningProcesses.Where(p => p.Contains(uk.WatchApplication)).FirstOrDefault();
+                if (watchProcessName != null) isRunning = true;
+                watchProcessName = null;
+            }
+            else isRunning = runningProcesses.Contains(uk.WatchApplication);
+            runningProcesses = null;
 
             if (isRunning)
             {
                 if (!Utilities.CheckForConnectedDevice(uk.KillDeviceName))
                 {
                     //need to enable it
-                    bool b = Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, true);
+                    Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, true);
                 }
             }
             else
@@ -27,9 +33,11 @@ namespace AutoFunctions.Functions
                 if (Utilities.CheckForConnectedDevice(uk.KillDeviceName))
                 {
                     //need to disable it
-                    bool b = Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, false);
+                    Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, false);
                 }
             }
+
+            uk = null;
         }
     }
 }

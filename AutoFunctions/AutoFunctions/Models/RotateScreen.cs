@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoFunctions.Models
 {
@@ -22,26 +18,28 @@ namespace AutoFunctions.Models
             //Enabled
             try
             {
-                this.Enabled = Convert.ToBoolean(P_enable);
+                Enabled = Convert.ToBoolean(P_enable);
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + this.Enabled.ToString() + "'.";
-                bool b = Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
                 details = null;
             }
             P_enable = null;
 
             //Monitor
-            this.Monitor = Functions.RunOnce.Get.RotateScreenMonitor(this.P_monitorString, logFile);
+            Monitor = Functions.RunOnce.Get.RotateScreenMonitor(P_monitorString, logFile);
             P_monitorString = null;
 
             //WatchApplication
-            if (this.WatchApplication.EndsWith("*"))
+            if (WatchApplication.EndsWith("*"))
             {
-                this.IsContains = true;
-                this.WatchApplication = this.WatchApplication.TrimEnd('*');
+                IsContains = true;
+                WatchApplication = WatchApplication.TrimEnd('*');
             }
+
+            logFile = null;
         }
     }
 }
