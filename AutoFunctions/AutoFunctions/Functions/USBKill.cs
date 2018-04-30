@@ -13,8 +13,9 @@ namespace AutoFunctions.Functions
             bool isRunning = true;
             if (uk.IsContains)
             {
-                var watchProcessName = runningProcesses.Where(p => p.Contains(uk.WatchApplication)).FirstOrDefault();
+                string watchProcessName = runningProcesses.Where(p => p.Contains(uk.WatchApplication)).FirstOrDefault();
                 if (watchProcessName != null) isRunning = true;
+                else isRunning = false;
                 watchProcessName = null;
             }
             else isRunning = runningProcesses.Contains(uk.WatchApplication);

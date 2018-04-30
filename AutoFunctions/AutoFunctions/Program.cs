@@ -4,6 +4,7 @@ using System.Linq;
 
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 //TODO: need to use the config file for other things, remove app config once that is completed.
+//TODO: need special rules for apps, like pinballx adding '_#' at the end of a file if it exists.
 
 namespace AutoFunctions
 {

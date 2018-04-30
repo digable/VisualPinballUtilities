@@ -16,8 +16,9 @@ namespace AutoFunctions.Functions
             {
                 if (mf.IsContains)
                 {
-                    var watchProcessName = runningProcesses.Where(p => p.Contains(mf.WatchApplication)).FirstOrDefault();
+                    string watchProcessName = runningProcesses.Where(p => p.Contains(mf.WatchApplication)).FirstOrDefault();
                     if (watchProcessName != null) isRunning = true;
+                    else isRunning = false;
                     watchProcessName = null;
                 }
                 else isRunning = runningProcesses.Contains(mf.WatchApplication);
@@ -71,11 +72,21 @@ namespace AutoFunctions.Functions
 
                             if (mf.Overwrite)
                             {
-                                details = "Deleting '" + Path.GetFileName(fromFile) + "' from '" + toFolder + "'.";
-                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
-                                details = null;
-                                File.Delete(toFile);
-                                File.Move(fromFile, toFile);
+                                try
+                                {
+                                    details = "Deleting '" + Path.GetFileName(fromFile) + "' from '" + toFolder + "'.";
+                                    Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                    details = null;
+                                    File.Delete(toFile);
+                                }
+                                catch (Exception ex)
+                                { }
+
+                                try
+                                {
+                                    File.Move(fromFile, toFile);
+                                }catch (Exception ex)
+                                { }
                             }
                             else
                             {
@@ -86,10 +97,15 @@ namespace AutoFunctions.Functions
                         }
                         else
                         {
-                            File.Move(fromFile, toFile);
-                            string details = "Moved '" + Path.GetFileName(fromFile) + "' to '" + toFolder + "'.";
-                            Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
-                            details = null;
+                            try
+                            {
+                                File.Move(fromFile, toFile);
+                                string details = "Moved '" + Path.GetFileName(fromFile) + "' to '" + toFolder + "'.";
+                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                details = null;
+                            }
+                            catch (Exception ex)
+                            { }
                         }
 
                         toFile = null;
