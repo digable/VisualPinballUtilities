@@ -142,13 +142,21 @@ namespace AutoFunctions
             return s;
         }
 
-        public static void WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, string logFile)
+        public static void WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, Models.Global g)
         {
-            StreamWriter sw = new StreamWriter(logFile, true);
-            sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + appFunction + "|" + details);
-            sw.Close();
-            sw.Dispose();
+            WriteToLogFile(loggingType, appFunction, details, g.LoggingEnabled, g.LogFile);
+            g = null;
+        }
 
+        public static void WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, bool loggingEnabled, string logFile)
+        {
+            if (loggingEnabled)
+            {
+                StreamWriter sw = new StreamWriter(logFile, true);
+                sw.WriteLine(loggingType.ToString() + "|" + DateTime.Now.ToString() + "|" + appFunction + "|" + details);
+                sw.Close();
+                sw.Dispose();
+            }
             details = null;
             logFile = null;
         }

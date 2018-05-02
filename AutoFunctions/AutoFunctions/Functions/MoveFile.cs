@@ -9,7 +9,7 @@ namespace AutoFunctions.Functions
 {
     class MoveFile
     {
-        public static void IsEnabled(Models.MoveFile mf, string[] runningProcesses, string logFile)
+        public static void IsEnabled(Models.MoveFile mf, string[] runningProcesses, bool loggingEnabled, string logFile)
         {
             bool isRunning = true;
             if (mf.WatchApplication != null && mf.WatchApplication != string.Empty)
@@ -67,7 +67,7 @@ namespace AutoFunctions.Functions
                         if (File.Exists(toFile))
                         {
                             string details = "File '" + Path.GetFileName(fromFile) + "' already exists in '" + toFolder + "'.";
-                            Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                            Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, loggingEnabled, logFile);
                             details = null;
 
                             if (mf.Overwrite)
@@ -75,7 +75,7 @@ namespace AutoFunctions.Functions
                                 try
                                 {
                                     details = "Deleting '" + Path.GetFileName(fromFile) + "' from '" + toFolder + "'.";
-                                    Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                    Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, loggingEnabled, logFile);
                                     details = null;
                                     File.Delete(toFile);
                                 }
@@ -91,7 +91,7 @@ namespace AutoFunctions.Functions
                             else
                             {
                                 details = "Overwrite is set to '" + mf.Overwrite + "'.  File will not be removed.";
-                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, loggingEnabled, logFile);
                                 details = null;
                             }
                         }
@@ -101,7 +101,7 @@ namespace AutoFunctions.Functions
                             {
                                 File.Move(fromFile, toFile);
                                 string details = "Moved '" + Path.GetFileName(fromFile) + "' to '" + toFolder + "'.";
-                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, logFile);
+                                Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, loggingEnabled, logFile);
                                 details = null;
                             }
                             catch (Exception ex)

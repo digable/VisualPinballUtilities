@@ -27,12 +27,9 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                if (g.LoggingEnabled)
-                {
-                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, g.LogFile);
-                    details = null;
-                }
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, g);
+                details = null;
             }
             P_enable = null;
 
@@ -67,13 +64,10 @@ namespace AutoFunctions.Models
                 }
                 else
                 {
-                    if (g.LoggingEnabled)
-                    {
-                        //INFO: there is no file and you need to reset your led wiz in Devices and Printers
-                        string details = "No device id found for '" + KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
-                        Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, g.LogFile);
-                        details = null;
-                    }
+                    //INFO: there is no file and you need to reset your led wiz in Devices and Printers
+                    string details = "No device id found for '" + KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, g);
+                    details = null;
                 }
             }
             //Stop --> Write device id to file

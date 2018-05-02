@@ -31,12 +31,9 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                if (g.LoggingEnabled)
-                {
-                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                    details = null;
-                }
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g);
+                details = null;
             }
             P_enable = null;
 
@@ -54,12 +51,9 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                if (g.LoggingEnabled)
-                {
-                    string details = "Overwrite value '" + P_overwrite + "' isn't a valid boolean.  Defaulting to '" + Overwrite.ToString() + "'.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                    details = null;
-                }
+                string details = "Overwrite value '" + P_overwrite + "' isn't a valid boolean.  Defaulting to '" + Overwrite.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g);
+                details = null;
             }
             P_overwrite = null;
 
@@ -94,13 +88,10 @@ namespace AutoFunctions.Models
             //INFO: check the counts on the 2 folder vars, they need to be the same or write to log and disable
             if (FromFolders.Count() != ToFolders.Count())
             {
-                if (g.LoggingEnabled)
-                {
-                    //INFO: the folders do not match counts, log it
-                    string details = "From folder count '" + FromFolders.Count().ToString() + "' and To folder count '" + ToFolders.Count().ToString() + "' do not match.  Check and update the config file.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                    details = null;
-                }
+                //INFO: the folders do not match counts, log it
+                string details = "From folder count '" + FromFolders.Count().ToString() + "' and To folder count '" + ToFolders.Count().ToString() + "' do not match.  Check and update the config file.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, g);
+                details = null;
                 Enabled = false;
             }
 
@@ -110,14 +101,10 @@ namespace AutoFunctions.Models
                 string fromFolder = FromFolders[i];
                 if (!System.IO.Directory.Exists(fromFolder))
                 {
-                    if (g.LoggingEnabled)
-                    {
-                        //log it, but continue on
-                        string details = "From folder '" + fromFolder + "' does not exist.";
-                        Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                        details = null;
-                    }
-
+                    //log it, but continue on
+                    string details = "From folder '" + fromFolder + "' does not exist.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g);
+                    details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
                 fromFolder = null;
@@ -128,14 +115,10 @@ namespace AutoFunctions.Models
                 string toFolder = ToFolders[i];
                 if (!System.IO.Directory.Exists(toFolder))
                 {
-                    if (g.LoggingEnabled)
-                    {
-                        //log it, but continue on
-                        string details = "To folder '" + toFolder + "' does not exist.";
-                        Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                        details = null;
-                    }
-
+                    //log it, but continue on
+                    string details = "To folder '" + toFolder + "' does not exist.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.MoveFile, details, g);
+                    details = null;
                     if (!SkipFolderIndices.Contains(i)) SkipFolderIndices.Add(i);
                 }
                 toFolder = null;
@@ -143,13 +126,10 @@ namespace AutoFunctions.Models
 
             if (FromFolders.Count() == SkipFolderIndices.Count())
             {
-                if (g.LoggingEnabled)
-                {
-                    //INFO: if we are skipping all of the folders, disable the service
-                    string details = "From folder count '" + FromFolders.Count().ToString() + "' and Skip Folder Indices count '" + SkipFolderIndices.Count().ToString() + "' match.  You shouldn't skip all folders you want to monitor.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, g.LogFile);
-                    details = null;
-                }
+                //INFO: if we are skipping all of the folders, disable the service
+                string details = "From folder count '" + FromFolders.Count().ToString() + "' and Skip Folder Indices count '" + SkipFolderIndices.Count().ToString() + "' match.  You shouldn't skip all folders you want to monitor.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.MoveFile, details, g);
+                details = null;
                 Enabled = false;
             }
             //Stop --> Checks

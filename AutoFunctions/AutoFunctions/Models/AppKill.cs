@@ -21,12 +21,9 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                if (g.LoggingEnabled)
-                {
-                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.AppKill, details, g.LogFile);
-                    details = null;
-                }
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.AppKill, details, g);
+                details = null;
             }
             P_enable = null;
 

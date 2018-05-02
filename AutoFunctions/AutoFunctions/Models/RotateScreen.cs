@@ -22,17 +22,14 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                if (g.LoggingEnabled)
-                {
-                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, g.LogFile);
-                    details = null;
-                }
+                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, g);
+                details = null;
             }
             P_enable = null;
 
             //Monitor
-            Monitor = Functions.RunOnce.Get.RotateScreenMonitor(P_monitorString, g.LogFile);
+            Monitor = Functions.RunOnce.Get.RotateScreenMonitor(P_monitorString, g.LoggingEnabled, g.LogFile);
             P_monitorString = null;
 
             //WatchApplication

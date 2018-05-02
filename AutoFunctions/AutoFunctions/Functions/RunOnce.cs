@@ -11,7 +11,7 @@ namespace AutoFunctions.Functions
     {
         public class Get
         {
-            public static int RotateScreenMonitor(string rotateScreen_monitorString, string logFile)
+            public static int RotateScreenMonitor(string rotateScreen_monitorString, bool loggingEnabled, string logFile)
             {
                 int rotateScreen_monitor = 1;
                 try
@@ -21,7 +21,7 @@ namespace AutoFunctions.Functions
                 catch (Exception)
                 {
                     string details = "Monitor number '" + rotateScreen_monitorString + "' isn't a valid integer.  Defaulting to 1.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, loggingEnabled, logFile);
                     details = null;
                 }
 

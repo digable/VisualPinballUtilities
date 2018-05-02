@@ -38,7 +38,7 @@ namespace AutoFunctions.Models
             catch (Exception)
             {
                 string details = "SleepTime value '" + P_sleepTime + "' isn't a valid integer.  Defaulting to '" + (SleepTime / 1000).ToString() + "' seconds.";
-               Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
                 details = null;
             }
             P_sleepTime = null;
@@ -51,7 +51,7 @@ namespace AutoFunctions.Models
             catch (Exception)
             {
                 string details = "OSVersion value '" + P_osVersion + "' isn't a valid integer.  Defaulting to '" + OSVersion.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
                 details = null;
             }
             P_osVersion = null;
@@ -64,7 +64,7 @@ namespace AutoFunctions.Models
             catch (Exception)
             {
                 string details = "IsEnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
                 details = null;
             }
             P_loggingEnabled = null;
