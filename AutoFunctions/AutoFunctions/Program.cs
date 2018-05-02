@@ -4,7 +4,7 @@ using System.Linq;
 
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 //TODO: need to use the config file for other things, remove app config once that is completed.
-//TODO: need special rules for apps, like pinballx adding '_#' at the end of a file if it exists.
+//TODO: need special rules for apps, like pinballx adding '_1' and '_2' at the end of a file if it exists.
 
 namespace AutoFunctions
 {
@@ -16,22 +16,22 @@ namespace AutoFunctions
             Models.Global g = new Models.Global();
 
             //INFO: get rotate screen parameters
-            Models.RotateScreen rs = new Models.RotateScreen(g.LogFile);
+            Models.RotateScreen rs = new Models.RotateScreen(g);
 
             //INFO: check to see if there is another one running, kill them all
             bool serviceIsRunning = Functions.RunOnce.CheckInstances(rs.Monitor);
             //INFO: remove from memory if its not enabled
             if (!rs.Enabled) rs = null;
 
-            Models.AppKill ak = new Models.AppKill(g.LogFile);
+            Models.AppKill ak = new Models.AppKill(g);
             //INFO: remove from memory if its not enabled
             if (!ak.Enabled) ak = null;
 
-            Models.USBKill uk = new Models.USBKill(g.ConfigFile, g.LogFile);
+            Models.USBKill uk = new Models.USBKill(g);
             //INFO: remove from memory if its not enabled
             if (!uk.Enabled) uk = null;
 
-            Models.MoveFile mf = new Models.MoveFile(g.LogFile);
+            Models.MoveFile mf = new Models.MoveFile(g);
             //INFO: remove from memory if its not enabled
             if (!mf.Enabled) mf = null;
 
@@ -60,6 +60,8 @@ namespace AutoFunctions
                 rp = null;
                 Thread.Sleep(g.SleepTime);
             }
+
+            //need to dispose of notification icon here
         }
     }
 }

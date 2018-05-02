@@ -75,6 +75,7 @@
     <Compile Include="Models\MoveFile.cs" />
     <Compile Include="Models\RotateScreen.cs" />
     <Compile Include="Models\USBKill.cs" />
+    <Compile Include="SystemTrayIcon.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Functions\AppKill.cs" />
     <Compile Include="Functions\MoveFile.cs" />

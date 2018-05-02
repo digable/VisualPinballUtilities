@@ -12,7 +12,7 @@ namespace AutoFunctions.Models
 
         private string P_enable = ConfigurationManager.AppSettings["app-kill_enable"].ToLower();
 
-        public AppKill(string logFile)
+        public AppKill(Global g)
         {
             //Enabled
             try
@@ -21,9 +21,12 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.AppKill, details, logFile);
-                details = null;
+                if (g.LoggingEnabled)
+                {
+                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.AppKill, details, g.LogFile);
+                    details = null;
+                }
             }
             P_enable = null;
 
@@ -34,7 +37,7 @@ namespace AutoFunctions.Models
                 WatchApplication = WatchApplication.TrimEnd('*');
             }
 
-            logFile = null;
+            g = null;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace AutoFunctions.Models
 
         private string P_enable = ConfigurationManager.AppSettings["usb-kill_enable"].ToLower();
 
-        public USBKill(string configFile, string logFile)
+        public USBKill(Global g)
         {
             //Enabled
             try
@@ -27,9 +27,12 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, logFile);
-                details = null;
+                if (g.LoggingEnabled)
+                {
+                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.USBKill, details, g.LogFile);
+                    details = null;
+                }
             }
             P_enable = null;
 
@@ -49,30 +52,32 @@ namespace AutoFunctions.Models
             {
                 //then detect it if its there, before you write to it again.
                 //write this to a file, save it somewhere for the first boot up.
-                if (!System.IO.File.Exists(configFile))
+                if (!System.IO.File.Exists(g.ConfigFile))
                 {
                     //write to the config file
-                    Utilities.WriteDeviceIdToConfig(KillDeviceName, KillDeviceId, configFile);
+                    Utilities.WriteDeviceIdToConfig(KillDeviceName, KillDeviceId, g.ConfigFile);
                 }
             }
             else
             {
-                if (System.IO.File.Exists(configFile))
+                if (System.IO.File.Exists(g.ConfigFile))
                 {
                     //read from this file, get the id
-                    KillDeviceId = Utilities.GetUsbDeviceIdFromFile(KillDeviceName, configFile);
+                    KillDeviceId = Utilities.GetUsbDeviceIdFromFile(KillDeviceName, g.ConfigFile);
                 }
                 else
                 {
-                    //INFO: there is no file and you need to reset your led wiz in Devices and Printers
-                    string details = "No device id found for '" + KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, logFile);
-                    details = null;
+                    if (g.LoggingEnabled)
+                    {
+                        //INFO: there is no file and you need to reset your led wiz in Devices and Printers
+                        string details = "No device id found for '" + KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
+                        Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, g.LogFile);
+                        details = null;
+                    }
                 }
             }
             //Stop --> Write device id to file
-            configFile = null;
-            logFile = null;
+            g = null;
         }
     }
 }

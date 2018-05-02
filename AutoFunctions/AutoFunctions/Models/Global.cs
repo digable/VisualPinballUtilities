@@ -11,11 +11,11 @@ namespace AutoFunctions.Models
 
         public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"].Trim();
         public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"].Trim();
-        public bool IsEnabledLogging { get; set; } = true;
+        public bool LoggingEnabled { get; set; } = true;
 
         private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"].Trim();
         private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"].Trim();
-        private string P_isEnabledLogging { get; set; } = ConfigurationManager.AppSettings["enable-logging"].Trim();
+        private string P_loggingEnabled { get; set; } = ConfigurationManager.AppSettings["logging-enabled"].Trim();
 
         public Global()
         {
@@ -59,15 +59,15 @@ namespace AutoFunctions.Models
             //IsEnabledLogging
             try
             {
-                IsEnabledLogging = Convert.ToBoolean(P_isEnabledLogging);
+                LoggingEnabled = Convert.ToBoolean(P_loggingEnabled);
             }
             catch (Exception)
             {
-                string details = "IsEnabledLogging value '" + P_isEnabledLogging + "' isn't a valid boolean.  Defaulting to '" + IsEnabledLogging.ToString() + "'.";
+                string details = "IsEnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
                 Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LogFile);
                 details = null;
             }
-            P_isEnabledLogging = null;
+            P_loggingEnabled = null;
         }
     }
 }

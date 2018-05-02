@@ -13,7 +13,7 @@ namespace AutoFunctions.Models
         private string P_enable = ConfigurationManager.AppSettings["rotate-screen_enable"].ToLower().Trim();
         private string P_monitorString { get; set; } = ConfigurationManager.AppSettings["rotate-screen_monitor"].Trim();
 
-        public RotateScreen(string logFile)
+        public RotateScreen(Global g)
         {
             //Enabled
             try
@@ -22,14 +22,17 @@ namespace AutoFunctions.Models
             }
             catch (Exception)
             {
-                string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, logFile);
-                details = null;
+                if (g.LoggingEnabled)
+                {
+                    string details = "Enabled value '" + P_enable + "' isn't a valid boolean.  Defaulting to '" + Enabled.ToString() + "'.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, g.LogFile);
+                    details = null;
+                }
             }
             P_enable = null;
 
             //Monitor
-            Monitor = Functions.RunOnce.Get.RotateScreenMonitor(P_monitorString, logFile);
+            Monitor = Functions.RunOnce.Get.RotateScreenMonitor(P_monitorString, g.LogFile);
             P_monitorString = null;
 
             //WatchApplication
@@ -39,7 +42,7 @@ namespace AutoFunctions.Models
                 WatchApplication = WatchApplication.TrimEnd('*');
             }
 
-            logFile = null;
+            g = null;
         }
     }
 }
