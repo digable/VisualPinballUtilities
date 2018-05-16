@@ -30,6 +30,7 @@ namespace AutoFunctions
             {
                 p.Kill();
             }
+            processes = null;
         }
 
         public static MonitorOrientation CheckMonitorOrientation(int deviceIndex = 1)
@@ -51,6 +52,8 @@ namespace AutoFunctions
 
         public static void RotateMonitor(int deviceIndex = 1, MonitorOrientation orientation = MonitorOrientation.Landscape)
         {
+            char[] trimChars = new char[] { '\\' };
+
             int num = 0;
             if (orientation == MonitorOrientation.Portrait)
             {
@@ -58,14 +61,19 @@ namespace AutoFunctions
             }
             string[] commandArray = new string[] { "/C display.exe /rotate:", num.ToString(), " /device:", deviceIndex.ToString(), " /toggle" };
             string str = string.Concat(commandArray);
+            commandArray = null;
             Process process = new Process
             {
-                StartInfo = { FileName = "cmd.exe" }
+                StartInfo =
+                {
+                    FileName = "cmd.exe",
+                    WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\",
+                    Arguments = str,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                }
             };
-            char[] trimChars = new char[] { '\\' };
-            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\";
-            process.StartInfo.Arguments = str;
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            str = null;
+            trimChars = null;
             process.Start();
         }
 
@@ -81,6 +89,7 @@ namespace AutoFunctions
 
             s = USBLib.USB.GetConnectedDevices().Where(d => d.Product.ToLower().Equals(deviceName.ToLower())).Select(d => d.InstanceID).FirstOrDefault();
 
+            deviceName = null;
             //HACK
             if (s == null) s = string.Empty;
 
@@ -89,19 +98,27 @@ namespace AutoFunctions
 
         public static void ChangeStatusOfUSBDevice(string usbDeviceId, int osVersion, bool enable)
         {
+            char[] trimChars = new char[] { '\\' };
+
             string enDisable = "enable";
             if (!enable) enDisable = "disable";
 
             string[] commandArray = new string[] { "/C devcon" + osVersion + ".exe " + enDisable + " \"@" + usbDeviceId + "\"" };
+            enDisable = null;
             string str = string.Concat(commandArray);
+            commandArray = null;
             Process process = new Process
             {
-                StartInfo = { FileName = "cmd.exe" }
+                StartInfo =
+                {
+                    FileName = "cmd.exe",
+                    WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\",
+                    Arguments = str,
+                    WindowStyle = ProcessWindowStyle.Hidden
+                }
             };
-            char[] trimChars = new char[] { '\\' };
-            process.StartInfo.WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase).TrimEnd(trimChars) + @"\";
-            process.StartInfo.Arguments = str;
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            str = null;
+            trimChars = null;
             process.Start();
         }
 
@@ -111,6 +128,10 @@ namespace AutoFunctions
             sw.WriteLine(deviceName + "|" + deviceId);
             sw.Close();
             sw.Dispose();
+
+            deviceName = null;
+            deviceId = null;
+            configFile = null;
         }
 
         public static string GetUsbDeviceIdFromFile(string deviceName, string configFile)
@@ -139,12 +160,16 @@ namespace AutoFunctions
             sr.Close();
             sr.Dispose();
 
+            deviceName = null;
+            configFile = null;
+
             return s;
         }
 
         public static void WriteToLogFile(LoggingType loggingType, ApplicationFunction appFunction, string details, Models.Global g)
         {
             WriteToLogFile(loggingType, appFunction, details, g.LoggingEnabled, g.LogFile);
+            details = null;
             g = null;
         }
 

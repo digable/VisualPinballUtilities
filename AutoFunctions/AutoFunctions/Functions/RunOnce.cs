@@ -48,6 +48,7 @@ namespace AutoFunctions.Functions
 
                 //kill rotate screen
                 var sorted = from p in processes orderby StartTimeNoException(p) ascending, p.Id select p;
+                processes = null;
 
                 foreach (var p in sorted)
                 {
@@ -60,11 +61,11 @@ namespace AutoFunctions.Functions
                         Utilities.RotateMonitor(rotateScreen_monitor, Utilities.MonitorOrientation.Landscape);
                     }
                 }
+                sorted = null;
                 //this kills this instance, it shouldn't make it this far
                 Process.GetCurrentProcess().Kill();
             }
-            processes = null;
-
+            
             return serviceIsRunning;
         }
 

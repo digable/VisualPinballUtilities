@@ -30,6 +30,19 @@ namespace AutoFunctions.Models
             LogFile = LogFile.Substring(6);
             trimChars = null;
 
+            //IsEnabledLogging
+            try
+            {
+                LoggingEnabled = Convert.ToBoolean(P_loggingEnabled);
+            }
+            catch (Exception)
+            {
+                string details = "IsEnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
+                details = null;
+            }
+            P_loggingEnabled = null;
+
             //SleepTime
             try
             {
@@ -55,19 +68,6 @@ namespace AutoFunctions.Models
                 details = null;
             }
             P_osVersion = null;
-
-            //IsEnabledLogging
-            try
-            {
-                LoggingEnabled = Convert.ToBoolean(P_loggingEnabled);
-            }
-            catch (Exception)
-            {
-                string details = "IsEnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
-                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
-                details = null;
-            }
-            P_loggingEnabled = null;
         }
     }
 }
