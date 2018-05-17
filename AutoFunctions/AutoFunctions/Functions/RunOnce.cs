@@ -32,9 +32,9 @@ namespace AutoFunctions.Functions
             }
         }
 
-        public static bool CheckInstances(int rotateScreen_monitor)
+        public static void CheckInstances(int rotateScreen_monitor)
         {
-            bool serviceIsRunning = true;
+            //bool serviceIsRunning = true;
             Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
 
             if (processes.Length > 1)
@@ -44,7 +44,7 @@ namespace AutoFunctions.Functions
                 //post a message saying you are killing the app
                 System.Windows.Forms.MessageBox.Show("RotateScreen is turning off.  To enable again, relaunch the application.", "Killing RotateScreen", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
 
-                serviceIsRunning = false;
+                //serviceIsRunning = false;
 
                 //kill rotate screen
                 var sorted = from p in processes orderby StartTimeNoException(p) ascending, p.Id select p;
@@ -66,7 +66,7 @@ namespace AutoFunctions.Functions
                 Process.GetCurrentProcess().Kill();
             }
             
-            return serviceIsRunning;
+            //return serviceIsRunning;
         }
 
         private static DateTime StartTimeNoException(System.Diagnostics.Process p)

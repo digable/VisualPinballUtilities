@@ -17,7 +17,7 @@ namespace AutoFunctions
             Models.RotateScreen rs = new Models.RotateScreen(g);
 
             //INFO: check to see if there is another one running, kill them all
-            bool serviceIsRunning = Functions.RunOnce.CheckInstances(rs.Monitor);
+            Functions.RunOnce.CheckInstances(rs.Monitor);
             rs = null;
 
             //INFO: this is the service
