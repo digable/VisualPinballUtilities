@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoFunctions.Functions
 {
@@ -79,13 +77,13 @@ namespace AutoFunctions.Functions
                                     details = null;
                                     File.Delete(toFile);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 { }
 
                                 try
                                 {
                                     File.Move(fromFile, toFile);
-                                }catch (Exception ex)
+                                }catch (Exception)
                                 { }
                             }
                             else
@@ -104,7 +102,7 @@ namespace AutoFunctions.Functions
                                 Utilities.WriteToLogFile(Utilities.LoggingType.Information, Utilities.ApplicationFunction.MoveFile, details, loggingEnabled, logFile);
                                 details = null;
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             { }
                         }
 

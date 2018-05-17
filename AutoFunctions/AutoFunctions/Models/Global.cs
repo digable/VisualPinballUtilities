@@ -15,7 +15,7 @@ namespace AutoFunctions.Models
 
         private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"].Trim();
         private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"].Trim();
-        private string P_loggingEnabled { get; set; } = ConfigurationManager.AppSettings["logging-enabled"].Trim();
+        private string P_loggingEnabled { get; set; } = ConfigurationManager.AppSettings["logging_enabled"].Trim();
 
         public Global()
         {

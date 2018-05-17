@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,19 +10,47 @@ namespace AutoFunctions
 {
     class Utilities
     {
-        public static bool CheckForRunningProcess(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));
-        public static bool CheckForRunningProcessContains(string processName) => Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
-        public static bool CheckForConnectedDevice(string deviceName) => USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
+        public static bool CheckForRunningProcess(string processName)
+        {
+            //return Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));
+            Process[] processes = Process.GetProcesses();
+            bool b = processes.Any<Process>(p => p.ProcessName.ToLower().Equals(processName.ToLower()));
+            processes = null;
+            processName = null;
+            return b;
+        }
+
+        public static bool CheckForRunningProcessContains(string processName)
+        {
+            //return Process.GetProcesses().Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
+            Process[] processes = Process.GetProcesses();
+            bool b = processes.Any<Process>(p => p.ProcessName.ToLower().Contains(processName.ToLower()));
+            processes = null;
+            processName = null;
+            return b;
+        }
+
+        public static bool CheckForConnectedDevice(string deviceName)
+        {
+            //return USBLib.USB.GetConnectedDevices().Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
+            List<USBLib.USB.USBDevice> l = USBLib.USB.GetConnectedDevices();
+            bool b = l.Any<USBLib.USB.USBDevice>(d => d.Product.ToLower().Equals(deviceName.ToLower()));
+            l = null;
+            deviceName = null;
+            return b;
+        }
 
         public static string[] RunningProcesses()
         {
             string[] s = new string[] { };
 
-            s = Process.GetProcesses().Select(p => p.ProcessName.ToLower()).ToArray();
+            //s = Process.GetProcesses().Select(p => p.ProcessName.ToLower()).ToArray();
+            Process[] processes = Process.GetProcesses();
+            s = processes.Select(p => p.ProcessName.ToLower()).ToArray();
+            processes = null;
 
             return s;
         }
-
 
         public static void KillRunningProcess(string processName)
         {
@@ -55,10 +84,8 @@ namespace AutoFunctions
             char[] trimChars = new char[] { '\\' };
 
             int num = 0;
-            if (orientation == MonitorOrientation.Portrait)
-            {
-                num = 90;
-            }
+            if (orientation == MonitorOrientation.Portrait) num = 90;
+
             string[] commandArray = new string[] { "/C display.exe /rotate:", num.ToString(), " /device:", deviceIndex.ToString(), " /toggle" };
             string str = string.Concat(commandArray);
             commandArray = null;

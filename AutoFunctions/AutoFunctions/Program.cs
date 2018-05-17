@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 
-using System.Linq;
-
 //TODO: have to so the playfield is the one in focus if pinballx is running and the direct b2s options are NOT open
 //TODO: need to use the config file for other things, remove app config once that is completed.
 //TODO: need special rules for apps, like pinballx adding '_1' and '_2' at the end of a file if it exists.
@@ -20,24 +18,27 @@ namespace AutoFunctions
 
             //INFO: check to see if there is another one running, kill them all
             bool serviceIsRunning = Functions.RunOnce.CheckInstances(rs.Monitor);
-            //INFO: remove from memory if its not enabled
-            if (!rs.Enabled) rs = null;
-
-            Models.AppKill ak = new Models.AppKill(g);
-            //INFO: remove from memory if its not enabled
-            if (!ak.Enabled) ak = null;
-
-            Models.USBKill uk = new Models.USBKill(g);
-            //INFO: remove from memory if its not enabled
-            if (!uk.Enabled) uk = null;
-
-            Models.MoveFile mf = new Models.MoveFile(g);
-            //INFO: remove from memory if its not enabled
-            if (!mf.Enabled) mf = null;
+            rs = null;
 
             //INFO: this is the service
             while (g.IsServiceRunning)
             {
+                rs = new Models.RotateScreen(g);
+                //INFO: remove from memory if its not enabled
+                if (!rs.Enabled) rs = null;
+
+                Models.AppKill ak = new Models.AppKill(g);
+                //INFO: remove from memory if its not enabled
+                if (!ak.Enabled) ak = null;
+
+                Models.USBKill uk = new Models.USBKill(g);
+                //INFO: remove from memory if its not enabled
+                if (!uk.Enabled) uk = null;
+
+                Models.MoveFile mf = new Models.MoveFile(g);
+                //INFO: remove from memory if its not enabled
+                if (!mf.Enabled) mf = null;
+
                 string[] rp = Utilities.RunningProcesses();
 
                 if (rs != null && rs.Enabled) Functions.RotateScreen.IsEnabled(rs, rp);
@@ -48,6 +49,8 @@ namespace AutoFunctions
 
                 if (mf != null && mf.Enabled) Functions.MoveFile.IsEnabled(mf, rp, g.LoggingEnabled, g.LogFile);
 
+                rp = null;
+
                 //INFO: log if there are no services running, close out the application
                 if (rs == null && ak == null && uk == null && mf == null)
                 {
@@ -57,7 +60,11 @@ namespace AutoFunctions
                     details = null;
                 }
 
-                rp = null;
+                rs = null;
+                ak = null;
+                uk = null;
+                mf = null;
+
                 Thread.Sleep(g.SleepTime);
             }
 
