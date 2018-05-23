@@ -1,6 +1,6 @@
 # Visual Pinball Utilities
 A suite of applications to help with managing, config, and backup of your vpin machine.
-## Applications
+## Solutions
 ### AutoFunctions
 *These are functions that run on a timer.*
 
