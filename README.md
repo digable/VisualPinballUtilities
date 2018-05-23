@@ -1,4 +1,8 @@
 # Visual Pinball Utilities
+
+[issues]: https://github.com/digable/VisualPinballUtilities/issues
+[new-issue]: https://github.com/digable/VisualPinballUtilities/issues/new
+
 A suite of applications to help with managing, config, and backup of your vpin machine.
 ## Solutions
 ### AutoFunctions
@@ -9,8 +13,7 @@ The functions contained are:
 - **Rotate Screen**
 - **USB Kill**
 - **Move File**
-- **App Kill**
-  - this has not been tested
+- **App Kill**, *this has not been tested*
 
 Use the App.config to modify settings.
 
