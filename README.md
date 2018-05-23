@@ -18,7 +18,7 @@ The functions contained are:
 Use the App.config to modify settings.
 
 #### configuration keys
-- with all '_watchApp' or '_appName' keys if it ends with an '\*' it will see if the process name contains the string
+- with all '_watchApp' or '_appName' keys: if it ends with an '\*' it will see if the process name contains the string
 
 `[Global]`
 
@@ -53,7 +53,7 @@ Use the App.config to modify settings.
 |Key|Value Type|Possible Values|Default Value(s)|Description|
 |---|:---:|:---:|:---:|---|
 |move-file_enable|boolean|true, false|false|enables or disables the service|
-|move-file_watchApp|string|*application name*|pinballx\*|the case insensitive name of the application to enable move file.  Leave blank to have ot run with service (always on)|
+|move-file_watchApp|string|*application name*|pinballx\*|the case insensitive name of the application to enable move file.  Leave blank to have it run with service (always on)|
 |move-file_overwrite|boolean|true, false|true|enables or disables overwriting existing files if they exist|
 |move-file_extensions|string||\*|the file extensions you want moved seperated by a ';' semicolon.  An '\*' asterisk will check all files|
 |move-file_fromFolders|string||C:\Emulators\PinballX\Media\Visual Pinball\Screen Grabs;C:\Emulators\PinballX\Media\Visual Pinball Physmod5\Screen Grabs;C:\Emulators\PinballX\Media\Visual Pinball X\Screen Grabs;C:\Emulators\PinballX\Media\P-ROC\Screen Grabs;|the folder you want to monitor for files seperated by a ';' semicolon|
