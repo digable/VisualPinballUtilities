@@ -46,7 +46,20 @@ namespace AutoFunctions.Models
             //SleepTime
             try
             {
-                SleepTime = Convert.ToInt32(P_sleepTime) * 1000;
+                int temp_SleepTime = Convert.ToInt32(P_sleepTime) * 1000;
+                if (temp_SleepTime <= 0)
+                {
+                    string details = "SleepTime value '" + P_sleepTime + "' isn't greater than zero.  Defaulting to '" + (SleepTime / 1000).ToString() + "' seconds.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
+                    details = null;
+                }
+                else if (temp_SleepTime > 86400)
+                {
+                    string details = "SleepTime value '" + P_sleepTime + "' is more than 24 hours.  Defaulting to '" + (SleepTime / 1000).ToString() + "' seconds.";
+                    Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
+                    details = null;
+                }
+                else SleepTime = temp_SleepTime;
             }
             catch (Exception)
             {

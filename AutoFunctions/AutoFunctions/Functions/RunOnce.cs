@@ -16,7 +16,20 @@ namespace AutoFunctions.Functions
                 int rotateScreen_monitor = 1;
                 try
                 {
-                    rotateScreen_monitor = Convert.ToInt32(rotateScreen_monitorString);
+                    int temp_rotateScreen_monitor = Convert.ToInt32(rotateScreen_monitorString);
+                    if (temp_rotateScreen_monitor <= 0)
+                    {
+                        string details = "Monitor number '" + rotateScreen_monitorString + "' must be greater than 0.  Defaulting to 1.";
+                        Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, loggingEnabled, logFile);
+                        details = null;
+                    }
+                    else if (temp_rotateScreen_monitor > 99)
+                    {
+                        string details = "Monitor number '" + rotateScreen_monitorString + "' must be less than 99.  Defaulting to 1.";
+                        Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.RotateScreen, details, loggingEnabled, logFile);
+                        details = null;
+                    }
+                    else rotateScreen_monitor = temp_rotateScreen_monitor;
                 }
                 catch (Exception)
                 {
