@@ -4,7 +4,17 @@
 [new-issue]: https://github.com/digable/VisualPinballUtilities/issues/new
 
 A suite of applications to help with managing, config, and backup of your vpin machine.
-## Solutions
+## Features
+
+- AutoFunctions
+	- Rotate Screen
+	- USB Kill
+	- Move File
+	- App Kill
+- USBLib
+- VisualPinballBackupToolConsole
+- VisualPinballUtilities
+
 ### AutoFunctions
 *These are functions that run on a timer.*
 
@@ -17,7 +27,7 @@ The functions contained are:
 
 Use the App.config to modify settings.
 
-#### configuration keys
+#### Configuration Keys
 - with all '_watchApp' or '_appName' keys: if it ends with an '\*' it will see if the process name contains the string
 
 `[Global]`
