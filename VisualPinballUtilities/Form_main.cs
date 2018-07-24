@@ -98,13 +98,17 @@ namespace VisualPinballUtilities
                 //need to query the altcolor folder and find the rom names
                 //@"C:\Emulators\Visual Pinball\altcolor" --> the folder names are the rom names
                 //use those rom names and update the pin dmd field to a '1' and win dmd to a '0'
-                string[] romNames = new string[] { };
-                romNames = Directory.GetDirectories(@"C:\Emulators\Visual Pinball\altcolor");
+                List<string> romNames = new List<string>();
+                string[] romNameDirectories = Directory.GetDirectories(@"C:\Emulators\Visual Pinball\altcolor");
+                foreach (string romNameDirectory in romNameDirectories)
+                {
+                    romNames.Add(Path.GetFileName(romNameDirectory.TrimEnd(Path.DirectorySeparatorChar)));
+                }
 
                 string[] fields = new string[] { "showpindmd", "showwindmd" };
-                string[] newValues = new string[] { "1", "0" };
+                object[] newValues = new object[] { 1, 0 };
 
-                bool b = RegistryUtilities.VisualPinMame.Update.Roms.Specific(romNames, fields, newValues);
+                bool b = RegistryUtilities.VisualPinMame.Update.Roms.Specific(romNames.ToArray(), fields, newValues);
             }
         }
 

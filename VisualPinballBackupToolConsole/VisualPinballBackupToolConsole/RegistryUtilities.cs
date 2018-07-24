@@ -151,6 +151,7 @@ namespace VisualPinballBackupToolConsole
                                 object value = 0;
                                 try
                                 {
+                                    //TODO: this might not always been an integer
                                     value = (int)romKey.GetValue(field);
                                 }
                                 catch (Exception)
@@ -158,6 +159,7 @@ namespace VisualPinballBackupToolConsole
                                     Console.WriteLine("'" + rom + "' doesn't have a '" + field + "' field.  Skipping...");
                                 }
 
+                                //TODO: this check will not be equal unless the object types match, need to figure that out
                                 if (value != newValue)
                                 {
                                     romKey.SetValue(field, newValue);
@@ -223,6 +225,7 @@ namespace VisualPinballBackupToolConsole
                                     object value = 0;
                                     try
                                     {
+                                        //TODO: this might not always been an integer
                                         value = (int)romKey.GetValue(fields[i]);
                                     }
                                     catch (Exception)
@@ -230,6 +233,7 @@ namespace VisualPinballBackupToolConsole
                                         Console.WriteLine("'" + rom + "' doesn't have a '" + fields[i] + "' field.  Skipping...");
                                     }
 
+                                    //TODO: this check will not be equal unless the object types match, need to figure that out
                                     if (value != newValues[i])
                                     {
                                         romKey.SetValue(fields[i], newValues[i]);
