@@ -137,10 +137,15 @@ namespace VisualPinballBackupToolConsole
                             bool b = true;
 
                             RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame);
+                            if (vpinmameKey == null)
+                            {
+                                Console.WriteLine("It appears Visual PinMAME is not installed on this computer.  Exiting...");
+                                return false;
+                            }
 
-                            string[] roms = vpinmameKey.GetSubKeyNames();
+                            string[] romNames = vpinmameKey.GetSubKeyNames();
 
-                            foreach (string rom in roms)
+                            foreach (string rom in romNames)
                             {
                                 RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame + @"\" + rom, true);
                                 object value = 0;
@@ -156,21 +161,94 @@ namespace VisualPinballBackupToolConsole
                                 if (value != newValue)
                                 {
                                     romKey.SetValue(field, newValue);
-                                    Console.WriteLine("Successfully updated '" + field + "' value to 1 for rom '" + rom + "'.");
+                                    Console.WriteLine("Successfully updated '" + field + "' value to " + newValue + " for rom '" + rom + "'.");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("'" + field + "' value is already set to 1 for rom '" + rom + "'.");
+                                    Console.WriteLine("'" + field + "' value is already set to " + newValue + " for rom '" + rom + "'.");
                                 }
 
                                 romKey = null;
                             }
 
-                            roms = null;
+                            romNames = null;
                             Console.WriteLine("Finished updating roms.");
 
                             return b;
                         }
+                    }
+
+                    public static bool Specific(string romName, string field, object newValue)
+                    {
+                        string[] romNames = new string[] { romName };
+                        string[] fields = new string[] { field };
+                        object[] newValues = new object[] { newValue };
+
+                        bool b = Specific(romNames, fields, newValues);
+
+                        newValues = null;
+                        fields = null;
+                        romNames = null;
+                        newValue = null;
+                        field = null;
+                        romName = null;
+
+                        return b;
+                    }
+
+                    public static bool Specific(string[] romNames, string[] fields, object[] newValues)
+                    {
+                        bool b = true;
+
+                        if (fields.Length != newValues.Length)
+                        {
+                            Console.WriteLine("'Field and value array lengths are not the same.  Exiting...");
+                            return false;
+                        }
+                        else
+                        {
+                            RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame);
+                            if (vpinmameKey == null)
+                            {
+                                Console.WriteLine("It appears Visual PinMAME is not installed on this computer.  Exiting...");
+                                return false;
+                            }
+
+                            foreach (string rom in romNames)
+                            {
+                                RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame + @"\" + rom, true);
+
+                                for (int i = 0; i < fields.Length; i++)
+                                {
+                                    object value = 0;
+                                    try
+                                    {
+                                        value = (int)romKey.GetValue(fields[i]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        Console.WriteLine("'" + rom + "' doesn't have a '" + fields[i] + "' field.  Skipping...");
+                                    }
+
+                                    if (value != newValues[i])
+                                    {
+                                        romKey.SetValue(fields[i], newValues[i]);
+                                        Console.WriteLine("Successfully updated '" + fields[i] + "' value to " + newValues[i] + " for rom '" + rom + "'.");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("'" + fields[i] + "' value is already set to " + newValues[i] + " for rom '" + rom + "'.");
+                                    }
+                                }
+                                romKey = null;
+                            }
+                        }
+                        romNames = null;
+                        fields = null;
+                        newValues = null;
+                        Console.WriteLine("Finished updating roms.");
+
+                        return b;
                     }
                 }
             }

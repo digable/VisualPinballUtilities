@@ -82,12 +82,30 @@ namespace VisualPinballUtilities
             //dmd_blue, dmd_blue0, dmd_blue33, dmd_blue66, dmd_red, dmd_red0, dmd_red33, dmd_red66, dmd_green, dmd_green0, dmd_green33, dmd_green66
 
             //INFO: 'dmd_compact' update
-            string field = "dmd_compact";
-            int newValue = 1;
-            if (checkBox_compactDMD.Checked) newValue = 1;
-            else newValue = 0;
+            if (checkBox_updateCompactDMD.Checked)
+            {
+                string field = "dmd_compact";
+                int newValue = 1;
+                if (checkBox_compactDMD.Checked) newValue = 1;
+                else newValue = 0;
 
-            bool b = RegistryUtilities.VisualPinMame.Update.Roms.All.For(field, newValue);
+                bool b = RegistryUtilities.VisualPinMame.Update.Roms.All.For(field, newValue);
+            }
+
+            //INFO: 'showpindmd' and 'showwindmd'
+            if (checkBox_updateShowPinDMD.Checked)
+            {
+                //need to query the altcolor folder and find the rom names
+                //@"C:\Emulators\Visual Pinball\altcolor" --> the folder names are the rom names
+                //use those rom names and update the pin dmd field to a '1' and win dmd to a '0'
+                string[] romNames = new string[] { };
+                romNames = Directory.GetDirectories(@"C:\Emulators\Visual Pinball\altcolor");
+
+                string[] fields = new string[] { "showpindmd", "showwindmd" };
+                string[] newValues = new string[] { "1", "0" };
+
+                bool b = RegistryUtilities.VisualPinMame.Update.Roms.Specific(romNames, fields, newValues);
+            }
         }
 
         private void button_eloRating_Click(object sender, EventArgs e)

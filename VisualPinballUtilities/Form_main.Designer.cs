@@ -44,6 +44,9 @@
             this.button_runReports = new System.Windows.Forms.Button();
             this.checkedListBox_reports = new System.Windows.Forms.CheckedListBox();
             this.groupBox_reports = new System.Windows.Forms.GroupBox();
+            this.checkBox_showPinDMD = new System.Windows.Forms.CheckBox();
+            this.checkBox_updateCompactDMD = new System.Windows.Forms.CheckBox();
+            this.checkBox_updateShowPinDMD = new System.Windows.Forms.CheckBox();
             this.groupBox_registryUpdates.SuspendLayout();
             this.groupBox_reports.SuspendLayout();
             this.SuspendLayout();
@@ -139,6 +142,9 @@
             // 
             // groupBox_registryUpdates
             // 
+            this.groupBox_registryUpdates.Controls.Add(this.checkBox_updateShowPinDMD);
+            this.groupBox_registryUpdates.Controls.Add(this.checkBox_updateCompactDMD);
+            this.groupBox_registryUpdates.Controls.Add(this.checkBox_showPinDMD);
             this.groupBox_registryUpdates.Controls.Add(this.button_registryUpdateAll);
             this.groupBox_registryUpdates.Controls.Add(this.checkBox_compactDMD);
             this.groupBox_registryUpdates.Location = new System.Drawing.Point(112, 12);
@@ -198,6 +204,38 @@
             this.groupBox_reports.TabStop = false;
             this.groupBox_reports.Text = "Reports";
             // 
+            // checkBox_showPinDMD
+            // 
+            this.checkBox_showPinDMD.AutoSize = true;
+            this.checkBox_showPinDMD.Checked = true;
+            this.checkBox_showPinDMD.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_showPinDMD.Location = new System.Drawing.Point(6, 42);
+            this.checkBox_showPinDMD.Name = "checkBox_showPinDMD";
+            this.checkBox_showPinDMD.Size = new System.Drawing.Size(102, 17);
+            this.checkBox_showPinDMD.TabIndex = 10;
+            this.checkBox_showPinDMD.Text = "Show PinDMD?";
+            this.checkBox_showPinDMD.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_updateCompactDMD
+            // 
+            this.checkBox_updateCompactDMD.AutoSize = true;
+            this.checkBox_updateCompactDMD.Location = new System.Drawing.Point(114, 19);
+            this.checkBox_updateCompactDMD.Name = "checkBox_updateCompactDMD";
+            this.checkBox_updateCompactDMD.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_updateCompactDMD.TabIndex = 11;
+            this.checkBox_updateCompactDMD.Text = "update?";
+            this.checkBox_updateCompactDMD.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_updateShowPinDMD
+            // 
+            this.checkBox_updateShowPinDMD.AutoSize = true;
+            this.checkBox_updateShowPinDMD.Location = new System.Drawing.Point(114, 42);
+            this.checkBox_updateShowPinDMD.Name = "checkBox_updateShowPinDMD";
+            this.checkBox_updateShowPinDMD.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_updateShowPinDMD.TabIndex = 12;
+            this.checkBox_updateShowPinDMD.Text = "update?";
+            this.checkBox_updateShowPinDMD.UseVisualStyleBackColor = true;
+            // 
             // Form_visualPinballUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,6 +285,9 @@
         private System.Windows.Forms.Button button_runReports;
         private System.Windows.Forms.CheckedListBox checkedListBox_reports;
         private System.Windows.Forms.GroupBox groupBox_reports;
+        private System.Windows.Forms.CheckBox checkBox_showPinDMD;
+        private System.Windows.Forms.CheckBox checkBox_updateShowPinDMD;
+        private System.Windows.Forms.CheckBox checkBox_updateCompactDMD;
     }
 }
 
