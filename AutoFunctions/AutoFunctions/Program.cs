@@ -24,7 +24,7 @@ namespace AutoFunctions
             while (g.IsServiceRunning)
             {
                 //INFO: this will kill the application if logged into PC via rdp
-                if (System.Windows.Forms.SystemInformation.TerminalServerSession) Functions.RunOnce.CheckInstances(rs.Monitor, true);
+                if (System.Windows.Forms.SystemInformation.TerminalServerSession && g.RDPKillEnabled) Functions.RunOnce.CheckInstances(rs.Monitor, true);
 
                 rs = new Models.RotateScreen(g);
                 //INFO: remove from memory if its not enabled

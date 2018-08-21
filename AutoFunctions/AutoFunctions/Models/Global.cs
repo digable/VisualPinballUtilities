@@ -12,10 +12,12 @@ namespace AutoFunctions.Models
         public string ConfigFile { get; set; } = ConfigurationManager.AppSettings["config-file"].Trim();
         public string LogFile { get; set; } = ConfigurationManager.AppSettings["log-file"].Trim();
         public bool LoggingEnabled { get; set; } = true;
+        public bool RDPKillEnabled { get; set; } = true;
 
         private string P_sleepTime { get; set; } = ConfigurationManager.AppSettings["sleepTime"].Trim();
         private string P_osVersion { get; set; } = ConfigurationManager.AppSettings["os-version"].Trim();
         private string P_loggingEnabled { get; set; } = ConfigurationManager.AppSettings["logging_enabled"].Trim();
+        private string P_RDPkillEnabled { get; set; } = ConfigurationManager.AppSettings["RDP-kill_enable"].Trim();
 
         public Global()
         {
@@ -30,18 +32,31 @@ namespace AutoFunctions.Models
             LogFile = LogFile.Substring(6);
             trimChars = null;
 
-            //IsEnabledLogging
+            //LoggingEnabled
             try
             {
                 LoggingEnabled = Convert.ToBoolean(P_loggingEnabled);
             }
             catch (Exception)
             {
-                string details = "IsEnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
+                string details = "EnabledLogging value '" + P_loggingEnabled + "' isn't a valid boolean.  Defaulting to '" + LoggingEnabled.ToString() + "'.";
                 Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, LoggingEnabled, LogFile);
                 details = null;
             }
             P_loggingEnabled = null;
+
+            //RDPKillEnabled
+            try
+            {
+                RDPKillEnabled = Convert.ToBoolean(P_RDPkillEnabled);
+            }
+            catch (Exception)
+            {
+                string details = "RDPKillEnabled value '" + P_RDPkillEnabled + "' isn't a valid boolean.  Defaulting to '" + RDPKillEnabled.ToString() + "'.";
+                Utilities.WriteToLogFile(Utilities.LoggingType.Warning, Utilities.ApplicationFunction.Global, details, RDPKillEnabled, LogFile);
+                details = null;
+            }
+            P_RDPkillEnabled = null;
 
             //SleepTime
             try
