@@ -45,12 +45,12 @@ namespace AutoFunctions.Functions
             }
         }
 
-        public static void CheckInstances(int rotateScreen_monitor)
+        public static void CheckInstances(int rotateScreen_monitor, bool bypassCountRestriction = false)
         {
             //bool serviceIsRunning = true;
             Process[] processes = Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location));
 
-            if (processes.Length > 1)
+            if (processes.Length > 1 || bypassCountRestriction)
             {
                 //the application is already running
 

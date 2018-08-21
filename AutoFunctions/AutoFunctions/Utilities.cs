@@ -84,7 +84,7 @@ namespace AutoFunctions
             char[] trimChars = new char[] { '\\' };
 
             int num = 0;
-            if (orientation == MonitorOrientation.Portrait) num = 90;
+            if (orientation == MonitorOrientation.Portrait) num = 90; 
 
             string[] commandArray = new string[] { "/C display.exe /rotate:", num.ToString(), " /device:", deviceIndex.ToString(), " /toggle" };
             string str = string.Concat(commandArray);
