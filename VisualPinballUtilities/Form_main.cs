@@ -21,8 +21,7 @@ namespace VisualPinballUtilities
             textBox_backupDirectory.Text = string.Empty;
             string[] reports = new string[] {
                 "PinballX --> list of media files w/o associations", //INFO: AC/DC will be ACDC
-                "PinballX --> ",
-                "adadadadad" };
+                "PinballX --> vpin table statistics"};
             for (int i = 0; i < reports.Length; i++)
             {
                 checkedListBox_reports.Items.Add(reports[i]);

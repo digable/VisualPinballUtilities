@@ -73,7 +73,37 @@ namespace VisualPinballUtilities
 
                         //pull the visual pinball version from pinballx config file
                         
-                        
+                        break;
+                    case "PinballX --> vpin table statistics":
+                        //C:\Emulators\PinballX\Databases\Statistics.ini
+                        /*  [VisualPinball_MedievalMadness_FS_B2S]
+                            description=Medieval Madness
+                            lastplayed=12/15/2016 9:46:12 PM
+                            timesplayed=140
+                            rom=pinball
+                            secondsplayed=75280
+                            highscore_1=MJC|58967470
+                            highscore_2=SLL|52000000
+                            highscore_3=MJC|51240370
+                        */
+                        Dictionary<string, Dictionary<string, object>> pinballXStatistics = PinballX_Utilities.Databases.Import.PinballXConfig(@"C:\Emulators\PinballX\Databases\Statistics.ini");
+
+                        StreamWriter sw = new StreamWriter(@"C:\_share\vpin-stats_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".txt");
+                        string header = "Key;Description;LastPlayed;TimesPlayed;Rom;SecondsPlayed;HighScore_1;HighScore_2;HighScore_3";
+                        sw.WriteLine(header);
+                        foreach(string key in pinballXStatistics.Keys)
+                        {
+                            string line = "\"" + key + "\"";
+                            foreach (string subKey in pinballXStatistics[key].Keys)
+                            {
+                                line += ";" + "\"" + pinballXStatistics[key][subKey] + "\"";
+                            }
+                            sw.WriteLine(line);
+                        }
+
+                        sw.Close();
+                        sw.Dispose();
+
                         break;
                     default:
                         break;
