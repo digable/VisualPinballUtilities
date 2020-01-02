@@ -204,7 +204,7 @@ namespace VisualPinballBackupToolConsole
 
                         if (fields.Length != newValues.Length)
                         {
-                            Console.WriteLine("'Field and value array lengths are not the same.  Exiting...");
+                            Console.WriteLine("Field and value array lengths are not the same.  Exiting...");
                             return false;
                         }
                         else
@@ -229,7 +229,7 @@ namespace VisualPinballBackupToolConsole
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.WriteLine("Rom '" + rom + "' doesn't exist in the registry. Skipping to next rom.");
+                                    Console.WriteLine("Rom '" + rom + "' doesn't exist in the registry.  Skipping...");
                                     continue;
                                 }
 
