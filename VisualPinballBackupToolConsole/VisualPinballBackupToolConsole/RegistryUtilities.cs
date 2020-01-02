@@ -209,8 +209,12 @@ namespace VisualPinballBackupToolConsole
                         }
                         else
                         {
-                            RegistryKey vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame);
-                            if (vpinmameKey == null)
+                            RegistryKey vpinmameKey = null;
+                            try
+                            {
+                                vpinmameKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame);
+                            }
+                            catch (Exception ex)
                             {
                                 Console.WriteLine("It appears Visual PinMAME is not installed on this computer.  Exiting...");
                                 return false;
@@ -218,7 +222,16 @@ namespace VisualPinballBackupToolConsole
 
                             foreach (string rom in romNames)
                             {
-                                RegistryKey romKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame + @"\" + rom, true);
+                                RegistryKey romKey = null;
+                                try
+                                {
+                                    romKey = Registry.CurrentUser.OpenSubKey(SubKeyFreewareVisualPinMame + @"\" + rom, true);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Rom '" + rom + "' doesn't exist in the registry. Skipping to next rom.");
+                                    continue;
+                                }
 
                                 for (int i = 0; i < fields.Length; i++)
                                 {
