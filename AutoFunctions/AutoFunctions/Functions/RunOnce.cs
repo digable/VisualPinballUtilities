@@ -55,7 +55,7 @@ namespace AutoFunctions.Functions
                 //the application is already running
 
                 //post a message saying you are killing the app
-                System.Windows.Forms.MessageBox.Show("RotateScreen is turning off.  To enable again, relaunch the application.", "Killing RotateScreen", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                System.Windows.Forms.MessageBox.Show("AutoFunctions is turning off.  To enable again, relaunch the application.", "Killing AutoFunctions", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
 
                 //serviceIsRunning = false;
 
