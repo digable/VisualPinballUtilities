@@ -39,14 +39,15 @@
             this.folderBrowserDialog_backupDirectory = new System.Windows.Forms.FolderBrowserDialog();
             this.checkBox_compactDMD = new System.Windows.Forms.CheckBox();
             this.groupBox_registryUpdates = new System.Windows.Forms.GroupBox();
+            this.checkBox_updateShowPinDMD = new System.Windows.Forms.CheckBox();
+            this.checkBox_updateCompactDMD = new System.Windows.Forms.CheckBox();
+            this.checkBox_showPinDMD = new System.Windows.Forms.CheckBox();
             this.button_registryUpdateAll = new System.Windows.Forms.Button();
             this.button_eloRating = new System.Windows.Forms.Button();
             this.button_runReports = new System.Windows.Forms.Button();
             this.checkedListBox_reports = new System.Windows.Forms.CheckedListBox();
             this.groupBox_reports = new System.Windows.Forms.GroupBox();
-            this.checkBox_showPinDMD = new System.Windows.Forms.CheckBox();
-            this.checkBox_updateCompactDMD = new System.Windows.Forms.CheckBox();
-            this.checkBox_updateShowPinDMD = new System.Windows.Forms.CheckBox();
+            this.button_findIPDBNumber = new System.Windows.Forms.Button();
             this.groupBox_registryUpdates.SuspendLayout();
             this.groupBox_reports.SuspendLayout();
             this.SuspendLayout();
@@ -154,6 +155,38 @@
             this.groupBox_registryUpdates.TabStop = false;
             this.groupBox_registryUpdates.Text = "Registry Updates";
             // 
+            // checkBox_updateShowPinDMD
+            // 
+            this.checkBox_updateShowPinDMD.AutoSize = true;
+            this.checkBox_updateShowPinDMD.Location = new System.Drawing.Point(114, 42);
+            this.checkBox_updateShowPinDMD.Name = "checkBox_updateShowPinDMD";
+            this.checkBox_updateShowPinDMD.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_updateShowPinDMD.TabIndex = 12;
+            this.checkBox_updateShowPinDMD.Text = "update?";
+            this.checkBox_updateShowPinDMD.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_updateCompactDMD
+            // 
+            this.checkBox_updateCompactDMD.AutoSize = true;
+            this.checkBox_updateCompactDMD.Location = new System.Drawing.Point(114, 19);
+            this.checkBox_updateCompactDMD.Name = "checkBox_updateCompactDMD";
+            this.checkBox_updateCompactDMD.Size = new System.Drawing.Size(65, 17);
+            this.checkBox_updateCompactDMD.TabIndex = 11;
+            this.checkBox_updateCompactDMD.Text = "update?";
+            this.checkBox_updateCompactDMD.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_showPinDMD
+            // 
+            this.checkBox_showPinDMD.AutoSize = true;
+            this.checkBox_showPinDMD.Checked = true;
+            this.checkBox_showPinDMD.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_showPinDMD.Location = new System.Drawing.Point(6, 42);
+            this.checkBox_showPinDMD.Name = "checkBox_showPinDMD";
+            this.checkBox_showPinDMD.Size = new System.Drawing.Size(102, 17);
+            this.checkBox_showPinDMD.TabIndex = 10;
+            this.checkBox_showPinDMD.Text = "Show PinDMD?";
+            this.checkBox_showPinDMD.UseVisualStyleBackColor = true;
+            // 
             // button_registryUpdateAll
             // 
             this.button_registryUpdateAll.Location = new System.Drawing.Point(334, 81);
@@ -204,43 +237,22 @@
             this.groupBox_reports.TabStop = false;
             this.groupBox_reports.Text = "Reports";
             // 
-            // checkBox_showPinDMD
+            // button_findIPDBNumber
             // 
-            this.checkBox_showPinDMD.AutoSize = true;
-            this.checkBox_showPinDMD.Checked = true;
-            this.checkBox_showPinDMD.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_showPinDMD.Location = new System.Drawing.Point(6, 42);
-            this.checkBox_showPinDMD.Name = "checkBox_showPinDMD";
-            this.checkBox_showPinDMD.Size = new System.Drawing.Size(102, 17);
-            this.checkBox_showPinDMD.TabIndex = 10;
-            this.checkBox_showPinDMD.Text = "Show PinDMD?";
-            this.checkBox_showPinDMD.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_updateCompactDMD
-            // 
-            this.checkBox_updateCompactDMD.AutoSize = true;
-            this.checkBox_updateCompactDMD.Location = new System.Drawing.Point(114, 19);
-            this.checkBox_updateCompactDMD.Name = "checkBox_updateCompactDMD";
-            this.checkBox_updateCompactDMD.Size = new System.Drawing.Size(65, 17);
-            this.checkBox_updateCompactDMD.TabIndex = 11;
-            this.checkBox_updateCompactDMD.Text = "update?";
-            this.checkBox_updateCompactDMD.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_updateShowPinDMD
-            // 
-            this.checkBox_updateShowPinDMD.AutoSize = true;
-            this.checkBox_updateShowPinDMD.Location = new System.Drawing.Point(114, 42);
-            this.checkBox_updateShowPinDMD.Name = "checkBox_updateShowPinDMD";
-            this.checkBox_updateShowPinDMD.Size = new System.Drawing.Size(65, 17);
-            this.checkBox_updateShowPinDMD.TabIndex = 12;
-            this.checkBox_updateShowPinDMD.Text = "update?";
-            this.checkBox_updateShowPinDMD.UseVisualStyleBackColor = true;
+            this.button_findIPDBNumber.Location = new System.Drawing.Point(12, 344);
+            this.button_findIPDBNumber.Name = "button_findIPDBNumber";
+            this.button_findIPDBNumber.Size = new System.Drawing.Size(150, 23);
+            this.button_findIPDBNumber.TabIndex = 13;
+            this.button_findIPDBNumber.Text = "PinballY-Find IPDB Number";
+            this.button_findIPDBNumber.UseVisualStyleBackColor = true;
+            this.button_findIPDBNumber.Click += new System.EventHandler(this.button_findIPDBNumber_Click);
             // 
             // Form_visualPinballUtilities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(539, 369);
+            this.ClientSize = new System.Drawing.Size(539, 415);
+            this.Controls.Add(this.button_findIPDBNumber);
             this.Controls.Add(this.groupBox_reports);
             this.Controls.Add(this.button_eloRating);
             this.Controls.Add(this.groupBox_registryUpdates);
@@ -288,6 +300,7 @@
         private System.Windows.Forms.CheckBox checkBox_showPinDMD;
         private System.Windows.Forms.CheckBox checkBox_updateShowPinDMD;
         private System.Windows.Forms.CheckBox checkBox_updateCompactDMD;
+        private System.Windows.Forms.Button button_findIPDBNumber;
     }
 }
 

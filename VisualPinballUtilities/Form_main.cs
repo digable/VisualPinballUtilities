@@ -131,5 +131,53 @@ namespace VisualPinballUtilities
             Report.Process(reportNames);
             reportNames = null;
         }
+
+        private void button_findIPDBNumber_Click(object sender, EventArgs e)
+        {
+            PinballX_Utilities.Databases.Import.GetIPDBData();
+            //TODO:
+            //need to pull in xml from the databases folder
+            string databasesDirectory = @"C:\Emulators\PinballY\Databases\";
+            //-->C:\Emulators\PinballY\Databases\P-ROC
+            //-->C:\Emulators\PinballY\Databases\Visual Pinball
+            //-->C:\Emulators\PinballY\Databases\Visual Pinball Physmod5
+            //-->C:\Emulators\PinballY\Databases\Visual Pinball X
+
+            string[] systemDirectories = System.IO.Directory.GetDirectories(databasesDirectory, "*", SearchOption.AllDirectories);
+            foreach (string systemDirectory in systemDirectories)
+            {
+                string directoryName = new DirectoryInfo(systemDirectory).Name;
+                string databaseFile = systemDirectory.TrimEnd('\\') + @"\" + directoryName + ".xml";
+                if(File.Exists(databaseFile))
+                {
+                    //TODO: process file
+                    System.Xml.XmlDocument xDoc = new System.Xml.XmlDocument();
+                    //TODO: try/catch around this for test
+                    xDoc.Load(databaseFile);
+
+                    List<PinballY_Utilities.Models.Database.game> tables = new List<PinballY_Utilities.Models.Database.game>();
+
+                    var rootNode = xDoc.FirstChild;
+                    foreach (System.Xml.XmlNode game in rootNode.ChildNodes)
+                    {
+                        System.Xml.Serialization.XmlRootAttribute xRoot = new System.Xml.Serialization.XmlRootAttribute()
+                        {
+                            ElementName = "game",
+                            IsNullable = true
+                        };
+                        PinballY_Utilities.Models.Database.game table = PinballX_Utilities.Databases.ConvertNode<PinballY_Utilities.Models.Database.game>(game, xRoot);
+                        xRoot = null;
+                        tables.Add(table);
+                        table = null;
+                    }
+
+                    xDoc = null;
+                }
+                else
+                {
+                    //TODO: log it and skip to the next one
+                }
+            }
+        }
     }
 }
