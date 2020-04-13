@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -124,85 +124,51 @@ namespace VisualPinballUtilities.PinballX_Utilities
 
             public static void GetIPDBData()
             {
-                /*Anonymous URLs:
-                 * Pinball Machine Database Game Listing
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=games
-                 * 
-                 * Pinball Machine Database Abbreviation Listing
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=abbrev
-                 * 
-                 * IPDB Top 300 Rated
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=top300
-                 * TODO: this one has multiple sets of data on it, need to parse it out
-                 * 
-                 * Pinball Machine Database Manufacturer Listing (A-M)
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=mfg1
-                 * 
-                 * Pinball Machine Database Manufacturer Listing (N-Z)
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=mfg2
-                 * 
-                 * Pinball Machine Database MPU System Listing
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=mpu
-                 * 
-                 * Pinball Machine Database Designer/Artist/Engineer Name Listing
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=names
-                 * 
-                 * Pinball Machine Database Designer/Artist/Engineer Last Name Listing
-                 * https://www.ipdb.org/lists.cgi?anonymously=true&list=lastnames
-                 * 
-                 * 
-                 *user/pass URLs
-                 * user: quincy.fuller@gmail.com
-                 * pass: jr4hl
-                 * 
-                 * Pinball Machine Database Game Listing
-                 * https://www.ipdb.org/lists.cgi?puid=40770&list=games
-                 * 
-                 */
+                IPDB.Utilities.Cache.SetIPDBCache();
+                System.Net.Http.HttpClient client = IPDB.Utilities.GetClient();
 
-                var baseAddress = new Uri("https://www.ipdb.org/lists.cgi");
-                var cookieContainer = new System.Net.CookieContainer();
-                using (var handler = new System.Net.Http.HttpClientHandler() { CookieContainer = cookieContainer })
-                using (var clientAuth = new System.Net.Http.HttpClient(handler) { BaseAddress = baseAddress })
+                foreach (var listsItem in IPDB.Utilities.listsItems)
                 {
-                    //usually i make a standard request without authentication, eg: to the home page.
-                    //by doing this request you store some initial cookie values, that might be used in the subsequent login request and checked by the server
-                    var homePageResult = clientAuth.GetAsync("/");
-                    homePageResult.Result.EnsureSuccessStatusCode();
-
-                    var contentAuth = new System.Net.Http.FormUrlEncodedContent(new[]
-                    {
-                        //the name of the form values must be the name of <input /> tags of the login form, in this case the tag is <input type="text" name="username">
-                        new KeyValuePair<string, string>("email", "quincy.fuller@gmail.com"),
-                        new KeyValuePair<string, string>("password", "jr4hl"),
-                    });
-                    var loginResult = clientAuth.PostAsync("/lists.cgi", contentAuth).Result;
-                    loginResult.EnsureSuccessStatusCode();
+                    //if (listsItem.Id != IPDB.Models.ListsValue.top300) continue;
 
                     //make the subsequent web requests using the same HttpClient object
-                    string url = @"https://www.ipdb.org/lists.cgi?puid=40770&list=games";
+                    string url = @"https://www.ipdb.org/lists.cgi?puid=" + IPDB.Utilities.puid + "&list=" + listsItem.Id;
                     System.Net.Http.HttpResponseMessage response = null;
                     string content = string.Empty;
 
                     Task.Run(async () =>
                     {
-                        response = await clientAuth.GetAsync(url);
+                        response = await client.GetAsync(url);
                     }).Wait();
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
                         Task.Run(async () =>
                         {
-                            content = await clientAuth.GetStringAsync(url);
+                            content = await client.GetStringAsync(url);
                         }).Wait();
 
                         //write this to json
                         System.Text.RegularExpressions.Regex checkTableTags = new System.Text.RegularExpressions.Regex(@"(<table[^>]*>)([\s\S\n\r\t]*?)(</table>)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                         //var tables = ConvertFromHTMLTableToJSON.GetPropertyValueStringXML(content, "table");
                         System.Text.RegularExpressions.MatchCollection mc = checkTableTags.Matches(content);
+                        int tableCounter = 0;
                         foreach (var table in mc)
                         {
-                            List<Dictionary<string, string>> data = ConvertFromHTMLTableToJSON.ExtractData(table.ToString());
+                            List<Dictionary<string, string>> data = ConvertFromHTMLTable.ExtractData(table.ToString(), listsItem.Id);
+                            //string stringData = System.Text.Json.JsonSerializer.Serialize(data);
+                            string filenameExtra = string.Empty;
+                            if (tableCounter > 0) filenameExtra = "_" + tableCounter;
+                            string filename = @"C:\temp\".TrimEnd('\\') + @"\" + listsItem.Name.Replace(@"/", "-").Replace(@"\", "-") + filenameExtra + ".txt";
+
+                            if (!System.IO.Directory.Exists(@"C:\temp\")) System.IO.Directory.CreateDirectory(@"C:\temp\");
+                            if (System.IO.File.Exists(filename)) System.IO.File.Delete(filename);
+                            System.IO.StreamWriter sw = new System.IO.StreamWriter(filename);
+                            sw.Write(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }));//
+                                                                                                                                                                                                          //sw.Write(JsonSerializer.Serialize(objectToSerialize, new JsonSerializerOptions { WriteIndented = true }));
+                            sw.Close();
+                            sw.Dispose();
+                            tableCounter++;
                         }
 
                     }
@@ -210,15 +176,17 @@ namespace VisualPinballUtilities.PinballX_Utilities
                     {
                         //TODO: write to log, figure out what is happening
                     }
-
-                    //TOSO: parse the content
                 }
+
+                //TOSO: parse the content
+                //}
+                client.Dispose();
             }
         }
 
-        public class ConvertFromHTMLTableToJSON
+        public class ConvertFromHTMLTable
         {
-            public static List<Dictionary<string, string>> ExtractData(string tableString)
+            public static List<Dictionary<string, string>> ExtractData(string tableString, IPDB.Models.ListsValue listsValue)
             {
                 List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
 
@@ -257,7 +225,11 @@ namespace VisualPinballUtilities.PinballX_Utilities
                             header = new List<string>();
                             foreach(var cell in cells)
                             {
-                                var thisCell = cell.Replace("(click to view)&nbsp;", string.Empty).Trim();
+                                var thisCell = cell.Replace("(click to view)", string.Empty)
+                                    .Replace("(click to search for)", string.Empty)
+                                                    .Replace("&nbsp;", string.Empty)
+                                                    .Replace("<br>", string.Empty)
+                                                    .Trim();
                                 header.Add(thisCell);
                             }
                             
@@ -274,7 +246,11 @@ namespace VisualPinballUtilities.PinballX_Utilities
                                     header = new List<string>();
                                     foreach (var cell in cells)
                                     {
-                                        var thisCell = cell.Replace("(click to view)&nbsp;", string.Empty).Trim();
+                                        var thisCell = cell .Replace("(click to view)", string.Empty)
+                                            .Replace("(click to search for)", string.Empty)
+                                                            .Replace("&nbsp;", string.Empty)
+                                                            .Replace("<br>", string.Empty)
+                                                            .Trim();
                                         header.Add(thisCell);
                                     }
                                     isFirst = false;
@@ -285,7 +261,7 @@ namespace VisualPinballUtilities.PinballX_Utilities
                                     {
                                         for (int i = 0; i < header.Count; i++)
                                         {
-                                            string cell = cells[i];
+                                            string cell = cells[i].Replace("&nbsp;", string.Empty).Trim();
                                             System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                                             if (checkATags.IsMatch(cell))
                                             {
@@ -295,10 +271,27 @@ namespace VisualPinballUtilities.PinballX_Utilities
                                                 var aTagMatchCollection = checkATags.Matches(cell);
                                                 var aTagMatch = aTagMatchCollection[0];
                                                 string linkURL = aTagMatch.Groups[2].Value.ToString();
-                                                tableRow.Add(header[i] + "_link", linkURL);
+                                                tableRow.Add(header[i] + "_link", @"https://www.ipdb.org/" + linkURL);
 
-                                                string ipdbNumber = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?'))).Get("gid");
-                                                tableRow.Add("IPDB", ipdbNumber);
+                                                switch(listsValue)
+                                                {
+                                                    case IPDB.Models.ListsValue.games:
+                                                    case IPDB.Models.ListsValue.abbrev:
+                                                        string ipdbId = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?'))).Get("gid");
+                                                        tableRow.Add("IPDBId", ipdbId);
+                                                        break;
+                                                    case IPDB.Models.ListsValue.mfg1:
+                                                    case IPDB.Models.ListsValue.mfg2:
+                                                        string mfgId = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?'))).Get("mfgid");
+                                                        tableRow.Add("IPDBMFGId", mfgId);
+                                                        break;
+                                                    case IPDB.Models.ListsValue.mpu:
+                                                        string mpuId = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?'))).Get("mpu");
+                                                        tableRow.Add("IPDBMPUId", mpuId);
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
                                             }
                                             else
                                             {
