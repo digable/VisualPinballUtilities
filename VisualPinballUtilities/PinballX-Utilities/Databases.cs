@@ -122,10 +122,12 @@ namespace VisualPinballUtilities.PinballX_Utilities
                 return dProperties;
             }
 
-            public static void GetIPDBData()
+            public static void GetIPDBLists()
             {
                 IPDB.Utilities.Cache.SetIPDBCache();
                 System.Net.Http.HttpClient client = IPDB.Utilities.GetClient();
+
+                List<string> IPDBIds = new List<string>();
 
                 foreach (var listsItem in IPDB.Utilities.listsItems)
                 {
@@ -155,11 +157,65 @@ namespace VisualPinballUtilities.PinballX_Utilities
                         int tableCounter = 0;
                         foreach (var table in mc)
                         {
-                            List<Dictionary<string, string>> data = ConvertFromHTMLTable.ExtractData(table.ToString(), listsItem.Id);
+                            List<Dictionary<string, string>> data = ConvertFromHTMLTable.ExtractListsData(table.ToString(), listsItem.Id);
                             //string stringData = System.Text.Json.JsonSerializer.Serialize(data);
                             string filenameExtra = string.Empty;
                             if (tableCounter > 0) filenameExtra = "_" + tableCounter;
                             string filename = @"C:\temp\".TrimEnd('\\') + @"\" + listsItem.Name.Replace(@"/", "-").Replace(@"\", "-") + filenameExtra + ".txt";
+
+                            if (!System.IO.Directory.Exists(@"C:\temp\")) System.IO.Directory.CreateDirectory(@"C:\temp\");
+                            if (System.IO.File.Exists(filename)) System.IO.File.Delete(filename);
+                            System.IO.StreamWriter sw = new System.IO.StreamWriter(filename);
+                            sw.Write(JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true, Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping }));//
+                                                                                                                                                                                                          //sw.Write(JsonSerializer.Serialize(objectToSerialize, new JsonSerializerOptions { WriteIndented = true }));
+                            sw.Close();
+                            sw.Dispose();
+                            tableCounter++;
+
+                            if(listsItem.Id == IPDB.Models.ListsValue.games)
+                            {
+                                IPDBIds = data.Where(a => a.ContainsKey("IPDBId") && !string.IsNullOrEmpty(a["IPDBId"])).Select(a => a["IPDBId"]).Distinct().ToList();
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //TODO: write to log, figure out what is happening
+                    }
+                }
+
+
+                foreach (var ipdbId in IPDBIds)
+                {
+                    //machine details
+                    //https://www.ipdb.org/machine.cgi?id=4032
+                    string url = @"https://www.ipdb.org/machine.cgi?id=" + ipdbId;
+                    System.Net.Http.HttpResponseMessage response = null;
+                    string content = string.Empty;
+
+                    Task.Run(async () =>
+                    {
+                        response = await client.GetAsync(url);
+                    }).Wait();
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        Task.Run(async () =>
+                        {
+                            content = await client.GetStringAsync(url);
+                        }).Wait();
+
+                        //write this to json
+                        System.Text.RegularExpressions.Regex checkTableTags = new System.Text.RegularExpressions.Regex(@"(<table[^>]*>)([\s\S\n\r\t]*)(</table>)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                        //var tables = ConvertFromHTMLTableToJSON.GetPropertyValueStringXML(content, "table");
+                        System.Text.RegularExpressions.MatchCollection mc = checkTableTags.Matches(content);
+                        int tableCounter = 0;
+                        foreach (var table in mc)
+                        {
+                            List<Dictionary<string, string>> data = ConvertFromHTMLTable.ExtractTableData(table.ToString());
+                            //string stringData = System.Text.Json.JsonSerializer.Serialize(data);
+                            string filename = @"C:\temp\".TrimEnd('\\') + @"\" + ipdbId + ".txt";
 
                             if (!System.IO.Directory.Exists(@"C:\temp\")) System.IO.Directory.CreateDirectory(@"C:\temp\");
                             if (System.IO.File.Exists(filename)) System.IO.File.Delete(filename);
@@ -177,7 +233,6 @@ namespace VisualPinballUtilities.PinballX_Utilities
                         //TODO: write to log, figure out what is happening
                     }
                 }
-
                 //TOSO: parse the content
                 //}
                 client.Dispose();
@@ -186,10 +241,9 @@ namespace VisualPinballUtilities.PinballX_Utilities
 
         public class ConvertFromHTMLTable
         {
-            public static List<Dictionary<string, string>> ExtractData(string tableString, IPDB.Models.ListsValue listsValue)
+            public static List<Dictionary<string, string>> ExtractListsData(string tableString, IPDB.Models.ListsValue listsValue)
             {
                 List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
-
                 
                 //TODO: need to check file for start and end <table> tags, must have these
                 System.Text.RegularExpressions.Regex checkTableTags = new System.Text.RegularExpressions.Regex(@"^(<table[^>]*>)([\s\S\n\r\t]*?)(</table>)$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
@@ -261,7 +315,7 @@ namespace VisualPinballUtilities.PinballX_Utilities
                                     {
                                         for (int i = 0; i < header.Count; i++)
                                         {
-                                            string cell = cells[i].Replace("&nbsp;", string.Empty).Trim();
+                                            string cell = cells[i].Replace("&nbsp;", string.Empty).Replace("<font size=+1>", string.Empty).Replace("</font>", string.Empty).Trim();
                                             System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                                             if (checkATags.IsMatch(cell))
                                             {
@@ -313,6 +367,90 @@ namespace VisualPinballUtilities.PinballX_Utilities
                 //<td> each one is a cell, grab all of it, add it to the array
                 //maybe check for <a> tags, for links, extract and add as a new column for that row <td>[field name with link]</td> --> [field name], [field name]_anchor
                 //check for more meta data as you need it
+                return table;
+            }
+
+            public static List<Dictionary<string, string>> ExtractTableData(string tableString)
+            {
+                List<Dictionary<string, string>> table = new List<Dictionary<string, string>>();
+
+                //TODO: need to check file for start and end <table> tags, must have these
+                System.Text.RegularExpressions.Regex checkTRTags = new System.Text.RegularExpressions.Regex(@"(<tr[^>]*>)([\s\S\n\r\t]*?)(<\/tr>)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (checkTRTags.IsMatch(tableString))
+                {
+                    var rows = GetPropertyValueStringXML(tableString, "tr");
+                    
+                    int rowCounter = 0;
+                    foreach (string row in rows)
+                    {
+                        if(rowCounter == 0//INFO: header with 'The Internet Pinball Database Presents'
+                            || rowCounter == 1//INFO: menu row, starting with 'Quick Search'
+                            || rowCounter == 2//INFO: machine name with 'Submit Changes' link
+                            || row.Contains("showpic.pl") //INFO: these are images, not scraping those
+                            || row.Contains("Serial Number Database")//INFO: just a link to a site that tracks serial numbers
+                            || row.Contains("Photos in")//INFO: the publications that contains images of this machine
+                        )
+                        {
+                            rowCounter++;
+                            continue;
+                        }
+
+                        Dictionary<string, string> tableRow = new Dictionary<string, string>();
+
+                        var cells = GetPropertyValueStringXML(row, "td");
+
+                        if (cells.Count == 2)
+                        {
+                            string header = cells[0].Replace("&nbsp;", string.Empty).Replace("<i>", string.Empty).Replace("</i>", string.Empty).Replace("<b>", string.Empty).Replace("</b>", string.Empty).Replace("</font>", "]").Trim().TrimEnd(':');
+                            string value = cells[1].Replace("&nbsp;", string.Empty).Replace("<i>", string.Empty).Replace("</i>", string.Empty).Replace("<b>", string.Empty).Replace("</b>", string.Empty).Replace("</font>", "]").Replace("<br>", string.Empty).Replace("</img>", string.Empty).Replace("</span>", string.Empty).Trim();
+
+                            //System.Text.RegularExpressions.Regex checkFont = new System.Text.RegularExpressions.Regex(@"(<font[^>]*>)");
+                            header = new System.Text.RegularExpressions.Regex(@"(<font[^>]*>)").Replace(header, "[");
+                            value = new System.Text.RegularExpressions.Regex(@"(<font[^>]*>)").Replace(value, "[");
+                            value = new System.Text.RegularExpressions.Regex(@"(<img[^>]*>)").Replace(value, string.Empty);
+                            value = new System.Text.RegularExpressions.Regex(@"(<span[^>]*>)").Replace(value, string.Empty);
+
+                            //System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                            //System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a[^>]*>(.*?)</a>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                            //tableRow.Add(header + "_original", value);
+
+                            System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a[^>]*>(.*?)</a>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                            var mc = checkATags.Matches(value);
+                            var valueNew = value;
+                            foreach (System.Text.RegularExpressions.Match m in mc)
+                            {
+                                if (m.Value.Contains("ppl="))
+                                {
+                                    System.Text.RegularExpressions.Regex checkALinkTags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                    var aTagMatchCollection = checkALinkTags.Matches(m.Value);
+                                    var aTagMatch = aTagMatchCollection[0];
+                                    string linkURL = aTagMatch.Groups[2].Value.ToString();
+                                    string person = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?')).Replace("&amp;", "&")).Get("ppl");
+
+                                    if (tableRow.ContainsKey(header))
+                                    {
+                                        tableRow[header] += ", " + person;
+                                    }
+                                    else tableRow.Add(header, person);
+                                    person = null;
+                                }
+                                else
+                                {
+                                    if (tableRow.ContainsKey(header))
+                                    {
+                                        tableRow[header] += ", " + value.Replace(m.Value, m.Groups[1].Value);
+                                    }
+                                    else tableRow.Add(header, value.Replace(m.Value, m.Groups[1].Value));
+                                }
+                            }
+
+                            table.Add(tableRow);
+                        }
+                        rowCounter++;
+                    }
+                }
+
                 return table;
             }
 

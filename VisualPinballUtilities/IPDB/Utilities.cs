@@ -41,8 +41,7 @@ namespace VisualPinballUtilities.IPDB
                     * Changes to individual games, have a date scraped, check the changes log when you pull in new data, rescrape if necessary
                     * https://www.ipdb.org/changes.pl
                     * 
-                    * machine details
-                    * https://www.ipdb.org/machine.cgi?id=4032
+                    * 
                     * <table><tbody>....</tbody><table>
                     * 
                     * Pinball Machine Database Game Listing

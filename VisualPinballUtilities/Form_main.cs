@@ -134,7 +134,7 @@ namespace VisualPinballUtilities
 
         private void button_findIPDBNumber_Click(object sender, EventArgs e)
         {
-            PinballX_Utilities.Databases.Import.GetIPDBData();
+            PinballX_Utilities.Databases.Import.GetIPDBLists();
             //TODO:
             //need to pull in xml from the databases folder
             string databasesDirectory = @"C:\Emulators\PinballY\Databases\";
