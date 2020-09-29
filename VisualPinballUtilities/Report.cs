@@ -60,6 +60,7 @@ namespace VisualPinballUtilities
                                     }
 
                                     //need to check the media files, mark which sections are missing files, and which files are not a match to anything in the db.
+                                    //TODO: pull in the db files for pinballx, then start doing the matches
                                 }
                                 else
                                 {

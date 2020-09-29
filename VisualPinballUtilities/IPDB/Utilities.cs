@@ -52,7 +52,7 @@ namespace VisualPinballUtilities.IPDB
             }
         }
 
-        public static System.Net.Http.HttpClient GetClient()
+        public static System.Net.Http.HttpClient GetIPDBClient()
         {
             System.Net.Http.HttpClient client = new System.Net.Http.HttpClient();
 

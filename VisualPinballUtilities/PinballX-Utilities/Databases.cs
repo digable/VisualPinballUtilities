@@ -125,7 +125,7 @@ namespace VisualPinballUtilities.PinballX_Utilities
             public static void GetIPDBLists()
             {
                 IPDB.Utilities.Cache.SetIPDBCache();
-                System.Net.Http.HttpClient client = IPDB.Utilities.GetClient();
+                System.Net.Http.HttpClient client = IPDB.Utilities.GetIPDBClient();
 
                 List<string> IPDBIds = new List<string>();
 
@@ -417,23 +417,44 @@ namespace VisualPinballUtilities.PinballX_Utilities
 
                             System.Text.RegularExpressions.Regex checkATags = new System.Text.RegularExpressions.Regex(@"<a[^>]*>(.*?)</a>", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                             var mc = checkATags.Matches(value);
-                            var valueNew = value;
+                            //var valueNew = value;
+
+                            //TODO: i need to completely redo all of this
                             foreach (System.Text.RegularExpressions.Match m in mc)
                             {
-                                if (m.Value.Contains("ppl="))
+                                //if (checkALinkTags.IsMatch(m.Value))
+                                //{
+                                System.Text.RegularExpressions.Regex checkAHrefTags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                                if (checkAHrefTags.IsMatch(m.Value))
                                 {
-                                    System.Text.RegularExpressions.Regex checkALinkTags = new System.Text.RegularExpressions.Regex(@"<a\s+(?:[^>]*?\s+)?href=([""'])(.*?)\1", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-                                    var aTagMatchCollection = checkALinkTags.Matches(m.Value);
-                                    var aTagMatch = aTagMatchCollection[0];
-                                    string linkURL = aTagMatch.Groups[2].Value.ToString();
-                                    string person = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?')).Replace("&amp;", "&")).Get("ppl");
-
-                                    if (tableRow.ContainsKey(header))
+                                    var aHrefTagMatchCollection = checkAHrefTags.Matches(m.Value);
+                                    foreach (System.Text.RegularExpressions.Match mTag in aHrefTagMatchCollection)
                                     {
-                                        tableRow[header] += ", " + person;
+                                        //var aHrefTagMatch = aHrefTagMatchCollection[0];
+                                        var aHrefTagMatch = mTag;
+                                        if (m.Value.Contains("ppl="))
+                                        {
+                                            string linkURL = aHrefTagMatch.Groups[2].Value.ToString();
+                                            string person = System.Web.HttpUtility.ParseQueryString(linkURL.Substring(linkURL.IndexOf('?')).Replace("&amp;", "&")).Get("ppl");
+
+                                            if (tableRow.ContainsKey(header))
+                                            {
+                                                tableRow[header] += ", " + person;
+                                            }
+                                            else tableRow.Add(header, person);
+                                            person = null;
+
+                                            continue;
+                                        }
+                                        
+                                        if (tableRow.ContainsKey(header))
+                                        {
+                                            tableRow[header] += ", " + value.Replace(m.Value, m.Groups[1].Value);
+                                        }
+                                        else tableRow.Add(header, value.Replace(m.Value, m.Groups[1].Value));
+
+                                        
                                     }
-                                    else tableRow.Add(header, person);
-                                    person = null;
                                 }
                                 else
                                 {
@@ -443,6 +464,7 @@ namespace VisualPinballUtilities.PinballX_Utilities
                                     }
                                     else tableRow.Add(header, value.Replace(m.Value, m.Groups[1].Value));
                                 }
+                                //}
                             }
 
                             table.Add(tableRow);
