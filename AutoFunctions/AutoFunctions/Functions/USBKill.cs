@@ -21,23 +21,25 @@ namespace AutoFunctions.Functions
             else isRunning = runningProcesses.Contains(uk.WatchApplication);
             runningProcesses = null;
 
-            if (isRunning)
+            foreach (Models.USBKill.Device killDevice in uk.KillDevices)
             {
-                if (!Utilities.CheckForConnectedDevice(uk.KillDeviceName))
+                if (isRunning)
                 {
-                    //need to enable it
-                    Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, true);
+                    if (!Utilities.CheckForConnectedDevice(killDevice.Name))
+                    {
+                        //need to enable it
+                        Utilities.ChangeStatusOfUSBDevice(killDevice.Id, osVersion, true);
+                    }
+                }
+                else
+                {
+                    if (Utilities.CheckForConnectedDevice(killDevice.Name))
+                    {
+                        //need to disable it
+                        Utilities.ChangeStatusOfUSBDevice(killDevice.Id, osVersion, false);
+                    }
                 }
             }
-            else
-            {
-                if (Utilities.CheckForConnectedDevice(uk.KillDeviceName))
-                {
-                    //need to disable it
-                    Utilities.ChangeStatusOfUSBDevice(uk.KillDeviceId, osVersion, false);
-                }
-            }
-
             uk = null;
         }
     }

@@ -11,8 +11,9 @@ namespace AutoFunctions.Models
     {
         public bool Enabled { get; set; } = false;
         public string WatchApplication { get; set; } = ConfigurationManager.AppSettings["usb-kill_watchApp"].ToLower().Trim();
-        public string KillDeviceName { get; set; } = ConfigurationManager.AppSettings["usb-kill_deviceName"].ToLower().Trim();
-        public string KillDeviceId { get; set; }
+        public string KillDeviceNamesString { get; set; } = ConfigurationManager.AppSettings["usb-kill_deviceNames"].ToLower().Trim();
+        public List<Device> KillDevices { get; set; } = new List<Device>();
+        //public string KillDeviceId { get; set; }
         //INFO: this is the default for LED-Wiz --> @"USB\VID_FAFA&PID_00F0\6&12A4013&0&2"
         public bool IsContains { get; set; } = false;
 
@@ -40,38 +41,66 @@ namespace AutoFunctions.Models
                 WatchApplication = WatchApplication.TrimEnd('*');
             }
 
-            //KillDeviceId
-            KillDeviceId = Utilities.GetUsbDeviceId(KillDeviceName);
-
-            //Start --> Write device id to file
-            //INFO: query to find the led wiz device, then find its device id
-            if (KillDeviceId != string.Empty)
+            if (KillDeviceNamesString.Contains(';'))
             {
-                //then detect it if its there, before you write to it again.
-                //write this to a file, save it somewhere for the first boot up.
-                if (!System.IO.File.Exists(g.ConfigFile))
+                string[] kdnss = KillDeviceNamesString.Split(';');
+                foreach (string kdns in kdnss)
                 {
-                    //write to the config file
-                    Utilities.WriteDeviceIdToConfig(KillDeviceName, KillDeviceId, g.ConfigFile);
+                    Device d = new Device();
+                    d.Name = kdns.Trim();
+                    KillDevices.Add(d);
+                    d = null;
                 }
             }
             else
             {
-                if (System.IO.File.Exists(g.ConfigFile))
+                Device d = new Device();
+                d.Name = KillDeviceNamesString.Trim();
+                KillDevices.Add(d);
+                d = null;
+            }
+
+            foreach (Device kd in KillDevices)
+            {
+                //KillDeviceId
+                kd.Id = Utilities.GetUsbDeviceId(kd.Name);
+
+                //Start --> Write device id to file
+                //INFO: query to find the device, then find its device id
+                if (kd.Id != string.Empty)
                 {
-                    //read from this file, get the id
-                    KillDeviceId = Utilities.GetUsbDeviceIdFromFile(KillDeviceName, g.ConfigFile);
+                    //then detect it if its there, before you write to it again.
+                    //write this to a file, save it somewhere for the first boot up.
+                    if (!System.IO.File.Exists(g.ConfigFile))
+                    {
+                        //write to the config file
+                        Utilities.WriteDeviceIdToConfig(kd.Name, kd.Id, g.ConfigFile);
+                    }
                 }
                 else
                 {
-                    //INFO: there is no file and you need to reset your led wiz in Devices and Printers
-                    string details = "No device id found for '" + KillDeviceName + "'.  Remove your device from device manager, then unplug and replug in to reset.";
-                    Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, g);
-                    details = null;
+                    if (System.IO.File.Exists(g.ConfigFile))
+                    {
+                        //read from this file, get the id
+                        kd.Id = Utilities.GetUsbDeviceIdFromFile(kd.Name, g.ConfigFile);
+                    }
+                    else
+                    {
+                        //INFO: there is no file and you need to reset your led wiz in Devices and Printers
+                        string details = "No device id found for '" + kd.Name + "'.  Remove your device from device manager, then unplug and replug in to reset.";
+                        Utilities.WriteToLogFile(Utilities.LoggingType.Error, Utilities.ApplicationFunction.USBKill, details, g);
+                        details = null;
+                    }
                 }
+                //Stop --> Write device id to file
             }
-            //Stop --> Write device id to file
             g = null;
+        }
+
+        public class Device
+        {
+            public string Name { get; set; }
+            public string Id { get; set; }
         }
     }
 }
